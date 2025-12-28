@@ -186,16 +186,17 @@ See:
 
 ## Repository structure (conceptual)
 
-```
+```text
 policy-to-production/
-├── 00-project-governance/          # Project governance: rules, conventions, communication, glossary. roadmaps, etc.
-├── 10-legal-framework           # Policy and legal context
-├── 20-rulebook                  # Scheme rules and operational obligations
-├── 30-architecture              # High-level system design
-├── 40-specifications            # Technical specifications
-├── 50-code                      # Illustrative implementations
-├── 60-tests                     # Acceptance criteria and evidence
-├── 70-ci-cd                     # Pipeline and deployment concepts
+├── 00-project-governance/        # Project governance: rules, conventions, communication, glossary, timelines
+├── 10-legal-framework/           # Policy and legal context
+├── 20-rulebook/                  # Scheme rules and operational obligations
+├── 30-architecture/              # High-level system design
+├── 40-specifications/            # Technical specifications
+├── 50-code/                      # Illustrative implementations
+├── 60-tests/                     # Acceptance criteria and evidence
+├── 70-reports/                   # Automatically generated reports (e.g. progress summaries, compliance views)
+├── 80-ci-cd/                     # Pipeline, automation, and deployment concepts
 ├── README.md
 └── LICENSE
 
