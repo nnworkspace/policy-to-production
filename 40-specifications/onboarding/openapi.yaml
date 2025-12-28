@@ -1,0 +1,205 @@
+# ---
+# artefact_type: specification
+# visibility: public
+# audience: everyone
+# form: text
+# role: specification
+# status: normative
+# owner: system-architecture
+# ---
+
+openapi: 3.0.3
+
+info:
+  title: Participant Onboarding API
+  version: "0.2.0"
+  description: |
+    Illustrative OpenAPI specification for participant onboarding
+    within the Digital Euro Service Platform (DESP).
+
+    This API demonstrates how onboarding requirements and
+    specifications are realised as machine-readable interfaces.
+
+    Normative references:
+    - Spec 2: onboarding-functional-spec.md
+    - Spec 3: onboarding-interfaces-spec.md
+    - Spec 4: onboarding-data-model-spec.md
+
+    This is NOT an official ECB API.
+
+# All endpoints defined here are exposed by:
+# COMP-EUR-05 — Digital Euro Access Gateway
+# and operate on authoritative state within:
+# COMP-EUR-04 — Digital Euro Service Platform (DESP)
+
+servers:
+  - url: https://api.example.eu/desp/onboarding
+
+components:
+  parameters:
+    # Spec references:
+    # - Spec 2 (onboarding-functional-spec.md): ONB-G-03 — Idempotency
+    # - Spec 3 (onboarding-interfaces-spec.md): INT-G-04 — Idempotent invocation
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+      description: |
+        Client-generated idempotency key.
+
+        Repeated requests with the same key and identical payload
+        MUST result in the same outcome without duplicate side effects.
+        Conflicting reuse of the same key MUST be rejected.
+
+  schemas:
+    # Spec reference:
+    # - Spec 4 (onboarding-data-model-spec.md): Core entity — Participant
+    Participant:
+      type: object
+      required:
+        - id
+        - state
+      properties:
+        id:
+          type: string
+          description: Globally unique participant identifier assigned by DESP
+        state:
+          type: string
+          description: Current onboarding lifecycle state
+          enum:
+            - DRAFT
+            - SUBMITTED
+            - VERIFIED
+            - ACTIVE
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp of participant creation
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp of last lifecycle state change
+
+paths:
+
+  /participants:
+    post:
+      summary: Create participant draft
+      operationId: createParticipantDraft
+      description: |
+        Creates a new participant record in DRAFT state.
+
+        Spec references:
+        - Spec 2 (onboarding-functional-spec.md): ONB-D-01 — Draft creation
+        - Spec 3 (onboarding-interfaces-spec.md): Flow 1 — Draft creation
+        - Spec 4 (onboarding-data-model-spec.md): Participant entity
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "201":
+          description: Participant draft created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Participant"
+        "400":
+          description: Invalid request
+
+  /participants/{participantId}/submit:
+    post:
+      summary: Submit participant onboarding
+      operationId: submitParticipant
+      description: |
+        Submits onboarding data for verification.
+
+        Transitions participant from DRAFT to SUBMITTED.
+
+        Spec references:
+        - Spec 2 (onboarding-functional-spec.md): ONB-S-01, ONB-S-02, ONB-S-03
+        - Spec 3 (onboarding-interfaces-spec.md): Flow 2 — Submission
+        - Spec 4 (onboarding-data-model-spec.md): Lifecycle state
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: participantId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Submission accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Participant"
+        "400":
+          description: Incomplete or invalid data
+        "409":
+          description: Invalid lifecycle state or idempotency conflict
+
+  /participants/{participantId}/verify:
+    post:
+      summary: Verify participant onboarding
+      operationId: verifyParticipant
+      description: |
+        Records successful verification of a participant.
+
+        Transitions participant from SUBMITTED to VERIFIED.
+
+        Spec references:
+        - Spec 2 (onboarding-functional-spec.md): ONB-V-01, ONB-V-02, ONB-V-03
+        - Spec 3 (onboarding-interfaces-spec.md): Flow 3 — Verification
+        - Spec 4 (onboarding-data-model-spec.md): Verification record
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: participantId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Participant verified
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Participant"
+        "403":
+          description: Not authorised
+        "409":
+          description: Invalid lifecycle state or idempotency conflict
+
+  /participants/{participantId}/activate:
+    post:
+      summary: Activate participant
+      operationId: activateParticipant
+      description: |
+        Activates a verified participant.
+
+        Transitions participant from VERIFIED to ACTIVE.
+
+        Spec references:
+        - Spec 2 (onboarding-functional-spec.md): ONB-A-01, ONB-A-02
+        - Spec 3 (onboarding-interfaces-spec.md): Flow 4 — Activation
+        - Spec 4 (onboarding-data-model-spec.md): Lifecycle state
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: participantId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Participant activated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Participant"
+        "403":
+          description: Not authorised
+        "409":
+          description: Invalid lifecycle state or idempotency conflict
+
