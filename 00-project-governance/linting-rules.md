@@ -190,7 +190,7 @@ Justification may reference:
 
 Initially a warning; may become a hard requirement.
 
----
+
 
 ### LINT-H2 — Orphan artefacts
 
@@ -202,7 +202,15 @@ This helps identify:
 * dead code
 * abandoned deliverables
 
----
+## API specification linting rules
+
+The following rules apply to OpenAPI specifications:
+
+- LINT-API-01 — Every operation must reference at least one specification ID
+- LINT-API-02 — Spec reference blocks must not be empty
+- LINT-API-03 — Referenced spec files should exist
+- LINT-API-04 — Spec IDs should follow defined conventions
+
 
 ## Linting feedback
 
