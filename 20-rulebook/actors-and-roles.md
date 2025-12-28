@@ -54,3 +54,4 @@ Government bodies accepting or making payments (e.g., taxes, welfare).
 ## 4. Technical Actors
 ### Offline Solution Provider
 Entities providing the secure hardware or software components required for offline digital euro bearer instruments.
+

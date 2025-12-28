@@ -1,9 +1,9 @@
 ---
-artefact_type: governance
+artefact_type: rulebook
 visibility: public
 audience: everyone
 form: text
-role: governance
+role: rule
 status: normative
 owner: rulebook-development-group
 ---
