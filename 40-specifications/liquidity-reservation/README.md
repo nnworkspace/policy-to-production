@@ -36,10 +36,10 @@ Each component has a unique **Global ID** to allow precise citation in code and 
 
 | Global ID | File | Role |
 | :--- | :--- | :--- |
-| **SPEC-LIQ-ROOT** | [`liquidity-spec-overview.md`](./liquidity-spec-overview.md) | **Root Document**<br>Defines the Scope (Waterfall/Reverse), Document Map, and Traceability rules. |
-| **SPEC-LIQ-FUNC** | [`liquidity-functional-spec.md`](./liquidity-functional-spec.md) | **Functional Spec**<br>Defines the Reservation State Machine (`RESERVING` → `LOCKED` → `SETTLED`) and logic. |
-| **SPEC-LIQ-INT** | [`liquidity-interfaces-spec.md`](./liquidity-interfaces-spec.md) | **Interface Spec**<br>Defines the `I_Funding` (Core Banking) and `I_Settlement` interactions. |
-| **SPEC-LIQ-DATA** | [`liquidity-data-model-spec.md`](./liquidity-data-model-spec.md) | **Data Model Spec**<br>Defines the `LiquidityLock` and `FundingInstruction` entities. |
+| **SPEC-LIQ-ROOT** | [`liquidity-reservation-spec-overview.md`](./liquidity-reservation-spec-overview.md) | **Root Document**<br>Defines the Scope (Waterfall/Reverse), Document Map, and Traceability rules. |
+| **SPEC-LIQ-FUNC** | [`liquidity-reservation-functional-spec.md`](./liquidity-reservation-functional-spec.md) | **Functional Spec**<br>Defines the Reservation State Machine (`RESERVING` → `LOCKED` → `SETTLED`) and logic. |
+| **SPEC-LIQ-INT** | [`liquidity-reservation-interfaces-spec.md`](./liquidity-reservation-interfaces-spec.md) | **Interface Spec**<br>Defines the `I_Funding` (Core Banking) and `I_Settlement` interactions. |
+| **SPEC-LIQ-DATA** | [`liquidity-reservation-data-model-spec.md`](./liquidity-reservation-data-model-spec.md) | **Data Model Spec**<br>Defines the `LiquidityLock` and `FundingInstruction` entities. |
 
 
 ## 4. Traceability Strategy & Chain of Custody

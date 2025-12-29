@@ -61,9 +61,9 @@ The specification is split into three orthogonal views to ensure clarity and lin
 
 | View | Document | Global ID | Purpose |
 | :--- | :--- | :--- | :--- |
-| **Behavior** | [`liquidity-functional-spec.md`](./liquidity-functional-spec.md) | **SPEC-LIQ-FUNC** | **"The Logic"**<br>Defines the Reservation State Machine (e.g., `RESERVING` -> `LOCKED`) and shortfall calculations. |
-| **Data** | [`liquidity-data-model-spec.md`](./liquidity-data-model-spec.md) | **SPEC-LIQ-DATA** | **"The Schema"**<br>Defines the `LiquidityLock` and `FundingInstruction` entities. |
-| **Interfaces** | [`liquidity-interfaces-spec.md`](./liquidity-interfaces-spec.md) | **SPEC-LIQ-INT** | **"The Flow"**<br>Sequence diagrams for `I_Funding` and `I_Settlement`. |
+| **Behavior** | [`liquidity-reservation-functional-spec.md`](./liquidity-reservation-functional-spec.md) | **SPEC-LIQ-FUNC** | **"The Logic"**<br>Defines the Reservation State Machine (e.g., `RESERVING` -> `LOCKED`) and shortfall calculations. |
+| **Data** | [`liquidity-reservation-data-model-spec.md`](./liquidity-reservation-data-model-spec.md) | **SPEC-LIQ-DATA** | **"The Schema"**<br>Defines the `LiquidityLock` and `FundingInstruction` entities. |
+| **Interfaces** | [`liquidity-reservation-interfaces-spec.md`](./liquidity-reservation-interfaces-spec.md) | **SPEC-LIQ-INT** | **"The Flow"**<br>Sequence diagrams for `I_Funding` and `I_Settlement`. |
 
 ## 5. Design Principles
 

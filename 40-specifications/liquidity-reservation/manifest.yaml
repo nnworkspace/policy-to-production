@@ -37,26 +37,26 @@ traceability:
 
 contents:
   overview:
-    file: liquidity-spec-overview.md
+    file: liquidity-reservation-functional-spec.md
     id: SPEC-LIQ-ROOT
     description: The root document defining the scope (Funding, Defunding, Zero-Holding).
 
   specifications:
-    - file: liquidity-functional-spec.md
+    - file: liquidity-reservation-functional-spec.md
       id: SPEC-LIQ-FUNC
       type: behavior
       description: |
         The Logic. Defines the "Reservation State Machine" (e.g., RESERVING -> LOCKED -> SETTLED)
         and the specific algorithms for calculating shortfalls.
 
-    - file: liquidity-interfaces-spec.md
+    - file: liquidity-reservation-interfaces-spec.md
       id: SPEC-LIQ-INT
       type: interface
       description: |
         The Flows. Defines the internal API between the Adapter and the Core Banking System (`I_Funding`)
         and the interaction with the Settlement Engine (`I_Settlement`).
 
-    - file: liquidity-data-model-spec.md
+    - file: liquidity-reservation-data-model-spec.md
       id: SPEC-LIQ-DATA
       type: data
       description: |
