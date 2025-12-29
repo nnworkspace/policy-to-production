@@ -145,7 +145,7 @@ Downstream artefacts MUST declare their dependencies using the format:
 #### Example: Gherkin Test Scenario
 
 ```gherkin
-# Location: 60-tests/100-conformance/onboarding/ONB-TS-01.feature
+# Location: 50-tests/100-conformance/onboarding/ONB-TS-01.feature
 
 # -----------------------------------------------------------
 # DEPENDENCY: SPEC-SET-ONB

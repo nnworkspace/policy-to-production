@@ -193,8 +193,8 @@ policy-to-production/
 ├── 20-rulebook/                  # Scheme rules and operational obligations
 ├── 30-architecture/              # High-level system design
 ├── 40-specifications/            # Technical specifications
-├── 50-code/                      # Illustrative implementations
-├── 60-tests/                     # Acceptance criteria and evidence
+├── 50-tests/                     # Acceptance criteria and evidence
+├── 60-code/                      # Illustrative implementations
 ├── 70-reports/                   # Automatically generated reports (e.g. progress summaries, compliance views)
 ├── 80-ci-cd/                     # Pipeline, automation, and deployment concepts
 ├── README.md

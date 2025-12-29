@@ -140,7 +140,7 @@ Those are implementation concerns. This folder is concerned with **system behavi
 To execute this strategy, the folder is organised into several distinct assurance categories:
 
 ```text
-60-tests/
+50-tests/
 ├── 100-conformance-scenarios/    # FUNCTIONAL (Business Logic)
 │   ├── onboarding/
 │   ├── liquidity-reservation/

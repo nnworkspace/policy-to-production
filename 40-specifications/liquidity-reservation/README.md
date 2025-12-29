@@ -64,10 +64,10 @@ Every requirement must apply to a specific **Component ID**. This prevents "Arch
 Every requirement must be verifiable. Downstream artefacts rely on the **exact version** of this specification set to prove compliance.
 
 - **Test Suite:** The logic here is verified by the Conformance Test Suite:
-    - `@test=TEST-SET-LIQ:0.1.0` (located in `60-tests/100-conformance-scenarios/liquidity/`)
+    - `@test=TEST-SET-LIQ:0.1.0` (located in `50-tests/100-conformance-scenarios/liquidity/`)
     - *Enforcement:* **LINT-T3** checks that every spec ID is covered by a test.
 - **Implementation:** The Reference Implementation derives its logic from here:
-    - `50-code/waterfall-engine` (Must declare compliance to `SPEC-SET-LIQ:0.1.0`)
+    - `60-code/waterfall-engine` (Must declare compliance to `SPEC-SET-LIQ:0.1.0`)
 
 > **Note on Drift:** Mismatches between the version defined in `manifest.yaml` and the versions cited by consumers will be flagged by **LINT-T5 (Spec Drift)**.
 
