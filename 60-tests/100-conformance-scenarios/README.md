@@ -59,8 +59,6 @@ For a detailed guide on the grammar and syntax used herein:
 
 ## Traceability
 
-## Traceability
-
 Each conformance scenario SHOULD declare, in its header comments:
 
 - one or more **specification identifiers** it derives from,
@@ -103,7 +101,6 @@ By expressing assurance as scenarios rather than code, this folder supports coll
 
 The scenarios in this folder are **illustrative and educational**.
 
-They demonstrate how conformance scenarios may be structured in a complex institutional project.
-They do not represent official conformance tests or certification criteria for the Digital Euro or any other real system.
+They demonstrate how conformance scenarios may be structured in a complex institutional project. They do not represent official conformance tests or certification criteria for the Digital Euro or any other real system.
 
 
