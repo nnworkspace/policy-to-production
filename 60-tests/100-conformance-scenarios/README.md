@@ -59,17 +59,24 @@ For a detailed guide on the grammar and syntax used herein:
 
 ## Traceability
 
+## Traceability
+
 Each conformance scenario SHOULD declare, in its header comments:
 
 - one or more **specification identifiers** it derives from,
+- the **exact version** of each referenced specification,
 - the **feature or capability** it covers,
 - and a unique **assurance identifier**.
 
+Traceability in this project is **version-aware by design**. A reference to a specification is only meaningful when the specific version of that specification is known.
+
 This enables:
 
-- automated traceability checks,
-- coverage analysis across specifications,
+- automated, version-aware traceability checks,
+- coverage analysis across specification versions,
+- reproducible assurance results over time,
 - and clear linkage to reports and audits.
+
 
 
 ## Relationship to other assurance artefacts
