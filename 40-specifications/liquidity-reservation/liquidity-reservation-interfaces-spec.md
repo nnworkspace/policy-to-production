@@ -5,296 +5,178 @@ audience: everyone
 form: text
 role: specification
 status: normative
-owner: system-architecture
+owner: system-design
 ---
 
 # Liquidity Reservation — Interface Behaviour Specification
 
-## Purpose
+## 1. Identification
+- **Global ID:** `SPEC-LIQ-INT`
+- **Part of Set:** `SPEC-SET-LIQ`
+- **Traceability:**
+    - **Upstream Spec:** `SPEC-LIQ-FUNC` (Implements `TR-LIQ-04`)
+    - **Upstream Arch:** `@arch=SET-ARCH:0.1.0` (Implements `COMP-EUR-05` Interfaces)
 
-This document defines the **interaction behaviour between system components**
-required to realise liquidity reservation within the Digital Euro system.
+## 2. Purpose and Scope
 
-It specifies **how components interact** to fulfil the functional requirements
-defined in the Liquidity Reservation — Functional Specification.
+This document defines the **component interactions** required to execute atomic Waterfall operations.
 
-This document does not define API syntax or data schemas.
+It focuses on the normative interface between the **PSP** and the **Digital Euro Service Platform (DESP)**. Interactions between the PSP and its own Core Banking System are described logically but are implementation-specific (proprietary).
 
----
+## 3. Component Inventory (Actors)
 
-## Normative references
+| ID | Component Name | Role | Responsibility | Trace |
+| :--- | :--- | :--- | :--- | :--- |
+| **SYS-PSP** | **PSP Waterfall Engine** | Client | Orchestrates the atomic swap. Managing component: `COMP-PSP-02`. | `COMP-PSP-02` |
+| **SYS-GWY** | **Access Gateway** | Interface | The Border Control. Authenticates PSPs and routes to DESP services. | `COMP-EUR-05` |
+| **SYS-EUR** | **Settlement Engine** | Target | The DESP Core Service. Executes the actual funding/defunding. | `COMP-EUR-01` |
 
-This specification is constrained by:
+## 4. Interface Operation Catalog
 
-- Liquidity Reservation — Functional Specification  
-- System Architecture — Component Inventory  
+### 4.1 Interface: I_Settlement (Normative)
+*Between PSP and Access Gateway (`SYS-GWY`)*
 
-All interactions described here MUST comply with the functional requirements
-and architectural boundaries defined upstream.
+| Op ID | Operation Name | Direction | Functional Trace |
+| :--- | :--- | :--- | :--- |
+| **OP-LIQ-01** | `fund` | `PSP` $\to$ `EUR` | Issues new Digital Euro. Requires proof of reservation. |
+| **OP-LIQ-02** | `defund` | `PSP` $\to$ `EUR` | Reduces Digital Euro balance. Triggered by Limit Breach. |
 
----
+### 4.2 Interface: I_Funding (Informative)
+*Internal to PSP Domain (Zone A)*
 
-## Architectural components in scope
+| Op ID | Operation Name | Description |
+| :--- | :--- | :--- |
+| **INT-CBS-01** | `LockFunds` | Proprietary call to Legacy Core to reserve commercial money. |
+| **INT-CBS-02** | `CaptureFunds` | Proprietary call to finalize the debit. |
 
-This specification applies to interactions between:
+## 5. Interaction Flows
 
-- **PSP Integration Layer** (illustrative, non-standardised)
-- **COMP-EUR-05 — Digital Euro Access Gateway**
-- **COMP-EUR-04 — Digital Euro Service Platform (DESP)**
+### 5.1 Flow: Atomic Waterfall (Funding)
+This flow details the interaction between the PSP's engine and the Eurosystem.
 
----
-
-## Interaction principles
-
-### INT-LR-01 — Canonical platform access
-
-All interactions that affect authoritative liquidity state
-MUST occur via the **Digital Euro Access Gateway**.
-
-Direct access to DESP services MUST NOT be exposed.
-
----
-
-### INT-LR-02 — Authoritative state ownership
-
-Authoritative liquidity and reservation state
-MUST be maintained exclusively within DESP.
-
-PSP-side systems MUST NOT persist or derive authoritative liquidity state.
-
----
-
-### INT-LR-03 — Explicit orchestration
-
-Liquidity reservations MUST be created, consumed, released,
-or expired through explicit operations.
-
-Implicit state changes are prohibited.
-
----
-
-### INT-LR-04 — Idempotent invocation
-
-All liquidity reservation operations MUST support idempotent invocation.
-
-- PSP Integration Layers handle client-facing retries and idempotency keys.
-- Replayed requests MUST NOT result in duplicate side effects.
-- Conflicting reuse of identifiers MUST be rejected.
-
----
-
-## Interface responsibilities
-
-### PSP Integration Layer
-
-The PSP Integration Layer MUST:
-
-- initiate reservation-related requests on behalf of PSP operations,
-- perform syntactic validation of requests,
-- manage retries and idempotency,
-- invoke the Digital Euro Access Gateway for authoritative operations.
-
-It MUST NOT:
-
-- alter authoritative liquidity state,
-- bypass the Access Gateway.
-
----
-
-### Digital Euro Access Gateway (`COMP-EUR-05`)
-
-The Access Gateway MUST:
-
-- authenticate and authorise PSP system identities,
-- validate request semantics and lifecycle preconditions,
-- route authorised requests to DESP services,
-- enforce platform-level controls (rate limiting, logging, observability).
-
-It MUST NOT:
-
-- implement PSP-specific business logic,
-- store or process end-user personal data.
-
----
-
-### Digital Euro Service Platform (`COMP-EUR-04`)
-
-DESP services MUST:
-
-- create and persist authoritative reservation records,
-- enforce lifecycle integrity and exclusivity constraints,
-- perform atomic reservation, consumption, and release operations,
-- generate audit-relevant events for all state changes.
-
-DESP services MUST NOT:
-
-- accept direct calls from PSPs,
-- rely on PSP-side state for reservation integrity.
-
----
-
-## Interaction flows
-
-### Flow 1 — Create reservation
+**Visualisation (Normative)**
 
 ```mermaid
 sequenceDiagram
-    participant PSP as PSP Integration Layer
-    participant AG as Digital Euro Access Gateway
-    participant DESP as Digital Euro Service Platform
+    autonumber
+    
+    participant PSP as SYS-PSP<br/>(Waterfall Engine)
+    participant GWY as SYS-GWY<br/>(Access Gateway)
+    participant EUR as SYS-EUR<br/>(Settlement Engine)
 
-    PSP->>AG: Create liquidity reservation
-    AG->>AG: Authenticate & authorise PSP
-    AG->>AG: Validate request semantics
-    AG->>DESP: Reserve liquidity
-    DESP->>DESP: Check available unreserved liquidity
-    DESP-->>AG: Reservation created (reservation_id)
-    AG-->>PSP: Reservation confirmed
+    Note over PSP, EUR: Flow: Atomic Waterfall (Funding)
 
+    %% Step 1: Internal Phase (Proprietary)
+    rect rgb(240, 240, 240)
+        Note right of PSP: Phase 1: Internal Reservation
+        PSP->>PSP: LockFunds()<br/>(Interact with Core Banking)
+    end
+
+    %% Step 2: External Phase (Standard Scheme)
+    Note right of PSP: Phase 2: External Funding
+    PSP->>GWY: POST /fund (amount, reservation_ref)
+    activate GWY
+    
+    GWY->>EUR: Route Request
+    activate EUR
+    Note right of EUR: Validate & Record Liability
+    EUR-->>GWY: 200 OK
+    deactivate EUR
+
+    GWY-->>PSP: 200 OK
+    deactivate GWY
+
+    %% Step 3: Finalisation
+    rect rgb(240, 240, 240)
+        Note right of PSP: Phase 3: Internal Settlement
+        PSP->>PSP: CaptureFunds()<br/>(Debit Core Banking)
+    end
 ```
 
-**Trigger:** PSP requires liquidity to be reserved for a pending settlement.
+**Step-by-Step Definition**
 
-1. PSP Integration Layer submits a reservation request.
-2. Access Gateway authenticates and authorises the PSP.
-3. Access Gateway validates request semantics.
-4. Access Gateway routes the request to DESP.
-5. DESP verifies available unreserved liquidity.
-6. DESP creates a reservation record.
-7. Reservation identifier is returned to the PSP.
+| Step ID | Sender | Receiver | Message / Action | Constraints / Rules | Trace |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **STEP-WAT-01** | `SYS-PSP` | `SYS-PSP` | *Internal Lock* | **Action:** Reserve funds in Core Banking. | `REQ-LIQ-FUNC-01` |
+| **STEP-WAT-02** | `SYS-PSP` | `SYS-GWY` | `POST /fund` | **Body:** `amount`, `reservation_ref`. | `TR-LIQ-04` |
+| **STEP-WAT-03** | `SYS-GWY` | `SYS-EUR` | *Route Request* | Forward to Settlement Engine (`COMP-EUR-01`). | `COMP-EUR-04` |
+| **STEP-WAT-04** | `SYS-EUR` | `SYS-EUR` | *Issue* | Create new liability. | `COMP-EUR-01` |
+| **STEP-WAT-05** | `SYS-EUR` | `SYS-GWY` | `200 OK` | Return success. | `LIQ-01` |
+| **STEP-WAT-06** | `SYS-GWY` | `SYS-PSP` | `200 OK` | Forward success. | `TR-LIQ-05` |
+| **STEP-WAT-07** | `SYS-PSP` | `SYS-PSP` | *Internal Capture* | **Action:** Debit Core Banking account. | `REQ-LIQ-FUNC-03` |
 
-**Constraints:**
-- Operation MUST be idempotent.
-- Creation MUST fail if insufficient liquidity is available.
+### 5.2 Flow: Reverse Waterfall (Defunding)
 
-
-### Flow 2 — Consume reservation
+**Visualisation (Normative)**
 
 ```mermaid
 sequenceDiagram
-    participant PSP as PSP Integration Layer
-    participant AG as Digital Euro Access Gateway
-    participant DESP as Digital Euro Service Platform
+    autonumber
+    
+    participant PSP as SYS-PSP<br/>(Waterfall Engine)
+    participant GWY as SYS-GWY<br/>(Access Gateway)
+    participant EUR as SYS-EUR<br/>(Settlement Engine)
 
-    PSP->>AG: Consume reservation
-    AG->>AG: Validate authorisation & lifecycle state
-    AG->>DESP: Consume reservation
-    DESP->>DESP: Apply liquidity to settlement (atomic)
-    DESP-->>AG: Reservation consumed
-    AG-->>PSP: Consumption confirmed
+    Note over PSP, EUR: Flow: Reverse Waterfall (Defunding)
 
+    %% Trigger
+    Note right of PSP: Trigger: Holding Limit Breach<br/>(Excess > 0)
+
+    %% Step 1: External Phase (Defund First)
+    PSP->>GWY: POST /defund (excess_amount)
+    activate GWY
+    
+    GWY->>EUR: Route Request
+    activate EUR
+    Note right of EUR: Reduce Liability
+    EUR-->>GWY: 200 OK
+    deactivate EUR
+
+    GWY-->>PSP: 200 OK
+    deactivate GWY
+
+    %% Step 2: Internal Phase (Credit Last)
+    rect rgb(240, 240, 240)
+        Note right of PSP: Phase 2: Internal Deposit
+        PSP->>PSP: CreditAccount()<br/>(Deposit to Core Banking)
+    end
 ```
 
-**Trigger:** Settlement execution requires consumption of reserved liquidity.
+**Step-by-Step Definition**
 
-1. PSP Integration Layer submits a consumption request.
-2. Access Gateway validates lifecycle preconditions.
-3. Access Gateway routes the request to DESP.
-4. DESP consumes the reservation atomically.
-5. Liquidity is applied to settlement.
-6. Confirmation is returned to the PSP.
+| Step ID | Sender | Receiver | Message / Action | Constraints / Rules | Trace |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **STEP-REV-01** | `SYS-PSP` | `SYS-GWY` | `POST /defund` | **Trigger:** Holding Limit Breach. | `REQ-LIQ-FUNC-04` |
+| **STEP-REV-02** | `SYS-GWY` | `SYS-EUR` | *Route Request* | Forward to Settlement Engine. | `COMP-EUR-04` |
+| **STEP-REV-03** | `SYS-EUR` | `SYS-EUR` | *Defund* | Destroy/Reduce liability. | `COMP-EUR-01` |
+| **STEP-REV-04** | `SYS-EUR` | `SYS-GWY` | `200 OK` | Confirm reduction. | `LIQ-02` |
+| **STEP-REV-05** | `SYS-GWY` | `SYS-PSP` | `200 OK` | Forward success. | `TR-LIQ-06` |
+| **STEP-REV-06** | `SYS-PSP` | `SYS-PSP` | *Internal Credit* | **Action:** Credit Core Banking account. | `REQ-LIQ-FUNC-06` |
 
-**Constraints:**
-- Consumption MUST be irreversible.
-- Only active reservations MAY be consumed.
+## 6. Technical Constraints
 
+| ID | Constraint | Requirement Description | Trace |
+| :--- | :--- | :--- | :--- |
+| **INT-LIQ-01** | **Performance** | The `fund` operation MUST complete within 200ms (p99) to ensure the total Waterfall duration (Lock+Fund+Capture) remains acceptable for POS payments. | `NFR-PERF-01` |
+| **INT-LIQ-02** | **Idempotency** | The `POST /fund` request MUST carry a `Idempotency-Key` (UUID) to prevent accidental double-funding on network retry. | `INT-OB-04` |
 
-### Flow 3 — Release reservation
+## Appendix: How to Parse This Specification
 
-```mermaid
-sequenceDiagram
-    participant PSP as PSP Integration Layer
-    participant AG as Digital Euro Access Gateway
-    participant DESP as Digital Euro Service Platform
+**For Automation Engineers:**
 
-    PSP->>AG: Release reservation
-    AG->>AG: Validate authorisation & lifecycle state
-    AG->>DESP: Release reservation
-    DESP->>DESP: Restore liquidity availability
-    DESP-->>AG: Reservation released
-    AG-->>PSP: Release confirmed
+1.  **Contract Validation (External):**
+    - **Source:** Parse **Section 4.1 (Operation Catalog)**.
+    - **Target:** Compare against `40-specifications/liquidity-reservation/openapi.yaml` (or the Gateway API definition).
+    - *Validation:* Ensure that `OP-LIQ-01` (`POST /fund`) and `OP-LIQ-02` (`POST /defund`) exist and require the mandatory headers defined in `INT-LIQ-02` (`Idempotency-Key`).
 
-```
+2.  **Protocol Compliance (Ordering Check):**
+    - Parse **Section 5.1 (Atomic Waterfall Sequence)**.
+    - **Logic Check:** Verify that the External call (`POST /fund`) is strictly **sandwiched** between two Internal actions:
+        - *Pre-Condition:* Must be preceded by `LockFunds` (or equivalent internal locking step).
+        - *Post-Condition:* Must be followed by `CaptureFunds` (or equivalent internal debit step).
+    - *Usage:* Use this rule to lint the PSP Adapter's implementation code or integration test logic.
 
-**Trigger:** Settlement does not occur.
-
-1. PSP Integration Layer submits a release request.
-2. Access Gateway validates authorisation and state.
-3. Access Gateway routes the request to DESP.
-4. DESP releases the reservation.
-5. Liquidity becomes immediately available again.
-
-**Constraints:**
-- Release MUST NOT be allowed after consumption.
-- Operation MUST be idempotent.
-
-
-### Flow 4 — Reservation expiry
-
-```mermaid
-sequenceDiagram
-    participant DESP as Digital Euro Service Platform
-    participant AG as Digital Euro Access Gateway
-
-    DESP->>DESP: Detect reservation expiry
-    DESP->>DESP: Release expired reservation
-    DESP->>DESP: Generate audit event
-    DESP-->>AG: (Optional) State update notification
-
-```
-
-**Trigger:** Reservation exceeds its validity period.
-
-1. DESP detects reservation expiry.
-2. DESP releases the reservation automatically.
-3. An audit event is generated.
-
-**Constraints:**
-- Expiry MUST NOT require external invocation.
-- Expired reservations MUST NOT be consumable.
-
-
-## Error handling
-
-### INT-LR-E01 — Insufficient liquidity
-
-Reservation creation MUST fail
-if available unreserved liquidity is insufficient.
-
----
-
-### INT-LR-E02 — Invalid lifecycle transition
-
-Operations inconsistent with the reservation lifecycle
-MUST be rejected.
-
----
-
-### INT-LR-E03 — Authorisation failure
-
-Unauthorised reservation operations
-MUST be rejected without side effects.
-
----
-
-## Relationship to downstream artefacts
-
-This interface behaviour specification constrains:
-
-- API definitions (e.g. OpenAPI),
-- settlement orchestration logic,
-- automated tests,
-- CI/CD validation rules.
-
-Downstream artefacts MUST NOT contradict
-the interaction patterns defined herein.
-
----
-
-## Disclaimer
-
-This specification is **illustrative**.
-
-It demonstrates one possible interaction model for liquidity reservation within a digital currency platform, without asserting an official ECB or Eurosystem implementation.
-
+3.  **Traceability Auditing:**
+    - Extract the `Trace` column from the **Step-by-Step Definition** tables in Section 5.
+    - *Validation:* Ensure every step traces back to a Functional Requirement in `SPEC-LIQ-FUNC` (e.g., `REQ-LIQ-FUNC-01`) or a Component ID in `ARCH-SET` (e.g., `COMP-EUR-01`).
 

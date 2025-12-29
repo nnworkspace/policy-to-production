@@ -1,0 +1,69 @@
+# ---
+# artefact_type: manifest
+# visibility: public
+# audience: everyone
+# form: yaml
+# role: governance
+# status: active
+# owner: system-design
+# ---
+
+manifest_version: 1.0.0
+
+identification:
+  global_id: SPEC-SET-LIQ
+  name: Liquidity Reservation & Waterfall Specifications
+  version: 0.1.0
+  description: |
+    Defines the "Waterfall" and "Reverse Waterfall" mechanisms.
+    
+    This set specifies how a PSP must interact with its own Core Banking System (CBS)
+    to reserve Commercial Bank Money *before* instructing a Digital Euro issuance,
+    ensuring atomic "funding" and "defunding" operations.
+
+traceability:
+  upstream:
+    rulebook:
+      - id: RULE-SET:0.9.0
+        files:
+          - liquidity-and-waterfall.md
+          - operational-rules.md
+    architecture:
+      - id: ARCH-SET:0.1.0
+        components:
+          - COMP-PSP-02  # Waterfall Engine
+          - COMP-PSP-01  # PSP Adapter
+          - COMP-EUR-01  # Settlement Engine (Target)
+
+contents:
+  overview:
+    file: liquidity-spec-overview.md
+    id: SPEC-LIQ-ROOT
+    description: The root document defining the scope (Funding, Defunding, Zero-Holding).
+
+  specifications:
+    - file: liquidity-functional-spec.md
+      id: SPEC-LIQ-FUNC
+      type: behavior
+      description: |
+        The Logic. Defines the "Reservation State Machine" (e.g., RESERVING -> LOCKED -> SETTLED)
+        and the specific algorithms for calculating shortfalls.
+
+    - file: liquidity-interfaces-spec.md
+      id: SPEC-LIQ-INT
+      type: interface
+      description: |
+        The Flows. Defines the internal API between the Adapter and the Core Banking System (`I_Funding`)
+        and the interaction with the Settlement Engine (`I_Settlement`).
+
+    - file: liquidity-data-model-spec.md
+      id: SPEC-LIQ-DATA
+      type: data
+      description: |
+        The Schema. Defines the `LiquidityLock` and `FundingInstruction` entities.
+
+dependencies:
+  # We need a user (Onboarding) before we can fund their wallet.
+  - set_id: SPEC-SET-ONB
+    version: ">=0.1.0"
+

@@ -45,7 +45,7 @@ Different artefact types require different versioning mechanisms to align with t
 | **Architecture** (`30`) | **Manifest File** | Folder (System) | `ARCH-SET:2.1.0` |
 | **Specifications** (`40`) | **Manifest File** | Folder (Feature) | `SPEC-SET-ONB:1.2.0` |
 | **Source Code** (`50`) | **Git Tags / SemVer** | Repository / Component | `mvn:eu.eurosystem:desp-core:1.2.0` |
-| **Tests & Evidence** (`60`) | **Git Tags** | Repository | N/A (Tests *reference* versions) |
+| **Tests & Evidence** (`60`) | **Git Tags** | Repository | 'TEST-SET-ONB:1.2.0' |
 
 ## The Manifest System
 

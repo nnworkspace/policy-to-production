@@ -4,115 +4,100 @@ visibility: public
 audience: everyone
 form: text
 role: specification
-status: informative
-owner: system-architecture
+status: normative
+owner: system-design
 ---
 
-# Liquidity Reservation — Specification Overview
+# Specification Overview: Liquidity Reservation & Waterfall
 
-## Purpose
+## 1. Identification
+- **Global ID:** `SPEC-LIQ-ROOT`
+- **Part of Set:** `SPEC-SET-LIQ`
+- **Version:** Inherits from `manifest.yaml`
 
-This specification set defines the **liquidity reservation model** used to support
-safe, predictable settlement within the Digital Euro system.
+## 2. Purpose and Scope
+This document defines the **technical scope** for the automated liquidity management mechanisms known as "Waterfall" and "Reverse Waterfall".
 
-Liquidity reservation is a **risk-containment mechanism**.
-It ensures that payment and settlement operations do not over-commit available funds
-and that value movements remain orderly, auditable, and reversible where required.
+It translates the high-level policy rules defined in the **Scheme Rulebook** into concrete technical requirements, ensuring that the bridge between Commercial Bank Money and Central Bank Money functions atomically and securely.
 
-This overview explains the **scope, intent, and structure** of the liquidity reservation specifications.
+### 2.1 In Scope
+- **Waterfall (Funding):** The logic to detect a payment shortfall, reserve funds in the Commercial Bank Core (`COMP-PSP-02`), and instruct the Eurosystem to **fund** the difference (`Rule LIQ-01`).
+- **Reverse Waterfall (Defunding):** The logic to detect a Holding Limit breach, **defund** the excess Digital Euro, and credit the Commercial Bank Core (`Rule LIQ-02`).
+- **Zero-Holding Logic:** The specific configuration for Merchants who opt to automatically defund all incoming payments immediately (`Rule LIQ-03`).
+- **Double-Spending Prevention (Liquidity Side):** Ensuring that commercial funds reserved for a Digital Euro funding cannot be spent elsewhere during the transition.
 
----
+### 2.2 Out of Scope
+- **Inter-PSP Settlement:** The actual movement of Digital Euro between wallets (covered in `SPEC-SET-STL`).
+- **Offline Limits:** Management of offline secure element limits (covered in `SPEC-SET-OFF`).
+- **Manual Top-Ups:** User-initiated funding via the mobile app UI (treated as a standard Waterfall event, but triggered differently).
 
-## Normative context
+## 3. Normative References (Upstream Traceability)
 
-The Digital Euro scheme rulebook defines:
+The requirements in this specification set are derived **exclusively** from the following mandated baselines.
 
-- obligations around prefunding and settlement safety,
-- roles and responsibilities of participants,
-- high-level principles for liquidity availability and risk mitigation.
+### 3.1 Legal & Rulebook Basis
+This specification satisfies the mandates of **Rulebook Set v0.9.0** (`@rule=SET-RULEBOOK:0.9.0`).
 
-However, the rulebook does **not** prescribe a concrete technical model
-for how liquidity is reserved, released, or consumed.
+| Rule ID | Rule Name | Upstream Source |
+| :--- | :--- | :--- |
+| **LIQ-01** | **Waterfall (Auto-Funding)** | [`liquidity-and-waterfall.md`](../../20-rulebook/liquidity-and-waterfall.md) |
+| **LIQ-02** | **Reverse Waterfall (Defunding)** | [`liquidity-and-waterfall.md`](../../20-rulebook/liquidity-and-waterfall.md) |
+| **LIQ-03** | **Zero-Holding Option** | [`liquidity-and-waterfall.md`](../../20-rulebook/liquidity-and-waterfall.md) |
+| **LIQ-04** | **Holding Limits** | [`functional-onboarding.md`](../../20-rulebook/functional-onboarding.md) |
 
-This specification set provides a **technical realisation** of those principles,
-without asserting an official ECB or Eurosystem implementation.
+### 3.2 Architectural Basis
+This specification adheres to the components and security zones defined in **Architecture Set v0.1.0** (`@arch=SET-ARCH:0.1.0`).
 
----
+| Component ID | Name | Role in Liquidity |
+| :--- | :--- | :--- |
+| **COMP-PSP-02** | **Waterfall Engine** | The orchestrator of the "Two-Phase Commit" between Commercial and Central systems. |
+| **COMP-PSP-01** | **PSP Adapter** | The interface layer sending the Funding/Defunding instructions to the Gateway. |
+| **COMP-EUR-01** | **Settlement Engine** | The target system executing the funding/defunding (Zone B). |
+| **COMP-EUR-05** | **Access Gateway** | The API entry point for all Eurosystem services. |
 
-## Scope
+## 4. Document Map (The Set)
 
-These specifications address:
+The specification is split into three orthogonal views to ensure clarity and linting enforcement.
 
-- reservation of liquidity prior to settlement,
-- lifecycle management of reservations,
-- enforcement of non-overcommitment invariants,
-- interaction patterns between intermediaries and the Eurosystem platform,
-- authoritative data required to support reservation, consumption, and release.
+| View | Document | Global ID | Purpose |
+| :--- | :--- | :--- | :--- |
+| **Behavior** | [`liquidity-functional-spec.md`](./liquidity-functional-spec.md) | **SPEC-LIQ-FUNC** | **"The Logic"**<br>Defines the Reservation State Machine (e.g., `RESERVING` -> `LOCKED`) and shortfall calculations. |
+| **Data** | [`liquidity-data-model-spec.md`](./liquidity-data-model-spec.md) | **SPEC-LIQ-DATA** | **"The Schema"**<br>Defines the `LiquidityLock` and `FundingInstruction` entities. |
+| **Interfaces** | [`liquidity-interfaces-spec.md`](./liquidity-interfaces-spec.md) | **SPEC-LIQ-INT** | **"The Flow"**<br>Sequence diagrams for `I_Funding` and `I_Settlement`. |
 
-They do **not** define:
+## 5. Design Principles
 
-- monetary policy,
-- holding limits,
-- end-user balance visibility,
-- pricing, fees, or interest,
-- or any political or distributional choices.
+### 5.1 Atomicity & Safety
+In accordance with `Rule LIQ-01`, the conversion between Commercial Money and Digital Euro must be atomic.
+- **Mechanism:** A "Reservation and Commit" pattern.
+- **Constraint:** Funds MUST be strictly locked in the Commercial Core *before* the request to **Fund** is sent to the Eurosystem.
 
----
-
-## Architectural context
-
-The specifications are written against the **Digital Euro Service Platform (DESP)** architecture
-and its canonical **Digital Euro Access Gateway**.
-
-They assume an intermediated model in which:
-
-- PSPs manage customer-facing interactions and initiate reservation requests,
-- authoritative liquidity state is maintained within DESP,
-- all platform interactions occur via the Access Gateway.
-
-PSP internal systems are **out of scope** and intentionally not standardised.
-
----
-
-## Specification set structure
-
-The liquidity reservation specification set is layered and complementary.
-
-Each file addresses a distinct concern:
-
-- **Functional intent** (what must happen),
-- **Interface behaviour** (how components interact),
-- **Data model** (what must be stored authoritatively).
-
-Together, they provide a complete and testable specification.
+### 5.2 Priority of Defunding
+In accordance with `Rule LIQ-02`, Holding Limits are hard constraints.
+- **Mechanism:** If an incoming payment causes a limit breach, the system MUST accept the payment and *immediately* trigger a Reverse Waterfall for the excess amount.
+- **Constraint:** User balances must never exceed the holding limit at the end of a transaction processing cycle.
 
 ---
 
-## Relationship to downstream artefacts
+## Appendix: How to Parse This Specification
 
-These specifications constrain and inform:
+**For Automation Engineers:**
 
-- API definitions (e.g. OpenAPI),
-- settlement and reservation logic,
-- automated tests and simulations,
-- CI/CD validation rules,
-- audit and compliance evidence.
+1.  **Suite Discovery:**
+    - Parse **Section 4 (Document Map)**.
+    - Extract the `Global ID` and `Document` path for each row.
+    - *Usage:* This allows your CI tools to dynamically discover all files belonging to `SPEC-SET-LIQ` without hardcoding filenames.
 
-Downstream artefacts MUST remain consistent with the specifications in this folder.
+2.  **Dependency Validation (Linting):**
+    - Parse **Section 3.1** to find the `@rule` tag.
+    - Check that this version matches the `version` field in `20-rulebook/manifest.yaml`.
+    - Parse **Section 3.2** to find the `@arch` tag.
+    - Check that this version matches the `version` field in `30-architecture/manifest.yaml`.
+    - *Alert:* If versions mismatch, fail the build with `SpecDriftError`.
 
----
+3.  **Traceability Auditing:**
+    - Extract all **Rule IDs** (e.g., `LIQ-01`, `LIQ-02`) listed in the table in **Section 3.1**.
+    - Scan the child specifications (`SPEC-LIQ-FUNC`, `SPEC-LIQ-INT`) defined in the Document Map.
+    - *Validation:* Warn if any Rule listed in the Overview is **not** referenced in the child specifications (indicating a missing requirement implementation).
 
-## Disclaimer
-
-This specification set is **illustrative and educational**.
-
-It does **not** represent:
-- an official ECB position,
-- a Eurosystem design decision,
-- or an agreed Digital Euro technical standard.
-
-All content is derived from publicly available information and from reasonable technical assumptions made solely to demonstrate methodology, structure, and traceability.
-
-No confidential, proprietary, or insider information is included.
-
-
+    

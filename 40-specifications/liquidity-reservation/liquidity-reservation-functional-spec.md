@@ -5,242 +5,146 @@ audience: everyone
 form: text
 role: specification
 status: normative
-owner: system-architecture
+owner: system-design
 ---
 
 # Liquidity Reservation — Functional Specification
 
-## Purpose
+## 1. Identification
+- **Global ID:** `SPEC-LIQ-FUNC`
+- **Part of Set:** `SPEC-SET-LIQ`
+- **Traceability:**
+    - **Upstream Rulebook:** `@rule=SET-RULEBOOK:0.9.0`
+    - **Upstream Arch:** `@arch=SET-ARCH:0.1.0`
 
-This specification defines the **functional requirements** for liquidity reservation
-within the Digital Euro system.
+## 2. Purpose and Scope
 
-Liquidity reservation ensures that settlement operations are executed safely by:
+This document defines the **functional behaviour** of the **Waterfall Engine (`COMP-PSP-02`)**.
 
-- preventing over-commitment of available funds,
-- providing deterministic settlement outcomes,
-- enabling controlled release or consumption of reserved liquidity,
-- supporting auditability and operational resilience.
+It specifies the **Reservation State Machine** required to bridge the PSP's internal **Commercial Bank Core** (Legacy) with the **Digital Euro Service Platform (DESP)**, ensuring atomic funding and defunding.
 
-This specification defines **what must happen**, independent of interfaces or data models.
+## 3. General Principles
 
----
+### 3.1 Architectural Strategy: The Two-Phase Commit
+To satisfy the strict atomicity requirements of `Rule LIQ-01`, the Waterfall Engine implements a **Two-Phase Commit (2PC)** pattern.
+* **Internal Leg (Phase 1):** The engine instructs the PSP's own Core Banking System to **Lock** funds. This is a proprietary, internal action.
+* **External Leg (Phase 2):** The engine instructs the **DESP** (via `COMP-EUR-05`) to **Fund** (Issue) Digital Euro.
+* **Result:** The DESP is the authoritative issuer, but it relies on the PSP's guarantee that commercial funds have been reserved.
 
-## Normative context
+### 3.2 Key Requirements
 
-This specification derives from:
+| ID | Principle | Requirement Statement | Trace |
+| :--- | :--- | :--- | :--- |
+| **REQ-LIQ-01** | **Atomic Conservation** | The sum of Commercial Bank Money + Digital Euro MUST remain constant. Funds MUST NOT be double-spendable. | `Rule LIQ-01` |
+| **REQ-LIQ-02** | **Fail-Safe Rollback** | If the DESP (`COMP-EUR-04`) rejects the funding (e.g., limit breach), the internal commercial reservation MUST be released immediately. | `Rule LIQ-01` |
+| **REQ-LIQ-03** | **Limit Precedence** | Incoming payments breaching the Holding Limit MUST trigger an automatic "Reverse Waterfall" to offload excess funds to the Commercial Bank Core. | `Rule LIQ-02` |
 
-- the Digital Euro scheme rulebook (prefunding and settlement safety principles),
-- the system architecture (DESP and Access Gateway),
-- general principles of payment system risk management.
+## 4. Reservation Lifecycle States
 
-It does not prescribe implementation technology or internal PSP processes.
+The lifecycle of a single **Liquidity Operation** within the Waterfall Engine (`COMP-PSP-02`).
 
----
+| State | Description | Asset Status |
+| :--- | :--- | :--- |
+| `INIT` | Request received. Calculating shortfall. | No change. |
+| `RESERVING` | Engine is instructing internal Core Banking to lock funds. | **Internal:** Pending Lock<br>**DESP:** Unchanged |
+| `LOCKED` | Commercial funds are reserved internally. Ready to Fund. | **Internal:** Locked<br>**DESP:** Unchanged |
+| `FUNDING` | Request sent to DESP (`COMP-EUR-05`). Awaiting finality. | **Internal:** Locked<br>**DESP:** Pending Issuance |
+| `SETTLED` | DESP confirmed Funding. Commercial funds finalized (debited). | **Internal:** Debited<br>**DESP:** Credited |
+| `ROLLING_BACK`| DESP failed. Unlocking Commercial funds. | **Internal:** Releasing Lock<br>**DESP:** Failed |
+| `FAILED` | Operation aborted. Funds restored to original state. | **Internal:** Restored<br>**DESP:** Failed |
 
-## Functional objectives
+## 5. State Machine & Transitions
 
-### LR-G-01 — Settlement safety
+```mermaid
+stateDiagram-v2
+    direction LR
 
-The system MUST ensure that liquidity required for settlement
-is available and reserved prior to execution.
+    %% Initial State
+    [*] --> INIT : Request Funding
+    
+    %% Phase 1: Internal Reservation
+    INIT --> RESERVING : TR-LIQ-01\n(detect_shortfall)
+    
+    state RESERVING {
+        [*] --> Awaiting_Internal_Core
+    }
 
----
+    RESERVING --> LOCKED : TR-LIQ-02\n(internal_lock_ok)
+    RESERVING --> FAILED : TR-LIQ-03\n(internal_lock_fail)
 
-### LR-G-02 — Non-overcommitment
+    %% Phase 2: External Funding
+    LOCKED --> FUNDING : TR-LIQ-04\n(submit_funding)
 
-The system MUST prevent the same unit of liquidity
-from being reserved or consumed more than once.
+    state FUNDING {
+        [*] --> Awaiting_DESP_Response
+    }
 
----
+    FUNDING --> SETTLED : TR-LIQ-05\n(desp_funding_ok)
+    FUNDING --> ROLLING_BACK : TR-LIQ-06\n(desp_funding_fail)
 
-### LR-G-03 — Deterministic outcomes
+    %% Rollback Logic
+    state ROLLING_BACK {
+        [*] --> Releasing_Internal_Lock
+    }
 
-Given identical inputs and state,
-liquidity reservation operations MUST produce deterministic results.
+    ROLLING_BACK --> FAILED : TR-LIQ-07\n(internal_void_ok)
 
----
+    %% Final States
+    SETTLED --> [*] : Success (Debit Finalised)
+    FAILED --> [*] : Aborted (Balance Restored)
+```
 
-### LR-G-04 — Explicit lifecycle control
+### Transition Logic
 
-Liquidity reservations MUST transition through explicit, well-defined lifecycle states.
+**Parsing Context:** `Scope: WaterfallStateMachine`
 
-Implicit reservation, release, or consumption is prohibited.
+| Trans ID | From State | To State | Trigger | Guard / Logic | Trace |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **TR-LIQ-01** | `INIT` | `RESERVING` | `detect_shortfall` | **Calc:** `Shortfall = Payment - Balance`. | `LIQ-01` |
+| **TR-LIQ-02** | `RESERVING` | `LOCKED` | `internal_lock_ok` | **Action:** PSP Core Banking confirms reservation ID. | `COMP-PSP-02` |
+| **TR-LIQ-03** | `RESERVING` | `FAILED` | `internal_lock_fail` | **Error:** Insufficient Commercial Funds (NSF). | `LIQ-01` |
+| **TR-LIQ-04** | `LOCKED` | `FUNDING` | `submit_funding` | **Action:** Call `POST /fund` on Access Gateway (`COMP-EUR-05`). | `COMP-EUR-01` |
+| **TR-LIQ-05** | `FUNDING` | `SETTLED` | `desp_funding_ok` | **Action:** Instruct Internal Core to "Capture" the lock. | `LIQ-01` |
+| **TR-LIQ-06** | `FUNDING` | `ROLLING_BACK`| `desp_funding_fail` | **Trigger:** Timeout/Error from DESP.<br>**Action:** Instruct Internal Core to "Void" lock. | `REQ-LIQ-02` |
+| **TR-LIQ-07** | `ROLLING_BACK`| `FAILED` | `internal_void_ok` | **Action:** Notify User of failure. | `NFR-REL-01` |
 
----
+## 6. Functional Requirements (The Logic)
 
-## Scope of liquidity reservation
+### 6.1 Funding Logic (The Waterfall)
+**Target:** `COMP-PSP-02` (Waterfall Engine)
 
-Liquidity reservation applies to:
+- **REQ-LIQ-FUNC-01:** Upon detection of `shortfall`, the engine MUST initiate a **Synchronous Hold** on the user's linked Commercial Bank Account.
+- **REQ-LIQ-FUNC-02:** This interaction is **internal** to the PSP (Zone A) and outside the scope of Scheme Interfaces, but the *result* (Success/Failure) determines the next step.
+- **REQ-LIQ-FUNC-03:** Only upon successful internal lock, the engine SHALL transmit a `FundingInstruction` to the DESP (`COMP-EUR-04`).
 
-- settlement operations requiring prefunding,
-- batched or deferred settlement scenarios,
-- operations where settlement finality depends on prior availability of funds.
+### 6.2 Defunding Logic (The Reverse Waterfall)
+**Target:** `COMP-PSP-02` (Waterfall Engine)
 
-It does NOT apply to:
+- **REQ-LIQ-FUNC-04:** Upon detecting a Holding Limit breach, the engine MUST immediately calculate `excess`.
+- **REQ-LIQ-FUNC-05:** The engine MUST instruct the DESP to **Defund** the `excess` amount.
+- **REQ-LIQ-FUNC-06:** Upon receiving `200 OK` (Defunded) from DESP, the engine MUST credit the user's Commercial Bank Account.
+- **Trace:** This aligns with `COMP-EUR-01` responsibility to prevent double spending (money is gone from DE before appearing in CB).
 
-- monetary issuance or redemption decisions,
-- balance disclosure to end users,
-- holding limit enforcement.
+## 7. Security & Audit
 
----
-
-## Core concepts
-
-### Liquidity source
-
-A **liquidity source** represents a pool of funds
-against which reservations can be made.
-
-Examples include:
-- prefunded settlement accounts,
-- designated liquidity pools for a PSP or participant.
-
-The internal structure of liquidity sources is out of scope.
-
----
-
-### Reservation
-
-A **liquidity reservation** represents a temporary, exclusive claim on a specified amount of liquidity from a given source.
-
-A reservation does not move funds. It only constrains availability.
-
----
-
-## Reservation lifecycle
-
-> **Placeholder:**  
-> The reservation lifecycle states and transitions are defined conceptually here
-> and refined in the Interface and Data Model specifications.
-
-At a minimum, the lifecycle includes:
-
-- creation of a reservation request,
-- confirmation of a successful reservation,
-- consumption of reserved liquidity during settlement,
-- release or expiry of unused reservations.
-
----
-
-## Functional requirements
-
-### LR-F-01 — Create reservation
-
-The system MUST support explicit creation of a liquidity reservation for a specified amount and scope.
-
-Creation MUST fail if sufficient unreserved liquidity is not available.
-
----
-
-### LR-F-02 — Reservation exclusivity
-
-Once created, a reservation MUST exclusively bind the specified amount
-until it is either consumed, released, or expired.
+| ID | Rule Name | Logic | Trace |
+| :--- | :--- | :--- | :--- |
+| **SEC-LIQ-01** | **Evidence Linking** | The `FundingInstruction` sent to DESP MUST include the PSP's internal `reservation_id` (hashed or raw) to prove backing funds exist. | `AUD-TRC-01` |
+| **AUD-LIQ-01** | **Reconciliation** | The PSP MUST reconcile `Total Funded` (from DESP Reports) against `Total Debited` (Internal Core) daily. | `RULE-OPS-05` |
 
 ---
 
-### LR-F-03 — Consume reservation
+## Appendix: How to Parse This Specification
 
-The system MUST support explicit consumption of a reservation as part of a settlement operation.
+**For Automation Engineers:**
 
-Consumption MUST be irreversible.
+1.  **State Machine Generation:**
+    - Parse **Section 5 (Transition Logic Table)**.
+    - Generate a State Pattern implementation for the `WaterfallService` class.
+    - *Validation:* Ensure strict handling of `TR-LIQ-06` (Rollback) to prevent "Funding at Risk" (where money is locked but not funded).
 
----
-
-### LR-F-04 — Release reservation
-
-The system MUST support explicit release of a reservation when settlement does not occur.
-
-Released liquidity MUST immediately become available again.
-
----
-
-### LR-F-05 — Reservation expiry
-
-The system MUST support time-bound reservations.
-
-Expired reservations MUST be released automatically without requiring external intervention.
-
----
-
-### LR-F-06 — Idempotency
-
-Repeated submission of identical reservation, consumption,
-or release requests MUST NOT result in duplicate side effects.
-
-Conflicting reuse of identifiers MUST be rejected.
-
----
-
-### LR-F-07 — Authorisation
-
-Only authorised actors MAY:
-
-- create reservations,
-- consume reservations,
-- release reservations.
-
-Unauthorised attempts MUST be rejected.
-
----
-
-## Error conditions
-
-### LR-E-01 — Insufficient liquidity
-
-Reservation creation MUST fail
-if the requested amount exceeds available unreserved liquidity.
-
----
-
-### LR-E-02 — Invalid lifecycle transition
-
-Operations inconsistent with the current reservation state
-MUST be rejected.
-
----
-
-### LR-E-03 — Expired reservation
-
-Attempts to consume or release an expired reservation
-MUST be rejected.
-
----
-
-## Auditability
-
-All reservation-related operations MUST generate
-audit-relevant events capturing:
-
-- the type of operation,
-- the affected reservation,
-- the actor role,
-- the timestamp,
-- the outcome.
-
-Audit records MUST NOT expose confidential or personal data.
-
----
-
-## Relationship to downstream specifications
-
-This functional specification constrains:
-
-- the Interface Behaviour Specification,
-- the Data Model Specification,
-- API definitions,
-- settlement logic and validation,
-- automated tests and CI/CD checks.
-
-Downstream artefacts MUST NOT contradict the requirements defined herein.
-
----
-
-## Disclaimer
-
-This specification is **illustrative**.
-
-It demonstrates how liquidity reservation principles can be translated into functional system requirements, without asserting an official ECB or Eurosystem implementation.
-
+2.  **Test Case Generation:**
+    - **Happy Path:** Simulate `TR-LIQ-01` -> `02` -> `04` -> `05` (Successful Top-up).
+    - **Rollback Path:** Simulate `TR-LIQ-04` -> `06` -> `07` (Eurosystem Timeout -> Unlock).
+    - *Constraint:* Assert that `ROLLING_BACK` state *always* triggers a call to `CBS.voidLock()`.
 

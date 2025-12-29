@@ -5,7 +5,7 @@
 # form: text
 # role: specification
 # status: normative
-# owner: system-architecture
+# owner: system-design
 # ---
 #
 # DISCLAIMER
@@ -25,193 +25,235 @@
 openapi: 3.0.3
 
 info:
-  title: Liquidity Reservation API
-  version: "0.1.0"
+  title: Liquidity Reservation API (Waterfall)
+  version: "1.0.0"
   description: |
-    Illustrative OpenAPI specification for liquidity reservation
-    within the Digital Euro Service Platform (DESP).
+    **FICTIONAL SPECIFICATION** for the Digital Euro Liquidity Management.
+    
+    This API defines the interface for PSPs to atomically Fund (Mint) and Defund (Burn) Digital Euro 
+    against Commercial Bank Money reservations, supporting the "Two-Phase Commit" pattern.
+    
+    **Traceability Dictionary:**
+    - **[SPEC-LIQ-FUNC]**: `liquidity-functional-spec.md` (State Machine & Logic)
+    - **[SPEC-LIQ-INT]**:  `liquidity-interfaces-spec.md` (Protocol & Headers)
+    - **[SPEC-LIQ-DATA]**: `liquidity-data-model-spec.md` (Data Schemas & Integrity)
+    
+  contact:
+    name: System Design Team
+    url: https://github.com/policy-to-production
 
-    Normative references:
-    - Spec LR-1: liquidity-reservation-functional-spec.md
-    - Spec LR-2: liquidity-reservation-interfaces-spec.md
-    - Spec LR-3: liquidity-reservation-data-model-spec.md
-
-    This specification exists to demonstrate methodology,
-    structure, and traceability — not to define a real API.
-
-# All endpoints defined here are exposed by:
-# COMP-EUR-05 — Digital Euro Access Gateway
-# and operate on authoritative state within:
-# COMP-EUR-04 — Digital Euro Service Platform (DESP)
-
+# Defined in [SPEC-LIQ-INT] Section 3: Component Inventory
 servers:
-  - url: https://api.example.eu/desp/liquidity
+  - url: https://api.access-gateway.eurosystem.eu/v1/liquidity
+    description: Digital Euro Access Gateway (COMP-EUR-05)
 
 components:
+  securitySchemes:
+    # Trace: [SPEC-LIQ-INT] Section 6 (Security Context)
+    mTLS:
+      type: http
+      scheme: mutual
+      description: |
+        Mutual TLS using eIDAS Qualified Website Authentication Certificates (QWACs).
+        Requests must be signed by the PSP's specialized Liquidity Key.
+
   parameters:
-    # Spec references:
-    # - Functional spec: LR-F-06 — Idempotency
-    # - Interface spec: INT-LR-04 — Idempotent invocation
+    # Trace: [SPEC-LIQ-INT] INT-LIQ-02 (Idempotency)
     IdempotencyKey:
       name: Idempotency-Key
       in: header
       required: true
       schema:
         type: string
+        format: uuid
       description: |
-        Client-generated idempotency key.
-
-        Repeated requests with the same key and identical payload
-        MUST result in the same outcome without duplicate side effects.
-        Conflicting reuse MUST be rejected.
+        Unique key (UUIDv4) to ensure safe retries. 
+        Critical for preventing double-funding on network timeouts.
 
   schemas:
-    # Spec reference:
-    # - Data model spec: Liquidity reservation entity
-    LiquidityReservation:
+    # Trace: [SPEC-LIQ-DATA] Section 4.2 Entity: FundingRequest
+    FundingRequest:
+      type: object
+      description: The payload for `OP-LIQ-01` to request issuance.
+      required:
+        - amount
+        - currency
+        - reservation_proof
+      properties:
+        amount:
+          type: integer
+          format: int64
+          description: |
+            Amount in minor units (cents). Must be positive.
+            Trace: [SPEC-LIQ-DATA] DAT-MSG-01
+          example: 1000
+          minimum: 1
+        currency:
+          type: string
+          pattern: '^EUR$'
+          description: |
+            Fixed value 'EUR'.
+            Trace: [SPEC-LIQ-DATA] DAT-MSG-02
+        reservation_proof:
+          type: string
+          description: |
+            Opaque hash or reference to the internal Commercial Bank Lock.
+            Trace: [SPEC-LIQ-DATA] DAT-PRI-01 (Privacy Rule), [SPEC-LIQ-FUNC] SEC-LIQ-01
+          example: "sha256:9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+        remittance_info:
+          type: string
+          maxLength: 140
+          description: Unstructured text for bank statement reconciliation.
+
+    # Trace: [SPEC-LIQ-DATA] Section 4.3 Entity: DefundingRequest
+    DefundingRequest:
+      type: object
+      description: The payload for `OP-LIQ-02` to offload excess liquidity.
+      required:
+        - amount
+        - reason_code
+      properties:
+        amount:
+          type: integer
+          format: int64
+          description: |
+            Amount to remove from circulation (cents).
+            Trace: [SPEC-LIQ-DATA] DAT-MSG-03
+          example: 500
+          minimum: 1
+        reason_code:
+          type: string
+          enum: [LIMIT_BREACH, ZERO_HOLDING_CONFIG]
+          description: |
+            The functional trigger for this operation.
+            Trace: [SPEC-LIQ-DATA] DAT-MSG-04
+
+    # Trace: [SPEC-LIQ-DATA] Common Response Structure
+    LiquidityResponse:
       type: object
       required:
-        - reservation_id
-        - liquidity_source_id
-        - amount
-        - state
+        - status
+        - settled_at
+        - settlement_ref
       properties:
-        reservation_id:
+        status:
           type: string
-          description: Globally unique reservation identifier
-        liquidity_source_id:
-          type: string
-          description: Referenced liquidity source
-        amount:
-          type: number
-          format: decimal
-          description: Reserved amount
-        state:
-          type: string
-          description: Current reservation lifecycle state
-          enum:
-            - REQUESTED
-            - RESERVED
-            - CONSUMED
-            - RELEASED
-            - EXPIRED
-        created_at:
+          enum: [SETTLED]
+          description: Confirmation status.
+        settled_at:
           type: string
           format: date-time
-        expires_at:
+          description: Timestamp of finality in the Settlement Engine.
+        settlement_ref:
           type: string
-          format: date-time
-        updated_at:
+          description: |
+            Unique Transaction ID generated by the Eurosystem.
+            Trace: [SPEC-LIQ-DATA] AUD-LIQ-01
+
+    # Trace: [SPEC-LIQ-INT] Standard Error Format
+    ProblemDetails:
+      type: object
+      properties:
+        type: 
           type: string
-          format: date-time
+        title: 
+          type: string
+        status: 
+          type: integer
+        detail: 
+          type: string
+        instance: 
+          type: string
+        error_code:
+          type: string
+          description: Machine-readable error code (e.g., LIMIT_BREACH).
+
+security:
+  - mTLS: []
 
 paths:
-
-  /reservations:
+  /fund:
     post:
-      summary: Create liquidity reservation
-      operationId: createLiquidityReservation
+      summary: Request Liquidity Funding (Waterfall)
+      operationId: fundDigitalEuro
       description: |
-        Creates a new liquidity reservation for a specified amount
-        from a given liquidity source.
-
-        Spec references:
-        - Functional spec: LR-F-01 — Create reservation
-        - Functional spec: LR-F-02 — Reservation exclusivity
-        - Interface spec: Flow 1 — Create reservation
-        - Data model spec: LiquidityReservation entity
+        Instructs the Eurosystem to issue (mint) Digital Euro. 
+        
+        **Functional Trace:** Executes Transition `TR-LIQ-04` (LOCKED -> FUNDING).
+        **Interface Trace:** Corresponds to `OP-LIQ-01` and `Flow 5.1`.
+        **Precondition:** MUST only be called after a successful internal lock of Commercial funds.
       parameters:
-        - $ref: "#/components/parameters/IdempotencyKey"
+        - $ref: '#/components/parameters/IdempotencyKey'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - liquidity_source_id
-                - amount
-                - expires_at
-              properties:
-                liquidity_source_id:
-                  type: string
-                amount:
-                  type: number
-                  format: decimal
-                expires_at:
-                  type: string
-                  format: date-time
+              $ref: '#/components/schemas/FundingRequest'
       responses:
-        "201":
-          description: Reservation created
+        '200':
+          description: |
+            Funding Successful. Liability created.
+            Trace: [SPEC-LIQ-INT] STEP-WAT-05, [SPEC-LIQ-FUNC] TR-LIQ-05.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LiquidityReservation"
-        "400":
-          description: Invalid request
-        "409":
-          description: Insufficient liquidity or idempotency conflict
+                $ref: '#/components/schemas/LiquidityResponse'
+        '400':
+          description: Validation Error (e.g., Invalid Currency, Amount mismatch).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '403':
+          description: |
+            Limit Breach. Funding would exceed Holding Limit.
+            Trace: [SPEC-LIQ-FUNC] REQ-LIQ-02 (Fail-Safe Rollback).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '504':
+          description: |
+            Gateway Timeout. Unknown state.
+            **Action Required:** PSP MUST trigger `TR-LIQ-06` (Rollback/Void).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
 
-  /reservations/{reservationId}/consume:
+  /defund:
     post:
-      summary: Consume liquidity reservation
-      operationId: consumeLiquidityReservation
+      summary: Request Liquidity Defunding (Reverse Waterfall)
+      operationId: defundDigitalEuro
       description: |
-        Consumes an existing liquidity reservation
-        as part of settlement execution.
-
-        Spec references:
-        - Functional spec: LR-F-03 — Consume reservation
-        - Interface spec: Flow 2 — Consume reservation
-        - Data model spec: Reservation lifecycle
+        Instructs the Eurosystem to destroy (burn) Digital Euro to reduce holding balance.
+        
+        **Functional Trace:** Executes logic for `REQ-LIQ-FUNC-05`.
+        **Interface Trace:** Corresponds to `OP-LIQ-02` and `Flow 5.2`.
       parameters:
-        - $ref: "#/components/parameters/IdempotencyKey"
-        - name: reservationId
-          in: path
-          required: true
-          schema:
-            type: string
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DefundingRequest'
       responses:
-        "200":
-          description: Reservation consumed
+        '200':
+          description: |
+            Defunding Successful. Liability reduced.
+            Trace: [SPEC-LIQ-INT] STEP-REV-04.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LiquidityReservation"
-        "403":
-          description: Not authorised
-        "409":
-          description: Invalid reservation state or conflict
-
-  /reservations/{reservationId}/release:
-    post:
-      summary: Release liquidity reservation
-      operationId: releaseLiquidityReservation
-      description: |
-        Releases a previously created liquidity reservation
-        without consuming it.
-
-        Spec references:
-        - Functional spec: LR-F-04 — Release reservation
-        - Interface spec: Flow 3 — Release reservation
-        - Data model spec: Reservation lifecycle
-      parameters:
-        - $ref: "#/components/parameters/IdempotencyKey"
-        - name: reservationId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Reservation released
+                $ref: '#/components/schemas/LiquidityResponse'
+        '422':
+          description: |
+            Insufficient Funds. Cannot defund more than current balance.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LiquidityReservation"
-        "403":
-          description: Not authorised
-        "409":
-          description: Invalid reservation state or conflict
+                $ref: '#/components/schemas/ProblemDetails'
 
+                

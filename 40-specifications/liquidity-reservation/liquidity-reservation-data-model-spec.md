@@ -5,198 +5,141 @@ audience: everyone
 form: text
 role: specification
 status: normative
-owner: system-architecture
+owner: system-design
 ---
 
 # Liquidity Reservation — Data Model Specification
 
-## Purpose
+## 1. Identification
+- **Global ID:** `SPEC-LIQ-DATA`
+- **Part of Set:** `SPEC-SET-LIQ`
+- **Traceability:**
+    - **Upstream Spec:** `SPEC-LIQ-FUNC` (Defines the states requiring storage)
+    - **Upstream Arch:** `@arch=SET-ARCH:0.1.0` (Defines `COMP-PSP-02` boundary)
 
-This document defines the **logical data model** required to support
-liquidity reservation within the Digital Euro Service Platform (DESP).
+## 2. Purpose and Scope
 
-It specifies the **minimum authoritative data** necessary to:
+This document defines the **schema and data integrity rules** for the Waterfall Engine (`COMP-PSP-02`).
 
-- enforce non-overcommitment of liquidity,
-- support reservation lifecycle management,
-- enable deterministic settlement behaviour,
-- provide auditability without exposing sensitive information.
+It governs:
+1.  **Data at Rest:** The `LiquidityReservation` entity stored by the PSP to manage the "Lock" state.
+2.  **Data in Motion:** The `FundingPayload` and `DefundingPayload` exchanged with the DESP via `SPEC-LIQ-INT`.
 
-This data model is **illustrative** and does not represent an official ECB schema.
+## 3. Conceptual Data Model
 
----
+### 3.1 Design Rationale: The "Split-State" Pattern
 
-## Normative context
+To support the **Two-Phase Commit** defined in `SPEC-LIQ-FUNC`, the data model strictly separates the **Internal State** from the **External Message**.
 
-This specification derives from:
+1.  **Persistence Requirement (`COMP-PSP-02`):** The Waterfall Engine must maintain a persistent record (`LiquidityReservation`) of every commercial lock. This ensures that if the system crashes after locking funds but before funding, the recovery process can identify the "Orphan Lock" and either complete or void it (Satisfying `REQ-LIQ-02`).
 
-- Liquidity Reservation — Functional Specification  
-- Liquidity Reservation — Interface Behaviour Specification  
-- System Architecture — Component Inventory  
+2.  **Privacy Barrier (`Zone A` vs. `Zone B`):** The internal record contains proprietary Core Banking references (`cbs_reference`). These MUST NOT be exposed to the DESP. Therefore, the external `FundingInstruction` carries only a sanitized "Reservation Proof" (Hash), complying with privacy mandates.
 
-Where the scheme rulebook is silent, conservative and
-risk-minimising assumptions are applied.
+The following diagram illustrates the relationship between the User's Wallet, the internal Reservation record, and the external Settlement transaction.
 
----
+**Visualisation (Normative)**
 
-## Design principles
+```mermaid
+classDiagram
+    direction TB
 
-### LR-DM-01 — Authoritative minimalism
+    %% 1. The Parent Entity (User Context)
+    class UserWallet {
+        +UUID user_id
+        +Decimal current_balance
+    }
 
-DESP stores **only authoritative reservation and liquidity data**.
+    %% 2. The Core Entity (Internal Record)
+    class LiquidityReservation {
+        <<Internal Zone A>>
+        +UUID reservation_id
+        +String cbs_reference
+        +Decimal amount
+        +Enum status
+        +Timestamp expiry_time
+        +String settlement_ref
+    }
 
-It MUST NOT store:
-- end-user identities,
-- PSP internal balances,
-- customer-level transaction context.
+    %% 3. External Systems (Dependencies)
+    class CoreBankingSystem {
+        <<External Legacy System>>
+        +String lock_id
+        +Decimal reserved_amount
+    }
 
----
+    class FundingInstruction {
+        <<External Message to DESP>>
+        +Integer amount
+        +String currency
+        +String reservation_proof
+    }
 
-### LR-DM-02 — Lifecycle-driven modelling
+    %% Relationships
+    UserWallet "1" -- "0..*" LiquidityReservation : initiates
+    
+    LiquidityReservation "1" --> "1" CoreBankingSystem : "tracks lock in"
+    LiquidityReservation "1" ..> "0..1" FundingInstruction : "generates payload"
+    
+    note for LiquidityReservation "The central source of truth for the Two-Phase Commit.\nStatus evolves: LOCKED -> SETTLED or FAILED"
+```
 
-All reservation data MUST be attributable
-to an explicit lifecycle state.
+## 4. Data Dictionary
 
-Implicit or inferred states are prohibited.
+### 4.1 Entity: LiquidityReservation (Internal)
+**Storage Target:** PSP Database (Zone A)
+**Purpose:** Tracks the lifecycle of a Commercial Bank Money lock to ensure it is eventually Captured or Voided.
 
----
+| Field Name | Data Type | Required | Description | Trace |
+| :--- | :--- | :--- | :--- | :--- |
+| **reservation_id** | `UUID` | Yes | Primary Key. Unique internal identifier for this operation. | `DAT-LIQ-01` |
+| **user_id** | `UUID` | Yes | Foreign Key to the PSP's local customer table. | `DAT-LIQ-02` |
+| **cbs_reference** | `String` | Yes | The ID returned by the Core Banking System during `LockFunds`. Used to trigger Capture/Void. | `REQ-LIQ-FUNC-02` |
+| **amount** | `Decimal` | Yes | The value locked in the Core Banking System. | `LIQ-01` |
+| **status** | `Enum` | Yes | `LOCKED`, `SETTLED`, `VOIDED`, `FAILED`. | `SPEC-LIQ-FUNC` (Sec 4) |
+| **expiry_time** | `Timestamp` | Yes | The time at which the Core Banking lock auto-expires (TTL). | `INT-LIQ-01` |
+| **settlement_ref** | `String` | No | The Transaction ID returned by DESP upon successful Funding. Populated only in `SETTLED` state. | `AUD-LIQ-01` |
 
-### LR-DM-03 — Separation of liquidity and reservation
+### 4.2 Entity: FundingRequest (External Payload)
+**Transmission Target:** Access Gateway (`I_Settlement`)
+**Purpose:** The payload sent to `OP-LIQ-01` (POST /fund) to request issuance.
 
-The model separates:
+| Field Name | Data Type | Format | Description | Trace |
+| :--- | :--- | :--- | :--- | :--- |
+| **amount** | `Integer` | `int64` | Amount in cent-euros (e.g., `1000` = €10.00). | `DAT-MSG-01` |
+| **currency** | `String` | `ISO 4217` | Fixed value: `EUR`. | `DAT-MSG-02` |
+| **reservation_proof** | `String` | `SHA-256` | A hash or opaque reference to the `reservation_id`. Allows the PSP to link the Mint event to the Lock event in audits without revealing internal IDs to DESP. | `SEC-LIQ-01` |
+| **remittance_info** | `String` | `Max 140` | (Optional) Reference for the bank statement (e.g., "Top-up 2024-01-01"). | `UX-01` |
 
-- **liquidity sources** (capacity),
-- **reservations** (temporary claims),
-- **audit events** (history).
+### 4.3 Entity: DefundingRequest (External Payload)
+**Transmission Target:** Access Gateway (`I_Settlement`)
+**Purpose:** The payload sent to `OP-LIQ-02` (POST /defund) to offload excess liquidity.
 
-This separation enables correctness, auditability, and extensibility.
+| Field Name | Data Type | Format | Description | Trace |
+| :--- | :--- | :--- | :--- | :--- |
+| **amount** | `Integer` | `int64` | Amount to defund (burn). | `DAT-MSG-03` |
+| **reason_code** | `String` | `Enum` | `LIMIT_BREACH`, `ZERO_HOLDING_CONFIG`. | `DAT-MSG-04` |
 
----
+## 5. Data Integrity & Privacy Rules
 
-## Core entities
-
-### Liquidity source
-
-A **Liquidity Source** represents a pool of funds
-from which liquidity may be reserved.
-
-This entity is authoritative but abstract.
-
-| Field | Type | Description |
-|------|------|-------------|
-| `liquidity_source_id` | String | Unique identifier |
-| `owner_id` | String | Participant or PSP reference |
-| `currency` | String | Currency code (e.g. EUR) |
-| `total_amount` | Decimal | Total available liquidity |
-| `reserved_amount` | Decimal | Amount currently reserved |
-| `updated_at` | Timestamp | Last update time |
-
-> **Note:**  
-> Available liquidity is derived as  
-> `total_amount - reserved_amount`.
-
----
-
-### Liquidity reservation
-
-A **Liquidity Reservation** represents an exclusive,
-time-bound claim on a portion of a liquidity source.
-
----
-
-#### Liquidity reservation entity
-
-| Field | Type | Description |
-|------|------|-------------|
-| `reservation_id` | String | Globally unique identifier |
-| `liquidity_source_id` | String | Referenced liquidity source |
-| `amount` | Decimal | Reserved amount |
-| `state` | Enum | Current reservation lifecycle state |
-| `created_at` | Timestamp | Reservation creation time |
-| `expires_at` | Timestamp | Reservation expiry time |
-| `updated_at` | Timestamp | Last state change |
-| `version` | Integer | Optimistic concurrency / audit version |
-
----
-
-## Reservation lifecycle
-
-> **Placeholder:**  
-> Reservation lifecycle states and transitions
-> are defined in the Functional and Interface specifications.
-
-This data model references those definitions
-but does not redefine them here.
-
----
-
-## Reservation invariants
-
-The following invariants MUST always hold:
-
-- A reservation amount MUST NOT exceed available liquidity.
-- A reservation MUST bind liquidity exclusively while active.
-- Reserved liquidity MUST NOT be double-counted.
-- Consumed reservations MUST NOT be released.
-- Expired reservations MUST NOT be consumed.
-
-Violations MUST be prevented by design.
+| ID | Rule Name | Logic | Trace |
+| :--- | :--- | :--- | :--- |
+| **DAT-VAL-01** | **Amount Precision** | All monetary values MUST be stored and transmitted as **Integers** (Minor Units / Cents) to prevent floating-point rounding errors. | `ARCH-STD-01` |
+| **DAT-PRI-01** | **Opaque References** | The `reservation_proof` sent to DESP MUST NOT contain PII or raw Core Banking IDs. It must be a random UUID or Hash generated by the Waterfall Engine. | `PRIV-01` |
+| **DAT-INT-01** | **Orphan Prevention** | A `LiquidityReservation` record MUST NOT be deleted until it reaches a terminal state (`SETTLED` or `VOIDED`). | `ACID` |
 
 ---
 
-## Audit metadata
+## Appendix: How to Parse This Specification
 
-### Purpose
+**For Automation Engineers:**
 
-Audit metadata ensures that reservation behaviour
-is **transparent and reconstructable** without exposing sensitive data.
+1.  **Schema Validation:**
+    - Parse **Section 4.2 and 4.3**.
+    - **Generate:** JSON Schema or Protobuf definitions for the `I_Settlement` API.
+    - *Validation:* Ensure `amount` is strictly typed as `integer`, not `float`.
 
----
-
-### Audit event
-
-| Field | Type | Description |
-|------|------|-------------|
-| `event_id` | String | Unique audit event identifier |
-| `reservation_id` | String | Affected reservation |
-| `event_type` | Enum | CREATE, CONSUME, RELEASE, EXPIRE |
-| `performed_by` | String | Actor role or system component |
-| `performed_at` | Timestamp | Event timestamp |
-| `source` | String | Access Gateway / DESP |
-
-Audit events are **append-only**.
-
----
-
-## Privacy considerations
-
-- Liquidity and reservation identifiers are opaque.
-- No personal data is stored in DESP.
-- PSP internal accounting details remain out of scope.
-
-This aligns with privacy-by-design principles
-and the intermediated model of the Digital Euro.
-
----
-
-## Mapping to downstream artefacts
-
-This data model constrains:
-
-- database schemas (illustrative),
-- API payloads,
-- reservation validation logic,
-- settlement orchestration,
-- automated tests and CI/CD checks.
-
-Downstream artefacts MUST remain consistent with this model.
-
----
-
-## Disclaimer
-
-This data model is **illustrative**.
-
-It demonstrates how liquidity reservation requirements can be realised in a coherent, auditable data model, without asserting an official ECB or Eurosystem implementation.
-
+2.  **Database Migration:**
+    - Parse **Section 4.1**.
+    - **Generate:** SQL Migration script (e.g., `CREATE TABLE liquidity_reservations ...`).
+    - *Constraint:* Ensure `cbs_reference` has a Unique Index to prevent double-usage of the same bank lock.
 
