@@ -1,40 +1,36 @@
-# artefact_type: evidence
-# visibility: public
-# audience: everyone
-# form: text
-# role: manifest
-# status: operative
-# owner: system-quality
+artefact_type: evidence
+form: text
+role: manifest
+visibility: public
+audience: everyone
+status: FICTIONAL-RELEASED
+
 # DISCLAIMER: This content is illustrative and for educational purposes only.
 # It demonstrates a methodology for structure and traceability.
 # It does not represent the test scenarios or requirements of the official Digital Euro project or any other real project.
 
 meta:
   # Unique Identifier for this Vector Set
-  id: VEC-SET-ONB
+  id: VEC-SET-LIQ
   
   # Human-readable title
-  title: "Participant Onboarding Test Vectors"
+  title: "Liquidity Reservation Test Vectors"
   
   # The Version of the *Vectors* (Data definitions)
-  # Example: Added new edge cases for 'invalid IBAN'
   version: "0.1.0"
   
   # Lifecycle State
   status: FICTIONAL-RELEASED
   
-  date: 2025-12-29
+  date: 2025-12-30
 
 # Dependency Declaration:
-# These vectors are derived from the data types defined in the Spec
 targets:
-  specification_id: SPEC-SET-ONB
+  specification_id: SPEC-LIQ-DATA
   specification_version: "0.1.0"
 
 # The data contents (Machine-readable test inputs/outputs)
 contains:
-  - tv-onb-01-valid-profiles.json
-  - tv-onb-02-boundary-values.json
-  - tv-onb-03-malformed-payloads.json
-
-  
+  - tv-liq-01-valid-funding.json
+  - tv-liq-02-limit-breach.json
+  - tv-liq-03-malformed-proofs.json

@@ -1,0 +1,48 @@
+{
+  "_header": {
+    "disclaimer": "This content is illustrative and for educational purposes only. It demonstrates a methodology for structure and traceability. It does not represent the test scenarios or requirements of the official Digital Euro project or any other real project.",
+    "artefact_type": "evidence",
+    "visibility": "public",
+    "audience": "everyone",
+    "form": "text",
+    "role": "data-vector",
+    "status": "operative",
+    "owner": "system-quality"
+  },
+  "metadata": {
+    "vector_id": "TV-LIQ-03",
+    "description": "Malformed payloads and proofs for security testing.",
+    "upstream_spec": "SPEC-LIQ-DATA v0.1.0",
+    "case_type": "negative"
+  },
+  "vectors": [
+    {
+      "id": "vec-sec-001",
+      "description": "Invalid Hash Format (Not Hex)",
+      "input": {
+        "amount": 100,
+        "currency": "EUR",
+        "reservation_proof": "invalid-string-!@#",
+        "idempotency_key": "uuid-v4-sec-001"
+      },
+      "expected_output": {
+        "status": 400,
+        "error_code": "INVALID_FORMAT"
+      }
+    },
+    {
+      "id": "vec-sec-002",
+      "description": "SQL Injection Attempt in Proof",
+      "input": {
+        "amount": 100,
+        "currency": "EUR",
+        "reservation_proof": "a3b9'; DROP TABLE WALLETS; --",
+        "idempotency_key": "uuid-v4-sec-002"
+      },
+      "expected_output": {
+        "status": 400,
+        "error_code": "INVALID_FORMAT"
+      }
+    }
+  ]
+}

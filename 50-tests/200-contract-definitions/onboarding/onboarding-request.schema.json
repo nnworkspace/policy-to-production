@@ -2,6 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://specs.digitaleuro.eu/schemas/onboarding/request/v1",
   "_header": {
+    "disclaimer": "This content is illustrative and for educational purposes only. It demonstrates a methodology for structure and traceability. It does not represent the test scenarios or requirements of the official Digital Euro project or any other real project.",
     "artefact_type": "contract_definition",
     "visibility": "public",
     "audience": "everyone",
@@ -41,4 +42,3 @@
     }
   }
 }
-

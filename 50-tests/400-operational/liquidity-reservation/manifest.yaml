@@ -1,0 +1,43 @@
+artefact_type: evidence
+form: text
+role: evidence
+visibility: public
+audience: everyone
+status: FICTIONAL-RELEASED
+
+# DISCLAIMER: This content is illustrative and for educational purposes only.
+# It demonstrates a methodology for structure and traceability.
+# It does not represent the test scenarios or requirements of the official Digital Euro project or any other real project.
+
+set:
+  id: OPS-LIQ
+  name: Liquidity Reservation – Operational Assurance
+  version: 0.1.0
+  description: >
+    Operational assurance set covering the runtime guarantees
+    of the Liquidity Reservation (Waterfall) mechanism, including
+    latency SLOs for critical funding paths.
+
+upstream:
+  specifications:
+    - id: SPEC-LIQ-FUNC
+      version: 0.1
+    - id: SPEC-LIQ-INT
+      version: 0.1
+  rulebooks:
+    - id: RULEBOOK-DE
+      version: 0.9
+
+contains:
+  - LIQ-OPT-01-funding-performance.yaml
+
+governance:
+  owner: system-quality
+  review_cycle: per-release
+  change_policy: versioned-set-only
+
+notes:
+  - >
+    Latency requirements for Liquidity Reservation are stricter
+    than general onboarding due to the blocking nature of
+    payment authorization flows.

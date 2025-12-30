@@ -5,6 +5,9 @@
 # role: manifest
 # status: normative
 # owner: system-quality
+# DISCLAIMER: This content is illustrative and for educational purposes only.
+# It demonstrates a methodology for structure and traceability.
+# It does not represent the test scenarios or requirements of the official Digital Euro project or any other real project.
 
 meta:
   # Unique Identifier for this Contract Set

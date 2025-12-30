@@ -1,0 +1,48 @@
+{
+  "_header": {
+    "disclaimer": "This content is illustrative and for educational purposes only. It demonstrates a methodology for structure and traceability. It does not represent the test scenarios or requirements of the official Digital Euro project or any other real project.",
+    "artefact_type": "evidence",
+    "visibility": "public",
+    "audience": "everyone",
+    "form": "text",
+    "role": "data-vector",
+    "status": "operative",
+    "owner": "system-quality"
+  },
+  "metadata": {
+    "vector_id": "TV-LIQ-02",
+    "description": "Funding requests exceeding defined limits.",
+    "upstream_spec": "SPEC-LIQ-DATA v0.1.0",
+    "case_type": "negative"
+  },
+  "vectors": [
+    {
+      "id": "vec-err-001",
+      "description": "Exceeds Single Transaction Limit",
+      "input": {
+        "amount": 300001,
+        "currency": "EUR",
+        "reservation_proof": "a3b9425d...",
+        "idempotency_key": "uuid-v4-err-001"
+      },
+      "expected_output": {
+        "status": 400,
+        "error_code": "LIMIT_EXCEEDED"
+      }
+    },
+    {
+      "id": "vec-err-002",
+      "description": "Exceeds Total Holdings Limit (Context Dependent)",
+      "input": {
+        "amount": 1000000,
+        "currency": "EUR",
+        "reservation_proof": "b2c1425d...",
+        "idempotency_key": "uuid-v4-err-002"
+      },
+      "expected_output": {
+        "status": 409,
+        "error_code": "HOLDING_LIMIT_BREACH"
+      }
+    }
+  ]
+}

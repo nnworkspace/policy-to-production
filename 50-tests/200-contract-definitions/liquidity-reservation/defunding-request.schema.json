@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://specs.digitaleuro.eu/schemas/liquidity/defunding-request/v1",
+  "_header": {
+    "disclaimer": "This content is illustrative and for educational purposes only. It demonstrates a methodology for structure and traceability. It does not represent the test scenarios or requirements of the official Digital Euro project or any other real project.",
+    "artefact_type": "contract_definition",
+    "visibility": "public",
+    "audience": "everyone",
+    "form": "text",
+    "role": "assurance",
+    "status": "normative",
+    "owner": "system-quality",
+    "traceability": [
+      "@spec=SPEC-LIQ-DATA:0.1.0",
+      "@spec=SPEC-LIQ-INT:0.1.0"
+    ]
+  },
+  "title": "Defunding Request Contract",
+  "description": "Validates the payload for OP-LIQ-02 (Defund). Enforces valid functional reasons.",
+  "type": "object",
+  "required": [
+    "amount",
+    "reason_code"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "amount": {
+      "type": "integer",
+      "description": "Amount to defund in CENT-EURO. [Trace: DAT-MSG-03]",
+      "minimum": 1,
+      "examples": [
+        500
+      ]
+    },
+    "reason_code": {
+      "type": "string",
+      "description": "Functional trigger for the defunding. [Trace: DAT-MSG-04]",
+      "enum": [
+        "LIMIT_BREACH",
+        "ZERO_HOLDING_CONFIG"
+      ]
+    }
+  }
+}

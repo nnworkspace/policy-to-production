@@ -1,5 +1,6 @@
 {
   "_header": {
+    "disclaimer": "This content is illustrative and for educational purposes only. It demonstrates a methodology for structure and traceability. It does not represent the test scenarios or requirements of the official Digital Euro project or any other real project.",
     "artefact_type": "evidence",
     "visibility": "public",
     "audience": "everyone",
@@ -25,7 +26,10 @@
         "incorporation_country": "GB",
         "regulatory_status": "E_MONEY_INSTITUTION",
         "contacts": [
-          { "role": "technical_admin", "email": "a@b.com" }
+          {
+            "role": "technical_admin",
+            "email": "a@b.com"
+          }
         ]
       },
       "expected_result": {
@@ -43,16 +47,46 @@
         "incorporation_country": "FR",
         "regulatory_status": "OTHER_REGULATED",
         "contacts": [
-           {"role": "admin_1", "email": "1@matrix.com"},
-           {"role": "admin_2", "email": "2@matrix.com"},
-           {"role": "admin_3", "email": "3@matrix.com"},
-           {"role": "admin_4", "email": "4@matrix.com"},
-           {"role": "admin_5", "email": "5@matrix.com"},
-           {"role": "admin_6", "email": "6@matrix.com"},
-           {"role": "admin_7", "email": "7@matrix.com"},
-           {"role": "admin_8", "email": "8@matrix.com"},
-           {"role": "admin_9", "email": "9@matrix.com"},
-           {"role": "admin_10", "email": "10@matrix.com"}
+          {
+            "role": "admin_1",
+            "email": "1@matrix.com"
+          },
+          {
+            "role": "admin_2",
+            "email": "2@matrix.com"
+          },
+          {
+            "role": "admin_3",
+            "email": "3@matrix.com"
+          },
+          {
+            "role": "admin_4",
+            "email": "4@matrix.com"
+          },
+          {
+            "role": "admin_5",
+            "email": "5@matrix.com"
+          },
+          {
+            "role": "admin_6",
+            "email": "6@matrix.com"
+          },
+          {
+            "role": "admin_7",
+            "email": "7@matrix.com"
+          },
+          {
+            "role": "admin_8",
+            "email": "8@matrix.com"
+          },
+          {
+            "role": "admin_9",
+            "email": "9@matrix.com"
+          },
+          {
+            "role": "admin_10",
+            "email": "10@matrix.com"
+          }
         ]
       },
       "expected_result": {
@@ -62,4 +96,3 @@
     }
   ]
 }
-

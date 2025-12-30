@@ -5,6 +5,10 @@ visibility: public
 audience: everyone
 status: FICTIONAL-RELEASED
 
+# DISCLAIMER: This content is illustrative and for educational purposes only.
+# It demonstrates a methodology for structure and traceability.
+# It does not represent the test scenarios or requirements of the official Digital Euro project or any other real project.
+
 set:
   id: SEC-SYS
   name: System-level Security Assurance

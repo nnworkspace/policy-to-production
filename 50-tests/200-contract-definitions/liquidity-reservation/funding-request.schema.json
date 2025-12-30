@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://specs.digitaleuro.eu/schemas/liquidity/funding-request/v1",
+  "_header": {
+    "disclaimer": "This content is illustrative and for educational purposes only. It demonstrates a methodology for structure and traceability. It does not represent the test scenarios or requirements of the official Digital Euro project or any other real project.",
+    "artefact_type": "contract_definition",
+    "visibility": "public",
+    "audience": "everyone",
+    "form": "text",
+    "role": "assurance",
+    "status": "normative",
+    "owner": "system-quality",
+    "traceability": [
+      "@spec=SPEC-LIQ-DATA:0.1.0",
+      "@spec=SPEC-LIQ-INT:0.1.0"
+    ]
+  },
+  "title": "Funding Request Contract",
+  "description": "Validates the payload for OP-LIQ-01 (Fund). Enforces correct currency units.",
+  "type": "object",
+  "required": [
+    "amount",
+    "currency",
+    "reservation_proof"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "amount": {
+      "type": "integer",
+      "description": "Amount in CENT-EURO (Minor Units). Must be positive. [Trace: DAT-MSG-01, DAT-VAL-01]",
+      "minimum": 1,
+      "examples": [
+        1000
+      ]
+    },
+    "currency": {
+      "type": "string",
+      "description": "Fixed currency code. [Trace: DAT-MSG-02]",
+      "enum": [
+        "EUR"
+      ]
+    },
+    "reservation_proof": {
+      "type": "string",
+      "description": "Opaque reference to internal lock. Privacy safe. [Trace: SEC-LIQ-01]",
+      "minLength": 1
+    },
+    "remittance_info": {
+      "type": "string",
+      "maxLength": 140,
+      "description": "Optional statement text. [Trace: UX-01]"
+    }
+  }
+}

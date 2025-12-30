@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://specs.digitaleuro.eu/schemas/onboarding/record/v1",
+  "$id": "https://specs.digitaleuro.eu/schemas/liquidity/response/v1",
   "_header": {
     "disclaimer": "This content is illustrative and for educational purposes only. It demonstrates a methodology for structure and traceability. It does not represent the test scenarios or requirements of the official Digital Euro project or any other real project.",
     "artefact_type": "contract_definition",
@@ -11,36 +11,35 @@
     "status": "normative",
     "owner": "system-quality",
     "traceability": [
-      "@spec=SPEC-OB-DATA:0.1.0"
+      "@spec=SPEC-LIQ-DATA:0.1.0"
     ]
   },
-  "title": "Alias Record Contract",
-  "description": "Validates the authoritative User Record returned by the Eurosystem. Traces to the Data Model Specification.",
+  "title": "Liquidity Response Contract",
+  "description": "Validates the success response for Funding and Defunding.",
   "type": "object",
   "required": [
-    "alias_id",
     "status",
-    "created_at"
+    "settled_at",
+    "settlement_ref"
   ],
   "additionalProperties": false,
   "properties": {
-    "alias_id": {
-      "type": "string",
-      "description": "The unique identifier stored in the central registry. [Trace: DAT-ALS-01]",
-      "pattern": "^[a-f0-9]{64}$"
-    },
     "status": {
       "type": "string",
-      "description": "Lifecycle state of the alias. [Trace: DAT-ALS-03]",
+      "description": "Confirmation of finality. [Trace: SPEC-LIQ-FUNC]",
       "enum": [
-        "ACTIVE",
-        "SUSPENDED"
+        "SETTLED"
       ]
     },
-    "created_at": {
+    "settled_at": {
       "type": "string",
       "format": "date-time",
-      "description": "UTC timestamp of registration."
+      "description": "Timestamp of settlement finality."
+    },
+    "settlement_ref": {
+      "type": "string",
+      "description": "Unique Transaction ID. [Trace: AUD-LIQ-01]",
+      "minLength": 1
     }
   }
 }

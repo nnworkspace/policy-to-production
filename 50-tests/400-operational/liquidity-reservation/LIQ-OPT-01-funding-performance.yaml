@@ -1,0 +1,53 @@
+# artefact_type: evidence
+# visibility: public
+# audience: everyone
+# form: text
+# role: evidence
+# status: operative
+# owner: system-quality
+# DISCLAIMER: This content is illustrative and for educational purposes only.
+# It demonstrates a methodology for structure and traceability.
+# It does not represent the test scenarios or requirements of the official Digital Euro project or any other real project.
+
+# ------------------------------------------------------------------------------
+# Operational Assurance Manifest: Liquidity Funding (Waterfall)
+# ------------------------------------------------------------------------------
+# Tracing: Validates 'liquidity' specific operational expectations.
+# ------------------------------------------------------------------------------
+
+metadata:
+  # Tracing: Unique ID for audit logs
+  assurance_id: "OPS-LIQ-001"
+  # Tracing: Links to the specific throughput requirement for Payments/Liquidity
+  upstream_id: "REQ-LIQ-PERF-100" 
+  # Tracing: Verifies against this specific version of the requirement
+  upstream_version: "v1.0.0"
+  scope: "liquidity-reservation"
+  type: "performance-profile"
+  description: "Defines strict low-latency SLOs for the critical path of reservation funding."
+
+load_profile:
+  # Tracing: Baseline traffic for inter-PSP settlements
+  nominal_throughput: 50   # RPS (Requests Per Second)
+  # Tracing: Burst capacity for peak settlement windows
+  spike_throughput: 1000   # RPS
+
+service_level_objectives:
+  latency:
+    # Tracing: "95% of requests < 100ms" (SLO-LIQ-LAT-01) - Critical Path
+    p95_threshold_ms: 100
+    # Tracing: "99% of requests < 250ms" (SLO-LIQ-LAT-02)
+    p99_threshold_ms: 250
+    # Tracing: Hard timeout to release locks quickly
+    max_threshold_ms: 500
+  
+  error_budget:
+    # Tracing: Extremely low tolerance for failures in payment flow (0.01%)
+    max_error_rate_nominal: 0.0001
+    
+  degradation_policy:
+    # Tracing: Fail-fast behavior to prevent holding locks (REQ-RESILIENCE-09)
+    allow_partial_outage: false
+    min_success_rate_under_stress: 0.95 # 95% success required even under stress
+    expected_error_code: 503 # Service Unavailable (Fail Fast)
+    recovery_time_seconds: 10 # Must recover very quickly

@@ -3,35 +3,35 @@
 # audience: everyone
 # form: text
 # role: manifest
-# status: operative
+# status: normative
 # owner: system-quality
 # DISCLAIMER: This content is illustrative and for educational purposes only.
 # It demonstrates a methodology for structure and traceability.
 # It does not represent the test scenarios or requirements of the official Digital Euro project or any other real project.
 
 meta:
-  # Unique Identifier for this Test Suite
-  id: TEST-SET-ONB
+  # Unique Identifier for this Contract Set
+  id: CONTRACT-SET-LIQ
   
   # Human-readable title
-  title: "Participant Onboarding Conformance Suite"
+  title: "Liquidity Reservation Contracts (Schemas)"
   
-  # The Version of the *Tests* (Not the specs!)
-  # Example: We fixed a bug in the test code, so we bump to 1.0.1
-  version: "0.1.1"
+  # Version of these Contract Definitions
+  version: "0.1.0"
   
   # Lifecycle State
   status: FICTIONAL-RELEASED
   
-  date: 2025-12-29
+  date: 2025-12-30
 
 # Dependency Declaration:
-# This Test Suite is designed to validate the following Spec Version
+# Validates interfaces defined in the following Spec Set
 targets:
-  specification_id: SPEC-SET-ONB
-  specification_version: "0.1.0"
+  specification_id: SPEC-SET-LIQ
+  specification_version: "1.0.0"
 
-# The executable contents
+# The executable contents (JSON Schemas)
 contains:
-  - ONB-TS-01-registration.feature
-  - ONB-TS-02-status-query.feature
+  - funding-request.schema.json
+  - defunding-request.schema.json
+  - liquidity-response.schema.json

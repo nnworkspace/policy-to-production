@@ -1,0 +1,48 @@
+{
+  "_header": {
+    "disclaimer": "This content is illustrative and for educational purposes only. It demonstrates a methodology for structure and traceability. It does not represent the test scenarios or requirements of the official Digital Euro project or any other real project.",
+    "artefact_type": "evidence",
+    "visibility": "public",
+    "audience": "everyone",
+    "form": "text",
+    "role": "data-vector",
+    "status": "operative",
+    "owner": "system-quality"
+  },
+  "metadata": {
+    "vector_id": "TV-LIQ-01",
+    "description": "Valid funding requests for successful reservation.",
+    "upstream_spec": "SPEC-LIQ-DATA v0.1.0",
+    "case_type": "positive"
+  },
+  "vectors": [
+    {
+      "id": "vec-001",
+      "description": "Standard Funding Request (Integer Amount)",
+      "input": {
+        "amount": 1000,
+        "currency": "EUR",
+        "reservation_proof": "a3b9425d...",
+        "idempotency_key": "uuid-v4-001"
+      },
+      "expected_output": {
+        "status": 201,
+        "reservation_id": "RES-001"
+      }
+    },
+    {
+      "id": "vec-002",
+      "description": "Max Allowed Transaction Value",
+      "input": {
+        "amount": 300000,
+        "currency": "EUR",
+        "reservation_proof": "f8c2910a...",
+        "idempotency_key": "uuid-v4-002"
+      },
+      "expected_output": {
+        "status": 201,
+        "reservation_id": "RES-002"
+      }
+    }
+  ]
+}

@@ -10,31 +10,27 @@
 # It does not represent the test scenarios or requirements of the official Digital Euro project or any other real project.
 
 meta:
-  # Unique Identifier for this Vector Set
-  id: VEC-SET-ONB
+  # Unique Identifier for this Test Suite
+  id: TEST-SET-LIQ
   
   # Human-readable title
-  title: "Participant Onboarding Test Vectors"
+  title: "Liquidity Reservation (Waterfall) Conformance Suite"
   
-  # The Version of the *Vectors* (Data definitions)
-  # Example: Added new edge cases for 'invalid IBAN'
+  # The Version of the *Tests* (Not the specs!)
   version: "0.1.0"
   
   # Lifecycle State
   status: FICTIONAL-RELEASED
   
-  date: 2025-12-29
+  date: 2025-12-30
 
 # Dependency Declaration:
-# These vectors are derived from the data types defined in the Spec
+# This Test Suite is designed to validate the following Spec Version
 targets:
-  specification_id: SPEC-SET-ONB
-  specification_version: "0.1.0"
+  specification_id: SPEC-SET-LIQ
+  specification_version: "1.0.0"
 
-# The data contents (Machine-readable test inputs/outputs)
+# The executable contents
 contains:
-  - tv-onb-01-valid-profiles.json
-  - tv-onb-02-boundary-values.json
-  - tv-onb-03-malformed-payloads.json
-
-  
+  - LIQ-TS-01-waterfall-funding.feature
+  - LIQ-TS-02-reverse-waterfall.feature
