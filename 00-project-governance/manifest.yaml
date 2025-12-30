@@ -27,6 +27,7 @@ contains:
   - README.md
   - access-derivation-and-auditability.md
   - artefact-classification.md
+  - branching-strategy.md
   - communication-and-project-management.md
   - commit-message-conventions.md
   - configuration-management.md
@@ -34,5 +35,8 @@ contains:
   - issue-labels.md
   - linting-rules.md
   - logical-system-and-visibility.md
+  - stakeholders.md
+  - timeline.md
+  
 
   
