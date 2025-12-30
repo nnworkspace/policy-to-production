@@ -9,7 +9,7 @@
 [package]
 name = "governance-common"
 version = "0.1.0"
-edition = "2025"
+edition = "2021"
 description = "Governance instrumentation primitives for Rust"
 
 [lib]
