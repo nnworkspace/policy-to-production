@@ -30,7 +30,6 @@ The documents in this folder define:
 
 They do **not** describe business logic, technical implementations, or project-specific deliverables.
 
----
 
 ## Governance documents
 
@@ -44,6 +43,9 @@ The governance corpus currently includes:
 
 - **`logical-system-and-visibility.md`**  
   Explains how a single logical system is maintained despite physical distribution of artefacts due to visibility or contractual constraints.
+
+- **`branching-strategy.md`**
+  Defines the Git branching model (Feature Branch Workflow) used to maintain stability and agility in the central repository.
 
 - **`communication-and-project-management.md`**  
   Defines how collaboration, coordination, and decision-making are conducted using the shared Git-based workbench.
@@ -66,7 +68,6 @@ The governance corpus currently includes:
 
 Additional governance instruments (such as issue templates) may live in subfolders and are governed by the same principles.
 
----
 
 ## Normative status
 
@@ -80,7 +81,6 @@ They define constraints that are:
 
 Changes to governance documents should therefore be treated as **governance decisions**, not routine edits.
 
----
 
 ## Audience
 
@@ -94,8 +94,6 @@ These documents are written for **everyone involved in the project**, including:
 
 They are intended to provide a **shared frame of reference** across disciplines.
 
----
-
 ## Relationship to the rest of the repository
 
 This folder does not stand alone.
@@ -108,8 +106,6 @@ Governance is effective only when it is:
 
 The purpose of this folder is to make those governing principles explicit, inspectable, and durable.
 
----
-
 ## Final note
 
 Governance, in this project, is not an overlay.
@@ -117,4 +113,12 @@ Governance, in this project, is not an overlay.
 It is part of the system itself.
 
 By keeping governance explicit, minimal, and enforceable, the project avoids institutional amnesia and preserves the intent behind what is built — long after the first implementation has shipped.
+
+## Disclaimer
+
+The documents in this folder are **illustrative and educational**.
+
+They do not represent official governance policies, legal mandates, or endorsed standards for the Digital Euro or any other real-world system.
+
+
 
