@@ -1,0 +1,1612 @@
+[
+  {
+    "source": "20-rulebook/functional-onboarding.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: rulebook\nvisibility: public\naudience: \n  - PSP\n  - NCB\n  - VENDOR\nform: text\nrole: rule\nstatus: normative\nowner: rulebook-development-group\n---\n"
+  },
+  {
+    "source": "20-rulebook/functional-onboarding.md",
+    "section": "User Onboarding and Identity Rules",
+    "text": ""
+  },
+  {
+    "source": "20-rulebook/functional-onboarding.md",
+    "section": "Source Reference",
+    "text": "**Draft Digital Euro Scheme Rulebook V0.9** \u2014 Section 5 (User Management).\n"
+  },
+  {
+    "source": "20-rulebook/functional-onboarding.md",
+    "section": "Purpose",
+    "text": "This document defines the rules for identifying users and establishing digital euro relationships. These rules determine the logic for the **Onboarding API** and **User Registry**.\n\n---\n"
+  },
+  {
+    "source": "20-rulebook/functional-onboarding.md",
+    "section": "1. Single Identity Principle",
+    "text": "**Rule ONB-01:** One User, One Identity.\n- A user is identified uniquely across the ecosystem, regardless of which Intermediary they use.\n- The scheme ensures that the **Holding Limit** is enforced across all intermediaries held by the same natural person.\n"
+  },
+  {
+    "source": "20-rulebook/functional-onboarding.md",
+    "section": "2. Onboarding Process",
+    "text": "**Rule ONB-02:** Intermediary Responsibility.\n- Onboarding MUST be performed by an authorized Intermediary.\n- The Intermediary MUST perform KYC/AML checks in compliance with relevant EU regulations before a digital euro account is activated.\n\n**Rule ONB-03:** Digital Euro Account Creation.\n- Upon successful verification, the Intermediary provisions a **Digital Euro Account** (wallet).\n- This account MUST be linked to the user's unique digital euro identifier.\n"
+  },
+  {
+    "source": "20-rulebook/functional-onboarding.md",
+    "section": "3. Account Switching & Portability",
+    "text": "**Rule ONB-04:** Portability.\n- Users MUST be able to switch Intermediaries or hold accounts with multiple Intermediaries (subject to the aggregate holding limit).\n- Onboarding a user at a new Intermediary triggers a check against the central limit repository to ensure compliance.\n"
+  },
+  {
+    "source": "20-rulebook/functional-onboarding.md",
+    "section": "4. Offboarding",
+    "text": "**Rule ONB-05:** Termination.\n- Users have the right to close their digital euro account at any time.\n- Intermediaries MUST process offboarding by defunding any remaining balance to the user's commercial bank account before closure.\n\n"
+  },
+  {
+    "source": "20-rulebook/actors-and-roles.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: rulebook\nvisibility: public\naudience: everyone\nform: text\nrole: rule\nstatus: normative\nowner: rulebook-development-group\n---\n"
+  },
+  {
+    "source": "20-rulebook/actors-and-roles.md",
+    "section": "Scheme Actors and Roles",
+    "text": ""
+  },
+  {
+    "source": "20-rulebook/actors-and-roles.md",
+    "section": "Source Reference",
+    "text": "**Draft Digital Euro Scheme Rulebook V0.9** \u2014 Sections 2.3 (Scheme Actors) & 3 (Participants).\n"
+  },
+  {
+    "source": "20-rulebook/actors-and-roles.md",
+    "section": "Purpose",
+    "text": "This document defines the primary actors and roles within the Digital Euro ecosystem. All technical specifications for authentication, authorization, and access control must align with these definitions.\n\n---\n"
+  },
+  {
+    "source": "20-rulebook/actors-and-roles.md",
+    "section": "1. Governance Authority",
+    "text": ""
+  },
+  {
+    "source": "20-rulebook/actors-and-roles.md",
+    "section": "The Eurosystem",
+    "text": "The Eurosystem (comprising the ECB and National Central Banks of the euro area) acts as the **Scheme Owner** and **Issuer**.\n- **Role:** Defines the rules, issues the digital euro, and safeguards the stability of the system.\n- **Responsibilities:**\n    - Setting holding limits.\n    - Overseeing scheme integrity.\n    - Providing settlement services.\n"
+  },
+  {
+    "source": "20-rulebook/actors-and-roles.md",
+    "section": "2. Intermediaries (Participants)",
+    "text": "Intermediaries are the primary interface for end users. They are typically **Payment Service Providers (PSPs)** authorized under PSD2/PSR.\n"
+  },
+  {
+    "source": "20-rulebook/actors-and-roles.md",
+    "section": "Role: Digital Euro Service Provider",
+    "text": "- **User Management:** Responsible for onboarding, Know Your Customer (KYC), and Anti-Money Laundering (AML) checks.\n- **Account Management:** managing the digital euro payment accounts (wallets) on behalf of users.\n- **Interface:** Providing the mobile app, online banking interface, or physical device for users to interact with the digital euro.\n- **Liquidity:** Facilitating funding and defunding operations via commercial bank money.\n"
+  },
+  {
+    "source": "20-rulebook/actors-and-roles.md",
+    "section": "Private Individuals",
+    "text": "Natural persons acting for private purposes.\n- **Capabilities:** Person-to-Person (P2P), Person-to-Merchant (P2M), and funding/defunding operations.\n- **Constraints:** Subject to standard holding limits.\n"
+  },
+  {
+    "source": "20-rulebook/actors-and-roles.md",
+    "section": "Merchants / Businesses",
+    "text": "Legal entities or individuals accepting payments for goods and services.\n- **Capabilities:** Receiving payments (P2M).\n- **Constraints:** Typically operate with a **zero holding limit** (automated defunding), meaning funds are instantly swept to a commercial account.\n"
+  },
+  {
+    "source": "20-rulebook/actors-and-roles.md",
+    "section": "Public Sector",
+    "text": "Government bodies accepting or making payments (e.g., taxes, welfare).\n"
+  },
+  {
+    "source": "20-rulebook/actors-and-roles.md",
+    "section": "Offline Solution Provider",
+    "text": "Entities providing the secure hardware or software components required for offline digital euro bearer instruments.\n\n"
+  },
+  {
+    "source": "20-rulebook/liquidity-and-waterfall.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: rulebook\nvisibility: public\naudience: \n  - PSP\n  - VENDOR\nform: text\nrole: rule\nstatus: normative\nowner: rulebook-development-group\n---\n"
+  },
+  {
+    "source": "20-rulebook/liquidity-and-waterfall.md",
+    "section": "Liquidity Management and Waterfall Functionality",
+    "text": ""
+  },
+  {
+    "source": "20-rulebook/liquidity-and-waterfall.md",
+    "section": "Source Reference",
+    "text": "**Draft Digital Euro Scheme Rulebook V0.9** \u2014 Section 6 (Liquidity Management).\n"
+  },
+  {
+    "source": "20-rulebook/liquidity-and-waterfall.md",
+    "section": "Purpose",
+    "text": "This document defines the automated funding and defunding mechanisms (\"Waterfall\" and \"Reverse Waterfall\") that ensure seamless payments and compliance with holding limits.\n\n---\n"
+  },
+  {
+    "source": "20-rulebook/liquidity-and-waterfall.md",
+    "section": "Funding & Defunding",
+    "text": "- **Funding:** Converting commercial bank money (or cash) into digital euro.\n- **Defunding:** Converting digital euro back into commercial bank money (or cash).\n- These operations MUST be performed at par (1:1 conversion).\n"
+  },
+  {
+    "source": "20-rulebook/liquidity-and-waterfall.md",
+    "section": "2. Waterfall Functionality (Automated Funding)",
+    "text": "**Rule LIQ-01:** Transaction Completion.\n- If a user attempts a payment exceeding their current digital euro balance, the Waterfall function MAY automatically pull the shortfall from their linked commercial bank account.\n- **Condition:** The user must have explicitly consented to and configured this functionality.\n- **Atomicity:** The funding and the payment MUST appear as a single atomic transaction to the user (no \"top-up then pay\" friction).\n"
+  },
+  {
+    "source": "20-rulebook/liquidity-and-waterfall.md",
+    "section": "3. Reverse Waterfall (Automated Defunding)",
+    "text": "**Rule LIQ-02:** Holding Limit Enforcement.\n- If an incoming transaction causes a user's balance to exceed their **Holding Limit**, the excess amount MUST be automatically defunded.\n- The excess is transferred immediately to the user's designated commercial bank account.\n\n**Rule LIQ-03:** Zero-Holding Merchants.\n- Merchants typically have a holding limit of **zero**.\n- **Effect:** Every payment received by a merchant implies an immediate, automated reverse waterfall of the full amount to their commercial bank account.\n"
+  },
+  {
+    "source": "20-rulebook/liquidity-and-waterfall.md",
+    "section": "4. Holding Limits",
+    "text": "**Rule LIQ-04:** Enforcement.\n- Holding limits apply to **natural persons**, not just accounts.\n- Systems MUST check the aggregate balance of a user across all intermediaries (if multiple accounts are permitted) or enforce the limit per user identity.\n- Incoming payments that would breach the limit without a configured Reverse Waterfall MUST be rejected.\n\n"
+  },
+  {
+    "source": "20-rulebook/README.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: rulebook\nvisibility: public\naudience: everyone\nform: text\nrole: rule\nstatus: normative\nowner: rulebook-development-group\n---\n"
+  },
+  {
+    "source": "20-rulebook/README.md",
+    "section": "Scheme Rulebook",
+    "text": "\nIn rigorous institutional projects, the **Rulebook** serves as the definitive operational logic of the system. It translates abstract legal mandates and high-level policy into concrete, binding obligations for all participants.\n\nWhile legislation defines *rights*, the Rulebook defines *rules*. It is the authoritative reference against which all technical specifications and implementations must be validated.\n\nTo make this concept concrete and tangible, this folder contains small parts from the **Digital Euro Scheme Rulebook** as an illustrative example.\n"
+  },
+  {
+    "source": "20-rulebook/README.md",
+    "section": "Purpose",
+    "text": "\nThe Rulebook layer acts as the **bridge** between the Legislative Framework (`10-legal-framework`) and the Technical Specifications (`40-specifications`).\n\nIts primary goals in this repository are:\n\n1.  **Decomposition:** Breaking down complex operational requirements into granular, addressable domains (e.g., Onboarding, Liquidity).\n2.  **Addressability:** Ensuring that every rule can be referenced by a unique identifier or file path, allowing downstream engineering artefacts to link directly to the specific logic they implement.\n3.  **Machine-Readability:** Presenting rules in a structured text format (Markdown) that integrates seamlessly with version control and automated governance pipelines.\n"
+  },
+  {
+    "source": "20-rulebook/README.md",
+    "section": "Source Material",
+    "text": "\nThe artefacts in this folder are derived from the official **Draft Digital Euro Scheme Rulebook V0.9** (published July 2025).\n\n* **Official Source:** [Draft Digital Euro Scheme Rulebook V0.9 (PDF)](https://www.ecb.europa.eu/euro/digital_euro/timeline/profuse/shared/pdf/ecb.derdgp250731_Draft_digital_euro_scheme_rulebook_v0.9.en.pdf)\n\n> **Note:** This repository contains excerpts formatted for demonstration purposes. In a live production environment, this folder or the rulebook's own repository should represent the official release versions of the Rulebook.\n"
+  },
+  {
+    "source": "20-rulebook/README.md",
+    "section": "Contents",
+    "text": "\nThe Digital Euro Rulebook is organised by functional domain in this demonstration:\n\n| Artefact | Description | Key Concepts |\n| :--- | :--- | :--- |\n| [`actors-and-roles.md`](./actors-and-roles.md) | Defines the \"Who\" of the system. | Eurosystem, Intermediaries (PSPs), Users, Merchants. |\n| [`functional-onboarding.md`](./functional-onboarding.md) | Rules for entry and identity. | One Person/One Identity, KYC responsibilities, Portability. |\n| [`liquidity-and-waterfall.md`](./liquidity-and-waterfall.md) | Rules for funding and defunding. | Manual funding, Automated Waterfall, Reverse Waterfall, Holding Limits. |\n\n"
+  },
+  {
+    "source": "20-rulebook/README.md",
+    "section": "Traceability Relationships",
+    "text": "\nThis Rulebook Set (`SET-RULEBOOK`) sits at the center of the traceability chain.\n\n- **Upstream (`10-legal-framework`):**\n  Rules here derive their authority from the external Legal Framework.\n    * *Example:* The \"Reverse Waterfall\" rule derives from the legal mandate to prevent excessive capital flight from commercial banks.\n\n- **Downstream (`30-architecture` & `40-specifications`):**\n  Technical specifications and architectural decisions MUST reference specific rules within this Set.\n\n    * **Version-Awareness:** Downstream artefacts must cite the **Set Version** (e.g., `@rule=SET-RULEBOOK:0.1.0`) exactly as declared in this folder's **`manifest.yaml`**. This ensures that technical decisions are bound to a specific, immutable version of the rules.\n    * **Enforcement:**\n        * **`LINT-T2`** enforces that every Specification anchors to a Rule.\n        * **`LINT-T4`** enforces that the reference includes the specific version suffix to prevent drift.\n"
+  },
+  {
+    "source": "20-rulebook/README.md",
+    "section": "Governance",
+    "text": "\n- **Owner:** Rulebook Development Group (RDG) / Scheme Manager.\n- **Status:** Normative.\n- **Change Management:** Changes to these files represent changes to the Scheme itself, not just software updates. They typically require multi-stakeholder approval.\n"
+  },
+  {
+    "source": "20-rulebook/README.md",
+    "section": "Final Note",
+    "text": "\nCode does not implement \"policy\"; code implements \"rules.\"\n\nBy formalising the Rulebook as a set of versioned technical documents, we ensure that the engineering team builds exactly what the scheme defines\u2014nothing more, nothing less.\n\n"
+  },
+  {
+    "source": "30-architecture/system-context.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: architecture\nvisibility: public\naudience: everyone\nform: text\nrole: architecture\nstatus: normative\nowner: system-architect\n---\n"
+  },
+  {
+    "source": "30-architecture/system-context.md",
+    "section": "System Context and Boundaries",
+    "text": ""
+  },
+  {
+    "source": "30-architecture/system-context.md",
+    "section": "Purpose",
+    "text": "This document defines the high-level **System Context** for the Digital Euro.\nIt identifies the external actors, the major logical systems, and the boundaries of responsibility between the private sector (Intermediaries) and the public sector (Eurosystem).\n"
+  },
+  {
+    "source": "30-architecture/system-context.md",
+    "section": "Context Diagram",
+    "text": "The Digital Euro ecosystem operates on a strict **Intermediated Model**.\n\n```mermaid\nC4Context\n    title Digital Euro - System Context (Intermediated Model)\n\n    Person(User, \"End User\", \"Private individual or Merchant using Digital Euro\")\n    \n    System_Boundary(UserSphere, \"User Domain\") {\n        System(WalletApp, \"Digital Euro Wallet App\", \"Mobile app or interface provided by PSP\")\n    }\n\n    System_Boundary(IntermediarySphere, \"Intermediary Domain (PSP)\") {\n        System(PSP_Backend, \"PSP Backend / Adapter\", \"Proprietary integration layer. Connects Core Banking to Eurosystem.\")\n        System(ComBank, \"Commercial Bank Core\", \"Source of liquidity (Waterfall / Reverse Waterfall)\")\n    }\n\n    System_Boundary(EurosystemSphere, \"Eurosystem Domain\") {\n        System(AccessGateway, \"Access Gateway\", \"Central API Entry Point. Authenticates PSPs and routes traffic.\")\n        System(SettlementEngine, \"Settlement Infrastructure\", \"Validates and settles transactions pseudonymously\")\n        System(AliasService, \"Alias / Identity Service\", \"Ensures 'One Person / One Identity' without revealing PII\")\n    }\n\n    %% Relationships\n    Rel(User, WalletApp, \"Initiates Payment / Views Balance\")\n    \n    Rel(WalletApp, PSP_Backend, \"Authenticated Requests\")\n    \n    Rel(PSP_Backend, ComBank, \"Funding / Defunding (Commercial Bank Money)\")\n    Rel(PSP_Backend, AccessGateway, \"API Calls (mTLS)\")\n    \n    Rel(AccessGateway, AliasService, \"Routes Identity Checks\")\n    Rel(AccessGateway, SettlementEngine, \"Routes Instructions\")\n```\n"
+  },
+  {
+    "source": "30-architecture/system-context.md",
+    "section": "Domain Responsibilities",
+    "text": "\nThe architecture is divided into three distinct spheres of responsibility.\n"
+  },
+  {
+    "source": "30-architecture/system-context.md",
+    "section": "1. The User Domain (End Points)",
+    "text": "* **Actors:** Private Individuals, Merchants, POS Terminals.\n* **Components:** Mobile Applications, Web Interfaces, Smart Cards (for offline).\n* **Responsibility:**\n    * User Interface and experience.\n    * Local management of cryptographic keys (if applicable) or secure authentication tokens.\n    * **Offline Capability:** For offline payments, the User Domain acts as a peer-to-peer system where value transfers directly between devices (Secure Element to Secure Element).\n"
+  },
+  {
+    "source": "30-architecture/system-context.md",
+    "section": "2. The Intermediary Domain (The \"Gatekeeper\")",
+    "text": "* **Actors:** Payment Service Providers (PSPs), Commercial Banks.\n* **Upstream Rule Reference:** [`20-rulebook/actors-and-roles.md`](../20-rulebook/actors-and-roles.md)\n* **Responsibility:**\n    * **KYC/AML:** Verifying the identity of the user.\n    * **User Management:** Mapping real-world identities to Digital Euro Aliases.\n    * **Liquidity Management:** Executing the **Waterfall** and **Reverse Waterfall** logic. This domain bridges the gap between Commercial Bank Money (in `ComBank`) and Central Bank Money.\n    * **Privacy Shield:** The Intermediary is the *only* entity that knows the link between the User's real identity (Name, IBAN) and their Digital Euro Wallet Address.\n"
+  },
+  {
+    "source": "30-architecture/system-context.md",
+    "section": "3. The Eurosystem Domain (The \"Backbone\")",
+    "text": "* **Actors:** ECB, National Central Banks.\n* **Responsibility:**\n    * **Settlement:** Moving value between wallet addresses.\n    * **Double-Spending Prevention:** Ensuring units are not spent twice (for online).\n    * **Holding Limit Enforcement:** Ensuring no individual exceeds the limit, using hashed identifiers provided by the Alias Service.\n    * **Issuance:** Creation and destruction of Digital Euro units based on collateral from Intermediaries.\n"
+  },
+  {
+    "source": "30-architecture/system-context.md",
+    "section": "Key Architectural Flows",
+    "text": ""
+  },
+  {
+    "source": "30-architecture/system-context.md",
+    "section": "A. Onboarding & Identity Linking",
+    "text": "1.  User identifies themselves to the **PSP**.\n2.  PSP performs KYC.\n3.  PSP computes a **Unique Identity Hash** (based on national ID, etc.) and registers it with the **Alias Service**.\n4.  **Alias Service** confirms if the user already exists (enforcing *One Person/One Identity*) without storing the user's name.\n"
+  },
+  {
+    "source": "30-architecture/system-context.md",
+    "section": "B. Payment & Settlement",
+    "text": "1.  User initiates payment via **Wallet App**.\n2.  PSP validates the request and forwards a settlement instruction to the **Access Gateway**.\n3.  **Settlement Engine** moves funds pseudonymously.\n4.  **Settlement Engine** confirms success to Payer PSP and Payee PSP.\n"
+  },
+  {
+    "source": "30-architecture/system-context.md",
+    "section": "C. The Waterfall (Funding)",
+    "text": "* **Upstream Rule Reference:** [`20-rulebook/liquidity-and-waterfall.md`](../20-rulebook/liquidity-and-waterfall.md)\n1.  If User balance is insufficient, **PSP** triggers a debit from **Commercial Bank Core**.\n2.  PSP instructs **Eurosystem DCA** to mint/transfer Digital Euro to User.\n3.  User pays immediately (Atomic Transaction).\n"
+  },
+  {
+    "source": "30-architecture/system-context.md",
+    "section": "Interfaces",
+    "text": "\nThis architecture implies the existence of the following high-level interfaces (to be specified in `40-specifications`):\n\n1.  **I_Onboarding:** API for PSPs to register/check User Hashes.\n2.  **I_Settlement:** API for PSPs to submit payment instructions.\n3.  **I_Funding:** Internal PSP interface to Commercial Core Banking."
+  },
+  {
+    "source": "30-architecture/component-inventory.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: architecture\nvisibility: public\naudience: everyone\nform: text\nrole: architecture\nstatus: normative\nowner: system-architect\n---\n"
+  },
+  {
+    "source": "30-architecture/component-inventory.md",
+    "section": "Component Inventory",
+    "text": ""
+  },
+  {
+    "source": "30-architecture/component-inventory.md",
+    "section": "Purpose",
+    "text": "This document lists the mandatory **Logical Components** of the Digital Euro architecture.\nIt serves as the master inventory for the system. Every piece of code or infrastructure in the `50-code` layer must map to at least one of these components.\n"
+  },
+  {
+    "source": "30-architecture/component-inventory.md",
+    "section": "Naming Convention",
+    "text": "Components are identified by ID: `COMP-<DOMAIN>-<ID>`.\n- `EUR`: Eurosystem (Central Infrastructure)\n- `PSP`: Payment Service Provider (Intermediary)\n- `USR`: User Domain\n\n"
+  },
+  {
+    "source": "30-architecture/component-inventory.md",
+    "section": "1. Eurosystem Domain (Central Infrastructure)",
+    "text": "\nThese components are operated by the Eurosystem (ECB and NCBs).  \nThey may process *transaction values* and *system-level identifiers*, but they do **not** process or store *real-world identities (PII)*.\n\nThe **Digital Euro Service Platform (DESP)** is the central technical platform that enables issuance, redemption, settlement and platform services which individual intermediaries cannot accomplish alone. The DESP provides core services (e.g. settlement, alias/participant registries, onboarding repositories) and exposes them via an access surface for supervised intermediaries. \n\n| ID | Component Name | Responsibility | Upstream Rule |\n| :--- | :--- | :--- | :--- |\n| **COMP-EUR-01** | **Settlement Engine** | The core ledger within DESP. Validates digital signatures, prevents double-spending, and moves value between wallet addresses. | `actors-and-roles.md` |\n| **COMP-EUR-02** | **Alias Service** | A DESP service that maintains the registry of hashed user identifiers to enforce the Single Identity Rule across PSPs without revealing PII. | `functional-onboarding.md` |\n| **COMP-EUR-03** | **Dispute Management System** | A DESP service that allows PSPs to flag fraudulent transactions or technical errors for investigation and resolution. | *N/A (Future Scope)* |\n| **COMP-EUR-04** | **Digital Euro Service Platform (DESP)** | The platform domain: hosts core services (settlement engine, alias service, onboarding repository, simulation and test APIs) and provides platform governance, observability, and operator controls. | `actors-and-roles.md`, `functional-onboarding.md` |\n| **COMP-EUR-05** | **Digital Euro Access Gateway** | The canonical access point / API surface of DESP. Authenticates and authorises PSPs, validates and routes requests to DESP services, enforces platform-level controls (rate limiting, schemas, audit), and provides a single integration contract for intermediaries. | `actors-and-roles.md`, `functional-onboarding.md` |\n\n"
+  },
+  {
+    "source": "30-architecture/component-inventory.md",
+    "section": "Detailed Definition: Digital Euro Service Platform (DESP) (`COMP-EUR-04`)",
+    "text": "\n- **Role:** The DESP is the central technical platform enabling issuance/redemption and providing functions (e.g. settlement, registries, test environments) that cannot be carried out by a single intermediary alone. Public experimentation materials and technical documentation describe DESP as the platform that stakeholders will connect to for prototyping and validation. \n\n- **Privacy constraint:** DESP services operate on system and participant identifiers (hashed or pseudonymised where appropriate). DESP must not persist plain-text personal identifiers unless explicitly required and authorised by law.\n\n"
+  },
+  {
+    "source": "30-architecture/component-inventory.md",
+    "section": "Detailed Definition: Digital Euro Access Gateway (`COMP-EUR-05`)",
+    "text": "\n- **Role:** The Access Gateway is the canonical API surface of DESP. It acts as the single (or federated) entry point for supervised intermediaries to access DESP services. Public documentation and experimentation APIs describe DESP access via standard RESTful interfaces; the Access Gateway is the integration plane for those APIs.\n\n- **Responsibilities:**\n  - Authenticate and authorise intermediaries (PSPs/NCBs) and their system identities.\n  - Validate request structure and semantics; enforce schema and policy checks.\n  - Route authorised calls to appropriate DESP services (e.g. Alias Service, Settlement Engine, onboarding repo).\n  - Provide platform-level controls: rate limiting, observability, audit logging, and request mediation.\n  - Optionally expose sandbox or experimentation endpoints for prototype testing (DESP experimentation portals do this today). \n\n- **Non-responsibilities:**\n  - MUST NOT perform customer-level KYC or store PII.\n  - MUST NOT implement PSP-specific business logic; PSPs retain client-facing responsibilities (pre-validation, idempotency handling, user KYC).\n  - MUST NOT become a data sink for personal data without legal authority.\n\n- **Operational note:** The Access Gateway may be implemented and hosted by NCBs or contracted providers under Eurosystem authority; public materials discuss both central platform operation and experimentation setups for DESP. \n\n\n---\n"
+  },
+  {
+    "source": "30-architecture/component-inventory.md",
+    "section": "2. Intermediary Domain (PSP Infrastructure)",
+    "text": "\nThese components are operated by private sector banks/fintechs. They are the **only** components that see clear-text user data.\n\n| ID | Component Name | Responsibility | Upstream Rule |\n| :--- | :--- | :--- | :--- |\n| **COMP-PSP-01** | **PSP Adapter Service** | The proprietary integration layer. Adapts the PSP's internal systems (Core Banking, Channels) to the standard Digital Euro API exposed by `COMP-EUR-05`. | `actors-and-roles.md` |\n| **COMP-PSP-02** | **Waterfall Engine** | Automates liquidity. Monitors wallet balance; triggers debits/credits to the commercial bank core when limits are breached (funding/defunding). | `liquidity-and-waterfall.md` |\n| **COMP-PSP-03** | **Key Management System (KMS)** | Securely manages the cryptographic keys required to sign transactions on behalf of the user (if using a custodial model). | `security-and-privacy-zones.md` |\n"
+  },
+  {
+    "source": "30-architecture/component-inventory.md",
+    "section": "Detailed Definition: Waterfall Engine (`COMP-PSP-02`)",
+    "text": "* **Trigger:** Incoming payment > Holding Limit OR Outgoing payment > Current Balance.\n* **Logic:**\n    1.  Calculate shortfall or excess.\n    2.  Lock commercial funds (atomic reservation).\n    3.  Instruct Settlement Engine to fund/defund.\n    4.  Confirm transaction.\n* **Criticality:** High. Failure here causes \"funding at risk\" or \"limit breach.\"\n\n---\n"
+  },
+  {
+    "source": "30-architecture/component-inventory.md",
+    "section": "3. User Domain (End-User Device)",
+    "text": "\n| ID | Component Name | Responsibility |\n| :--- | :--- | :--- |\n| **COMP-USR-01** | **Mobile Wallet App** | The UI for the citizen. Displays balance, scans QR codes, authorizes payments (biometrics). |\n| **COMP-USR-02** | **Secure Element Applet** | (Optional) Hardware-based applet for offline storage and peer-to-peer transfer. |\n\n---\n"
+  },
+  {
+    "source": "30-architecture/component-inventory.md",
+    "section": "Traceability Matrix",
+    "text": "\n| Component | Implements Logic From |\n| :--- | :--- |\n| `COMP-EUR-01` | **Rules:** Settlement finality, Integrity. |\n| `COMP-EUR-02` | **Rules:** One Person/One Identity, Holding Limits. |\n| `COMP-PSP-02` | **Rules:** Waterfall, Reverse Waterfall, Zero-Holding Merchant logic. |\n"
+  },
+  {
+    "source": "30-architecture/component-inventory.md",
+    "section": "Spec-ready interfaces",
+    "text": "\nThe following interfaces are expected to be specified downstream:\n\n- I_Onboarding \u2192 Alias Service\n- I_Settlement \u2192 Settlement Engine\n- I_Liquidity \u2192 Waterfall Engine\n- I_Wallet \u2192 PSP Adapter Service\n\nThese interfaces are illustrative and non-authoritative.\n\n"
+  },
+  {
+    "source": "30-architecture/README.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: architecture\nvisibility: public\naudience: everyone\nform: text\nrole: architecture\nstatus: normative\nowner: system-architect\n---\n"
+  },
+  {
+    "source": "30-architecture/README.md",
+    "section": "System Architecture",
+    "text": "\nIn complex institutional systems, architecture is not merely a diagram of services and databases. It is the definition of **boundaries, responsibilities, and constraints**.\n\nA rigorous architectural definition ensures that:\n1.  **Logical boundaries** align with legal and regulatory mandates (e.g., privacy firewalls).\n2.  **Responsibility** is clearly assigned to specific actors (who runs the ledger? who holds the keys?).\n3.  **Components** are decoupled to allow independent evolution of policy and technology.\n\nThis folder defines the **Logical Architecture** of the system. It describes *what* must be built and *how* parts relate, separate from the specific code implementations found in later layers.\n"
+  },
+  {
+    "source": "30-architecture/README.md",
+    "section": "Digital Euro Context",
+    "text": "\nTo provide a concrete example, this architecture reflects the **High-Level Design of the Digital Euro** as communicated by the Eurosystem.\n\nThe architecture is characterized by a strict **Intermediated Model**:\n- The **Eurosystem** acts as the settlement infrastructure provider and issuer.\n- **Supervised Intermediaries (PSPs)** act as the gatekeepers, managing user authentication, KYC, and the \"waterfall\" links to commercial bank money.\n\nThis design enforces a \"privacy partition\": the central settlement engine processes transactions pseudonymously, while the mapping to real-world identities remains strictly within the domain of the Intermediaries.\n\n> **Note on Accuracy:** The architectural descriptions in this folder represent our best understanding of the official ECB design choices based on public documentation available as of December 2025. They are structured to support the \"fictional\" specifications in this repository and should be viewed as illustrative of a compliant implementation.\n"
+  },
+  {
+    "source": "30-architecture/README.md",
+    "section": "Contents",
+    "text": "\nThe architecture is defined through three primary views:\n\n| Artefact | Purpose | Key Question Answered |\n| :--- | :--- | :--- |\n| [`system-context.md`](./system-context.md) | High-level ecosystem view. | How do the Eurosystem, PSPs, and Users interact? |\n| [`component-inventory.md`](./component-inventory.md) | Logical blocks and services. | What specific engines (e.g., Waterfall, Settlement, Alias) must be built? |\n| [`security-and-privacy-zones.md`](./security-and-privacy-zones.md) | Data boundaries and trust. | How is the \"Privacy Firewall\" between the ECB and User Identity architected? |\n"
+  },
+  {
+    "source": "30-architecture/README.md",
+    "section": "Traceability Relationships",
+    "text": "\nThis Architecture Set (`SET-ARCH`) sits between the rules and the detailed specifications.\n\n- **Upstream (`20-rulebook`):**\n  Every architectural component exists to satisfy a Rule.\n    - *Example:* The **Alias Service** component exists to satisfy the *Single Identity Principle* defined in the Rulebook.\n    - **Version-Awareness:** Architectural decisions must reference the specific **Rulebook Set Version** (e.g., `@rule=SET-RULEBOOK:1.0.0`) as declared in `20-rulebook/manifest.yaml`. This ensures our design satisfies the exact rules in force at the time of design.\n    - **Enforcement:** `LINT-T2` (Anchoring) and `LINT-T4` (Version Syntax).\n\n- **Downstream (`40-specifications` & `50-code`):**\n    - **Specifications (`40`):** detailed technical specifications (e.g. `SPEC-SET-ONB`) must cite the **Architecture Set Version** (e.g. `@arch=SET-ARCH:0.1.0`) they realise. This prevents specifications from implementing features that deviate from the agreed system design.\n    - **Code (`50`):** Implementations must trace back to the architectural components they realise.\n"
+  },
+  {
+    "source": "30-architecture/README.md",
+    "section": "Governance",
+    "text": "\n- **Owner:** Lead System Architect.\n- **Status:** Normative.\n- **Review:** Architectural changes (e.g., moving a boundary, merging components) require a **Design Decision** issue (`[DESIGN]`) and broad stakeholder review.\n"
+  },
+  {
+    "source": "30-architecture/README.md",
+    "section": "Final Note",
+    "text": "\nA good architecture is a contract. It tells the builders what to build, the auditors what to verify, and the policy-makers how their rules are enforced in silicon."
+  },
+  {
+    "source": "30-architecture/security-and-privacy-zones.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: architecture\nvisibility: public\naudience: everyone\nform: text\nrole: architecture\nstatus: normative\nowner: system-architect\n---\n"
+  },
+  {
+    "source": "30-architecture/security-and-privacy-zones.md",
+    "section": "Security and Privacy Zones",
+    "text": ""
+  },
+  {
+    "source": "30-architecture/security-and-privacy-zones.md",
+    "section": "Purpose",
+    "text": "This document defines the **Trust Boundaries** and **Data Visibility Zones** within the Digital Euro ecosystem.\n\nIts primary purpose is to strictly enforce the **\"Privacy Firewall\"** mandated by the Regulation: ensuring that the central settlement infrastructure cannot infer private user behavior, while allowing Intermediaries to perform full AML/CFT checks.\n\n\n"
+  },
+  {
+    "source": "30-architecture/security-and-privacy-zones.md",
+    "section": "1. The Three Security Zones",
+    "text": "\nThe architecture is partitioned into three distinct zones with different security models and data visibility rules.\n"
+  },
+  {
+    "source": "30-architecture/security-and-privacy-zones.md",
+    "section": "Zone A: The Intermediary Zone (PSP)",
+    "text": "- **Trust Model:** High Confidentiality (GDPR + Banking Secrecy).\n- **Data Sensitivity:** **HIGH** (Contains PII).\n- **Actors:** Commercial Banks, Payment Institutions.\n- **Data Visibility:**\n    - **Can see:** Real-world identities (Names, Tax IDs), Commercial bank account numbers (IBANs), Transaction history of *their* customers.\n    - **Cannot see:** Transaction history of users at *other* PSPs (except for the counterparty data required for the specific payment).\n"
+  },
+  {
+    "source": "30-architecture/security-and-privacy-zones.md",
+    "section": "Zone B: The Eurosystem Zone (Settlement)",
+    "text": "- **Trust Model:** High Integrity & Availability (Critical Infrastructure).\n- **Data Sensitivity:** **PSEUDONYMOUS** (No PII).\n- **Actors:** ECB, NCBs.\n- **Data Visibility:**\n    - **Can see:** Wallet Addresses, Transaction Amounts, Settlement Timestamps, Aggregate Flows.\n    - **Cannot see:** Real-world identities, User location data, Commercial bank account details.\n    - **Constraint:** The Eurosystem MUST NOT be technically capable of linking a Wallet Address to a Natural Person without the cooperation of the PSP (e.g., via a legal warrant).\n"
+  },
+  {
+    "source": "30-architecture/security-and-privacy-zones.md",
+    "section": "Zone C: The User Zone (Device)",
+    "text": "- **Trust Model:** Local Control (Zero Trust).\n- **Actors:** Mobile App, Secure Element.\n- **Data Visibility:**\n    - **Can see:** Own balance, Own transaction history (locally stored).\n\n\n"
+  },
+  {
+    "source": "30-architecture/security-and-privacy-zones.md",
+    "section": "2. The Privacy Firewall (Unlinking Mechanism)",
+    "text": "\nThe \"Privacy Firewall\" is not a physical box, but a set of cryptographic and architectural constraints that separate Zone A from Zone B.\n"
+  },
+  {
+    "source": "30-architecture/security-and-privacy-zones.md",
+    "section": "Mechanism 1: Identity Hashing (Alias Service)",
+    "text": "- **Requirement:** The Eurosystem needs to enforce holding limits across multiple PSPs.\n- **Implementation:**\n    - The PSP computes a **One-Way Hash** of the user's stable national identifier (e.g., `SHA-256(Salt + TaxID)`).\n    - This hash is sent to the Eurosystem's **Alias Service** (`COMP-EUR-02`).\n    - The Eurosystem sees only the hash `a1b2c3...`. It knows \"Hash `a1b2c3` owns 2000 EUR,\" but not who `a1b2c3` is.\n"
+  },
+  {
+    "source": "30-architecture/security-and-privacy-zones.md",
+    "section": "Mechanism 2: Tokenisation of Settlement Instructions",
+    "text": "- **Requirement:** Settlement must occur without revealing the \"Reason for Payment.\"\n- **Implementation:**\n    - Payment instructions sent to `COMP-EUR-01` (Settlement Engine) contain only technical addressing: `SenderWalletID`, `ReceiverWalletID`, `Amount`.\n    - Remittance information (e.g., \"For Invoice #1234\") is End-to-End Encrypted (E2EE) between Payer PSP and Payee PSP, or stripped entirely and handled out-of-band. The Settlement Engine treats this field as an opaque blob.\n\n\n"
+  },
+  {
+    "source": "30-architecture/security-and-privacy-zones.md",
+    "section": "3. Data Visibility Matrix",
+    "text": "\nThis matrix defines the *Maximum Knowledge* allowed for each actor.\n\n| Data Element | PSP (Intermediary) | Eurosystem (Central) | End User |\n| :--- | :--- | :--- | :--- |\n| **User Real Name** | \u2705 Visible | \u274c **FORBIDDEN** | \u2705 Visible |\n| **National ID / Tax ID** | \u2705 Visible | \u274c **FORBIDDEN** | \u2705 Visible |\n| **User Identity Hash** | \u2705 Visible | \u2705 Visible (Opaque) | \u274c N/A |\n| **Wallet Address** | \u2705 Visible | \u2705 Visible | \u2705 Visible |\n| **Transaction Amount** | \u2705 Visible | \u2705 Visible | \u2705 Visible |\n| **Commercial IBAN** | \u2705 Visible | \u274c **FORBIDDEN** | \u2705 Visible |\n| **Counterparty Name** | \u2705 Visible | \u274c **FORBIDDEN** | \u2705 Visible |\n\n\n"
+  },
+  {
+    "source": "30-architecture/security-and-privacy-zones.md",
+    "section": "4. Key Management & Custody",
+    "text": "\nSecurity relies on who holds the keys to sign transactions.\n"
+  },
+  {
+    "source": "30-architecture/security-and-privacy-zones.md",
+    "section": "Online Scenario (Custodial / Hybrid)",
+    "text": "- **Zone:** Intermediary Zone (`COMP-PSP-03`).\n- **Model:** The PSP typically manages the cryptographic keys on behalf of the user for usability and recovery.\n- **Constraint:** Operations must be authenticated by the user (e.g., via 2-Factor Authentication) before the PSP signs the settlement instruction.\n"
+  },
+  {
+    "source": "30-architecture/security-and-privacy-zones.md",
+    "section": "Offline Scenario (Non-Custodial)",
+    "text": "- **Zone:** User Zone (`COMP-USR-02`).\n- **Model:** Keys are stored in a **Secure Element** (Hardware) on the user's device.\n- **Constraint:** Neither the PSP nor the Eurosystem has access to these keys. Value is transferred peer-to-peer.\n\n"
+  },
+  {
+    "source": "40-specifications/README.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: specification\nvisibility: public\naudience: everyone\nform: text\nrole: specification\nstatus: informative\nowner: system-architecture\n---\n"
+  },
+  {
+    "source": "40-specifications/README.md",
+    "section": "Specifications",
+    "text": "\nThis folder contains **technical specifications** that translate intent \u2014 expressed in policy, legislation, and rulebooks \u2014 into forms that can be **implemented, tested, governed, and audited**.\n\nIn complex institutional projects, specifications play a unique and irreplaceable role. They are not an administrative burden; they are the **load-bearing structure** between ambition and execution.\n"
+  },
+  {
+    "source": "40-specifications/README.md",
+    "section": "Why specifications matter",
+    "text": "\nLarge public-sector and multi-stakeholder projects bring together many kinds of builders:\n\n- lawyers and policy authors,\n- architects and engineers,\n- procurement and vendor managers,\n- auditors and risk officers,\n- executives accountable for outcomes.\n\nEach group works with different tools, languages, and time horizons.\n\nSpecifications provide the **shared technical language** that allows these groups to work together without losing meaning over time.\n\nThey make intent durable.\n"
+  },
+  {
+    "source": "40-specifications/README.md",
+    "section": "Specifications are not tickets",
+    "text": "\nProject management tools \u2014 issues, tickets, boards \u2014 are suitable for **coordination and flow**.\n\nThey are poor places to encode **normative intent**.\n\nTickets are transient, conversational, fragmented, optimised for throughput, not meaning.\n\nSpecifications, by contrast, are deliberate, structured, reviewable as wholes, stable over time.\n\nIn serious systems, tickets may *reference* specifications, but they should never *replace* them.\n"
+  },
+  {
+    "source": "40-specifications/README.md",
+    "section": "Specifications serve different audiences",
+    "text": "\nA well-written specification can be read differently by different readers:\n\n- **Executives** see scope, boundaries, and risk containment.\n- **Architects** see structure, responsibilities, and invariants.\n- **Engineers** see constraints they can implement and test against.\n- **Auditors** see traceability and intent made explicit.\n\nThis does not require separate documents. It requires **clarity of structure and discipline of language**.\n"
+  },
+  {
+    "source": "40-specifications/README.md",
+    "section": "There is no single \u201cright\u201d way to write a specification",
+    "text": "\nThere is no universal standard for how technical specifications must be written. Many high-quality systems use very different styles, levels of formality, and structures.\n\nA good example is the European Commission\u2019s work on the EU Digital Identity Wallet. Its technical specifications are published here:\n\nhttps://github.com/eu-digital-identity-wallet/eudi-doc-standards-and-technical-specifications/blob/main/docs/technical-specifications\n\nThese documents are deliberately **heavy, formal, and institutional**. They are designed to support regulatory alignment, cross-border interoperability, and long-term legal certainty across Member States. They are excellent specifications \u2014 but they serve a very specific context and purpose.\n\nThe specifications in this repository take a different approach. They are intentionally lighter, more modular, and closer to downstream automation, in order to demonstrate traceability, CI/CD integration, and end-to-end governance.\n\nNeither approach is inherently superior.\n\nWhat matters is not *which* style you adopt, but whether your specifications:\n- make intent explicit,\n- separate concerns clearly,\n- support implementation, testing, and audit,\n- can evolve without collapsing,\n- and fit the organisational, legal, and technical reality of your project.\n\nReaders are encouraged to exercise **their own judgement** and to design specification practices that are appropriate to their domain, stakeholders, and constraints.\n"
+  },
+  {
+    "source": "40-specifications/README.md",
+    "section": "Modern specifications are for humans *and* machines",
+    "text": "\nIn contemporary institutional systems, specifications should not exist only to be read.\n\nThey should also be **consumable by automation**.\n\nThis enables:\n\n- consistency checks,\n- traceability enforcement,\n- test generation,\n- audit support,\n- CI/CD integration.\n\nThere are many ways to achieve this:\n\n- template-based automation,\n- schema-driven tooling,\n- rule engines,\n- or emerging AI-assisted techniques.\n\nThe common prerequisite is always the same:\n\n> **A specification must be well structured \u2014 in content and in form.**\n\nWithout structure, no amount of tooling will help.\n"
+  },
+  {
+    "source": "40-specifications/README.md",
+    "section": "How to read the specifications in this repository",
+    "text": "\nSpecifications in this folder are typically organised into **small, coherent sets**, each addressing a concrete domain or process (e.g. onboarding, liquidity reservation).\n\nWithin a set, documents are layered:\n\n1. **Overview** \u2014 scope, intent, and context  \n2. **Functional specification** \u2014 what must happen  \n3. **Interface specification** \u2014 how components interact  \n4. **Data model specification** \u2014 what must be stored and why  \n\nThis separation is intentional. It allows different concerns to evolve without entanglement.\n"
+  },
+  {
+    "source": "40-specifications/README.md",
+    "section": "A final note",
+    "text": "\nCivilisations do not fail because they lack ambition. They fail when intent cannot survive the journey from vision to execution.\n\nSpecifications exist to ensure that this journey remains intelligible.\n\nThis folder is a small attempt to show how that might be done \u2014 carefully, xplicitly, and with respect for the craft.\n\n"
+  },
+  {
+    "source": "40-specifications/README.md",
+    "section": "\u26a0\ufe0f Legal notice: Illustrative and non-authoritative content",
+    "text": "\n**Important:** The technical specifications contained in this folder are **illustrative** and **non-authoritative**.\n\nAt the time of writing, the European Central Bank (ECB) has not published detailed open technical specifications or OpenAPI definitions for Digital Euro back-end interfaces.\n\nThe documents provided here have been created solely to **demonstrate a methodology** for structuring, governing, and automating technical specifications in a complex institutional project.  \n\nWhile they reference publicly known concepts (such as the intermediated model), the specific API endpoints, data models, workflows, and attribute names are **hypothetical and invented by the author**.\n\nThese specifications are intended for **educational and illustrative purposes only** and **must not be treated as a basis for implementing any real Digital Euro systems**.\n\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-spec-overview.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: specification\nvisibility: public\naudience: everyone\nform: text\nrole: specification\nstatus: normative\nowner: system-design\n---\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-spec-overview.md",
+    "section": "Specification Overview: Liquidity Reservation & Waterfall",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-spec-overview.md",
+    "section": "1. Identification",
+    "text": "- **Global ID:** `SPEC-LIQ-ROOT`\n- **Part of Set:** `SPEC-SET-LIQ`\n- **Version:** Inherits from `manifest.yaml`\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-spec-overview.md",
+    "section": "2. Purpose and Scope",
+    "text": "This document defines the **technical scope** for the automated liquidity management mechanisms known as \"Waterfall\" and \"Reverse Waterfall\".\n\nIt translates the high-level policy rules defined in the **Scheme Rulebook** into concrete technical requirements, ensuring that the bridge between Commercial Bank Money and Central Bank Money functions atomically and securely.\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-spec-overview.md",
+    "section": "2.1 In Scope",
+    "text": "- **Waterfall (Funding):** The logic to detect a payment shortfall, reserve funds in the Commercial Bank Core (`COMP-PSP-02`), and instruct the Eurosystem to **fund** the difference (`Rule LIQ-01`).\n- **Reverse Waterfall (Defunding):** The logic to detect a Holding Limit breach, **defund** the excess Digital Euro, and credit the Commercial Bank Core (`Rule LIQ-02`).\n- **Zero-Holding Logic:** The specific configuration for Merchants who opt to automatically defund all incoming payments immediately (`Rule LIQ-03`).\n- **Double-Spending Prevention (Liquidity Side):** Ensuring that commercial funds reserved for a Digital Euro funding cannot be spent elsewhere during the transition.\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-spec-overview.md",
+    "section": "2.2 Out of Scope",
+    "text": "- **Inter-PSP Settlement:** The actual movement of Digital Euro between wallets (covered in `SPEC-SET-STL`).\n- **Offline Limits:** Management of offline secure element limits (covered in `SPEC-SET-OFF`).\n- **Manual Top-Ups:** User-initiated funding via the mobile app UI (treated as a standard Waterfall event, but triggered differently).\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-spec-overview.md",
+    "section": "3. Normative References (Upstream Traceability)",
+    "text": "\nThe requirements in this specification set are derived **exclusively** from the following mandated baselines.\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-spec-overview.md",
+    "section": "3.1 Legal & Rulebook Basis",
+    "text": "This specification satisfies the mandates of **Rulebook Set v0.9.0** (`@rule=SET-RULEBOOK:0.9.0`).\n\n| Rule ID | Rule Name | Upstream Source |\n| :--- | :--- | :--- |\n| **LIQ-01** | **Waterfall (Auto-Funding)** | [`liquidity-and-waterfall.md`](../../20-rulebook/liquidity-and-waterfall.md) |\n| **LIQ-02** | **Reverse Waterfall (Defunding)** | [`liquidity-and-waterfall.md`](../../20-rulebook/liquidity-and-waterfall.md) |\n| **LIQ-03** | **Zero-Holding Option** | [`liquidity-and-waterfall.md`](../../20-rulebook/liquidity-and-waterfall.md) |\n| **LIQ-04** | **Holding Limits** | [`functional-onboarding.md`](../../20-rulebook/functional-onboarding.md) |\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-spec-overview.md",
+    "section": "3.2 Architectural Basis",
+    "text": "This specification adheres to the components and security zones defined in **Architecture Set v0.1.0** (`@arch=SET-ARCH:0.1.0`).\n\n| Component ID | Name | Role in Liquidity |\n| :--- | :--- | :--- |\n| **COMP-PSP-02** | **Waterfall Engine** | The orchestrator of the \"Two-Phase Commit\" between Commercial and Central systems. |\n| **COMP-PSP-01** | **PSP Adapter** | The interface layer sending the Funding/Defunding instructions to the Gateway. |\n| **COMP-EUR-01** | **Settlement Engine** | The target system executing the funding/defunding (Zone B). |\n| **COMP-EUR-05** | **Access Gateway** | The API entry point for all Eurosystem services. |\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-spec-overview.md",
+    "section": "4. Document Map (The Set)",
+    "text": "\nThe specification is split into three orthogonal views to ensure clarity and linting enforcement.\n\n| View | Document | Global ID | Purpose |\n| :--- | :--- | :--- | :--- |\n| **Behavior** | [`liquidity-reservation-functional-spec.md`](./liquidity-reservation-functional-spec.md) | **SPEC-LIQ-FUNC** | **\"The Logic\"**<br>Defines the Reservation State Machine (e.g., `RESERVING` -> `LOCKED`) and shortfall calculations. |\n| **Data** | [`liquidity-reservation-data-model-spec.md`](./liquidity-reservation-data-model-spec.md) | **SPEC-LIQ-DATA** | **\"The Schema\"**<br>Defines the `LiquidityLock` and `FundingInstruction` entities. |\n| **Interfaces** | [`liquidity-reservation-interfaces-spec.md`](./liquidity-reservation-interfaces-spec.md) | **SPEC-LIQ-INT** | **\"The Flow\"**<br>Sequence diagrams for `I_Funding` and `I_Settlement`. |\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-spec-overview.md",
+    "section": "5. Design Principles",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-spec-overview.md",
+    "section": "5.1 Atomicity & Safety",
+    "text": "In accordance with `Rule LIQ-01`, the conversion between Commercial Money and Digital Euro must be atomic.\n- **Mechanism:** A \"Reservation and Commit\" pattern.\n- **Constraint:** Funds MUST be strictly locked in the Commercial Core *before* the request to **Fund** is sent to the Eurosystem.\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-spec-overview.md",
+    "section": "5.2 Priority of Defunding",
+    "text": "In accordance with `Rule LIQ-02`, Holding Limits are hard constraints.\n- **Mechanism:** If an incoming payment causes a limit breach, the system MUST accept the payment and *immediately* trigger a Reverse Waterfall for the excess amount.\n- **Constraint:** User balances must never exceed the holding limit at the end of a transaction processing cycle.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-spec-overview.md",
+    "section": "Appendix: How to Parse This Specification",
+    "text": "\n**For Automation Engineers:**\n\n1.  **Suite Discovery:**\n    - Parse **Section 4 (Document Map)**.\n    - Extract the `Global ID` and `Document` path for each row.\n    - *Usage:* This allows your CI tools to dynamically discover all files belonging to `SPEC-SET-LIQ` without hardcoding filenames.\n\n2.  **Dependency Validation (Linting):**\n    - Parse **Section 3.1** to find the `@rule` tag.\n    - Check that this version matches the `version` field in `20-rulebook/manifest.yaml`.\n    - Parse **Section 3.2** to find the `@arch` tag.\n    - Check that this version matches the `version` field in `30-architecture/manifest.yaml`.\n    - *Alert:* If versions mismatch, fail the build with `SpecDriftError`.\n\n3.  **Traceability Auditing:**\n    - Extract all **Rule IDs** (e.g., `LIQ-01`, `LIQ-02`) listed in the table in **Section 3.1**.\n    - Scan the child specifications (`SPEC-LIQ-FUNC`, `SPEC-LIQ-INT`) defined in the Document Map.\n    - *Validation:* Warn if any Rule listed in the Overview is **not** referenced in the child specifications (indicating a missing requirement implementation).\n\n    "
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-interfaces-spec.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: specification\nvisibility: public\naudience: everyone\nform: text\nrole: specification\nstatus: normative\nowner: system-design\n---\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-interfaces-spec.md",
+    "section": "Liquidity Reservation \u2014 Interface Behaviour Specification",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-interfaces-spec.md",
+    "section": "1. Identification",
+    "text": "- **Global ID:** `SPEC-LIQ-INT`\n- **Part of Set:** `SPEC-SET-LIQ`\n- **Traceability:**\n    - **Upstream Spec:** `SPEC-LIQ-FUNC` (Implements `TR-LIQ-04`)\n    - **Upstream Arch:** `@arch=SET-ARCH:0.1.0` (Implements `COMP-EUR-05` Interfaces)\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-interfaces-spec.md",
+    "section": "2. Purpose and Scope",
+    "text": "\nThis document defines the **component interactions** required to execute atomic Waterfall operations.\n\nIt focuses on the normative interface between the **PSP** and the **Digital Euro Service Platform (DESP)**. Interactions between the PSP and its own Core Banking System are described logically but are implementation-specific (proprietary).\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-interfaces-spec.md",
+    "section": "3. Component Inventory (Actors)",
+    "text": "\n| ID | Component Name | Role | Responsibility | Trace |\n| :--- | :--- | :--- | :--- | :--- |\n| **SYS-PSP** | **PSP Waterfall Engine** | Client | Orchestrates the atomic swap. Managing component: `COMP-PSP-02`. | `COMP-PSP-02` |\n| **SYS-GWY** | **Access Gateway** | Interface | The Border Control. Authenticates PSPs and routes to DESP services. | `COMP-EUR-05` |\n| **SYS-EUR** | **Settlement Engine** | Target | The DESP Core Service. Executes the actual funding/defunding. | `COMP-EUR-01` |\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-interfaces-spec.md",
+    "section": "4. Interface Operation Catalog",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-interfaces-spec.md",
+    "section": "4.1 Interface: I_Settlement (Normative)",
+    "text": "*Between PSP and Access Gateway (`SYS-GWY`)*\n\n| Op ID | Operation Name | Direction | Functional Trace |\n| :--- | :--- | :--- | :--- |\n| **OP-LIQ-01** | `fund` | `PSP` $\\to$ `EUR` | Issues new Digital Euro. Requires proof of reservation. |\n| **OP-LIQ-02** | `defund` | `PSP` $\\to$ `EUR` | Reduces Digital Euro balance. Triggered by Limit Breach. |\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-interfaces-spec.md",
+    "section": "4.2 Interface: I_Funding (Informative)",
+    "text": "*Internal to PSP Domain (Zone A)*\n\n| Op ID | Operation Name | Description |\n| :--- | :--- | :--- |\n| **INT-CBS-01** | `LockFunds` | Proprietary call to Legacy Core to reserve commercial money. |\n| **INT-CBS-02** | `CaptureFunds` | Proprietary call to finalize the debit. |\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-interfaces-spec.md",
+    "section": "5. Interaction Flows",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-interfaces-spec.md",
+    "section": "5.1 Flow: Atomic Waterfall (Funding)",
+    "text": "This flow details the interaction between the PSP's engine and the Eurosystem.\n\n**Visualisation (Normative)**\n\n```mermaid\nsequenceDiagram\n    autonumber\n    \n    participant PSP as SYS-PSP<br/>(Waterfall Engine)\n    participant GWY as SYS-GWY<br/>(Access Gateway)\n    participant EUR as SYS-EUR<br/>(Settlement Engine)\n\n    Note over PSP, EUR: Flow: Atomic Waterfall (Funding)\n\n    %% Step 1: Internal Phase (Proprietary)\n    rect rgb(240, 240, 240)\n        Note right of PSP: Phase 1: Internal Reservation\n        PSP->>PSP: LockFunds()<br/>(Interact with Core Banking)\n    end\n\n    %% Step 2: External Phase (Standard Scheme)\n    Note right of PSP: Phase 2: External Funding\n    PSP->>GWY: POST /fund (amount, reservation_ref)\n    activate GWY\n    \n    GWY->>EUR: Route Request\n    activate EUR\n    Note right of EUR: Validate & Record Liability\n    EUR-->>GWY: 200 OK\n    deactivate EUR\n\n    GWY-->>PSP: 200 OK\n    deactivate GWY\n\n    %% Step 3: Finalisation\n    rect rgb(240, 240, 240)\n        Note right of PSP: Phase 3: Internal Settlement\n        PSP->>PSP: CaptureFunds()<br/>(Debit Core Banking)\n    end\n```\n\n**Step-by-Step Definition**\n\n| Step ID | Sender | Receiver | Message / Action | Constraints / Rules | Trace |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **STEP-WAT-01** | `SYS-PSP` | `SYS-PSP` | *Internal Lock* | **Action:** Reserve funds in Core Banking. | `REQ-LIQ-FUNC-01` |\n| **STEP-WAT-02** | `SYS-PSP` | `SYS-GWY` | `POST /fund` | **Body:** `amount`, `reservation_ref`. | `TR-LIQ-04` |\n| **STEP-WAT-03** | `SYS-GWY` | `SYS-EUR` | *Route Request* | Forward to Settlement Engine (`COMP-EUR-01`). | `COMP-EUR-04` |\n| **STEP-WAT-04** | `SYS-EUR` | `SYS-EUR` | *Issue* | Create new liability. | `COMP-EUR-01` |\n| **STEP-WAT-05** | `SYS-EUR` | `SYS-GWY` | `200 OK` | Return success. | `LIQ-01` |\n| **STEP-WAT-06** | `SYS-GWY` | `SYS-PSP` | `200 OK` | Forward success. | `TR-LIQ-05` |\n| **STEP-WAT-07** | `SYS-PSP` | `SYS-PSP` | *Internal Capture* | **Action:** Debit Core Banking account. | `REQ-LIQ-FUNC-03` |\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-interfaces-spec.md",
+    "section": "5.2 Flow: Reverse Waterfall (Defunding)",
+    "text": "\n**Visualisation (Normative)**\n\n```mermaid\nsequenceDiagram\n    autonumber\n    \n    participant PSP as SYS-PSP<br/>(Waterfall Engine)\n    participant GWY as SYS-GWY<br/>(Access Gateway)\n    participant EUR as SYS-EUR<br/>(Settlement Engine)\n\n    Note over PSP, EUR: Flow: Reverse Waterfall (Defunding)\n\n    %% Trigger\n    Note right of PSP: Trigger: Holding Limit Breach<br/>(Excess > 0)\n\n    %% Step 1: External Phase (Defund First)\n    PSP->>GWY: POST /defund (excess_amount)\n    activate GWY\n    \n    GWY->>EUR: Route Request\n    activate EUR\n    Note right of EUR: Reduce Liability\n    EUR-->>GWY: 200 OK\n    deactivate EUR\n\n    GWY-->>PSP: 200 OK\n    deactivate GWY\n\n    %% Step 2: Internal Phase (Credit Last)\n    rect rgb(240, 240, 240)\n        Note right of PSP: Phase 2: Internal Deposit\n        PSP->>PSP: CreditAccount()<br/>(Deposit to Core Banking)\n    end\n```\n\n**Step-by-Step Definition**\n\n| Step ID | Sender | Receiver | Message / Action | Constraints / Rules | Trace |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **STEP-REV-01** | `SYS-PSP` | `SYS-GWY` | `POST /defund` | **Trigger:** Holding Limit Breach. | `REQ-LIQ-FUNC-04` |\n| **STEP-REV-02** | `SYS-GWY` | `SYS-EUR` | *Route Request* | Forward to Settlement Engine. | `COMP-EUR-04` |\n| **STEP-REV-03** | `SYS-EUR` | `SYS-EUR` | *Defund* | Destroy/Reduce liability. | `COMP-EUR-01` |\n| **STEP-REV-04** | `SYS-EUR` | `SYS-GWY` | `200 OK` | Confirm reduction. | `LIQ-02` |\n| **STEP-REV-05** | `SYS-GWY` | `SYS-PSP` | `200 OK` | Forward success. | `TR-LIQ-06` |\n| **STEP-REV-06** | `SYS-PSP` | `SYS-PSP` | *Internal Credit* | **Action:** Credit Core Banking account. | `REQ-LIQ-FUNC-06` |\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-interfaces-spec.md",
+    "section": "6. Technical Constraints",
+    "text": "\n| ID | Constraint | Requirement Description | Trace |\n| :--- | :--- | :--- | :--- |\n| **INT-LIQ-01** | **Performance** | The `fund` operation MUST complete within 200ms (p99) to ensure the total Waterfall duration (Lock+Fund+Capture) remains acceptable for POS payments. | `NFR-PERF-01` |\n| **INT-LIQ-02** | **Idempotency** | The `POST /fund` request MUST carry a `Idempotency-Key` (UUID) to prevent accidental double-funding on network retry. | `INT-OB-04` |\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-interfaces-spec.md",
+    "section": "Appendix: How to Parse This Specification",
+    "text": "\n**For Automation Engineers:**\n\n1.  **Contract Validation (External):**\n    - **Source:** Parse **Section 4.1 (Operation Catalog)**.\n    - **Target:** Compare against `40-specifications/liquidity-reservation/openapi.yaml` (or the Gateway API definition).\n    - *Validation:* Ensure that `OP-LIQ-01` (`POST /fund`) and `OP-LIQ-02` (`POST /defund`) exist and require the mandatory headers defined in `INT-LIQ-02` (`Idempotency-Key`).\n\n2.  **Protocol Compliance (Ordering Check):**\n    - Parse **Section 5.1 (Atomic Waterfall Sequence)**.\n    - **Logic Check:** Verify that the External call (`POST /fund`) is strictly **sandwiched** between two Internal actions:\n        - *Pre-Condition:* Must be preceded by `LockFunds` (or equivalent internal locking step).\n        - *Post-Condition:* Must be followed by `CaptureFunds` (or equivalent internal debit step).\n    - *Usage:* Use this rule to lint the PSP Adapter's implementation code or integration test logic.\n\n3.  **Traceability Auditing:**\n    - Extract the `Trace` column from the **Step-by-Step Definition** tables in Section 5.\n    - *Validation:* Ensure every step traces back to a Functional Requirement in `SPEC-LIQ-FUNC` (e.g., `REQ-LIQ-FUNC-01`) or a Component ID in `ARCH-SET` (e.g., `COMP-EUR-01`).\n\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/README.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: specification\nvisibility: public\naudience: everyone\nform: text\nrole: documentation\nstatus: informative\nowner: system-design\n---\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/README.md",
+    "section": "Liquidity Reservation Specification Set",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/README.md",
+    "section": "1. Identity and Scope",
+    "text": "\nThis folder contains the **Liquidity Reservation Specification Set** (`SPEC-SET-LIQ`).\n\nIt defines the technical requirements, state machines, and interface protocols required to implement the **Waterfall** (Funding) and **Reverse Waterfall** (Defunding) mechanisms. These mechanisms ensure that every Digital Euro issuance is atomically backed by a reservation of Commercial Bank Money.\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/README.md",
+    "section": "Versioning Strategy",
+    "text": "**This folder is versioned as an atomic unit.**\nThe current normative version of this set is defined in the **[`manifest.yaml`](./manifest.yaml)** file. Individual Markdown files do not carry independent version numbers.\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/README.md",
+    "section": "2. \u26a0\ufe0f LEGAL NOTICE: FICTIONAL CONTENT",
+    "text": "\n> **IMPORTANT:** The technical specifications contained in this folder are **FICTIONAL**.\n>\n> They have been created by the authors of this repository solely to **demonstrate how rigorous specifications can/should be structured** within a governed project. They do **NOT** represent actual Digital Euro project. \n>\n> **Do not use these specifications to build actual software for the Digital Euro.**\n\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/README.md",
+    "section": "3. The Specification Set",
+    "text": "\nThe set consists of the following modular components.\nEach component has a unique **Global ID** to allow precise citation in code and tests (e.g., `Ref: SPEC-LIQ-FUNC`).\n\n| Global ID | File | Role |\n| :--- | :--- | :--- |\n| **SPEC-LIQ-ROOT** | [`liquidity-reservation-spec-overview.md`](./liquidity-reservation-spec-overview.md) | **Root Document**<br>Defines the Scope (Waterfall/Reverse), Document Map, and Traceability rules. |\n| **SPEC-LIQ-FUNC** | [`liquidity-reservation-functional-spec.md`](./liquidity-reservation-functional-spec.md) | **Functional Spec**<br>Defines the Reservation State Machine (`RESERVING` \u2192 `LOCKED` \u2192 `SETTLED`) and logic. |\n| **SPEC-LIQ-INT** | [`liquidity-reservation-interfaces-spec.md`](./liquidity-reservation-interfaces-spec.md) | **Interface Spec**<br>Defines the `I_Funding` (Core Banking) and `I_Settlement` interactions. |\n| **SPEC-LIQ-DATA** | [`liquidity-reservation-data-model-spec.md`](./liquidity-reservation-data-model-spec.md) | **Data Model Spec**<br>Defines the `LiquidityLock` and `FundingInstruction` entities. |\n\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/README.md",
+    "section": "4. Traceability Strategy & Chain of Custody",
+    "text": "\nThis Specification Set acts as the bridge between high-level mandates and concrete verification. To ensure auditability, every requirement in this folder follows a strict **Chain of Custody**:\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/README.md",
+    "section": "4.1 Origin (Upstream Mandates)",
+    "text": "Every requirement must trace back to a specific **Rule ID**. This anchors technical behavior to the legal and operational framework.\n\n- **Mandate:** We implement the *Liquidity & Funding Rules* defined in:\n    - `@rule=SET-RULEBOOK:0.9.0` (specifically [`liquidity-and-waterfall.md`](../../20-rulebook/liquidity-and-waterfall.md))\n- **Enforcement:** **LINT-T2** validates that every spec file contains valid `@rule` references.\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/README.md",
+    "section": "4.2 Constraint (Architectural Boundary)",
+    "text": "Every requirement must apply to a specific **Component ID**. This prevents \"Architecture Drift\" by ensuring specifications respect the system boundaries and security zones.\n\n- **Constraint:** We adhere to the *System Context* and *Security Zones* defined in:\n    - `@arch=SET-ARCH:0.1.0` (specifically mapping to `COMP-PSP-02` Waterfall Engine and `COMP-PSP-01` PSP Adapter)\n- **Enforcement:** **LINT-T1** (Validation of implementation traces) and architectural review.\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/README.md",
+    "section": "4.3 Verification (Downstream Consumers)",
+    "text": "Every requirement must be verifiable. Downstream artefacts rely on the **exact version** of this specification set to prove compliance.\n\n- **Test Suite:** The logic here is verified by the Conformance Test Suite:\n    - `@test=TEST-SET-LIQ:0.1.0` (located in `50-tests/100-conformance-scenarios/liquidity/`)\n    - *Enforcement:* **LINT-T3** checks that every spec ID is covered by a test.\n- **Implementation:** The Reference Implementation derives its logic from here:\n    - `60-code/waterfall-engine` (Must declare compliance to `SPEC-SET-LIQ:0.1.0`)\n\n> **Note on Drift:** Mismatches between the version defined in `manifest.yaml` and the versions cited by consumers will be flagged by **LINT-T5 (Spec Drift)**.\n\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/README.md",
+    "section": "5. Governance & Linting",
+    "text": "\nThis folder is subject to the following automated governance rules:\n\n- **LINT-T2 (Anchoring):** Every specification file must reference a Rulebook ID.\n- **LINT-T4 (Version Syntax):** References must include the version suffix (e.g., `:0.1.0`).\n- **LINT-T5** (Spec Drift): Referenced versions must match the `RELEASED` version in the target manifest.\n- **LINT-C1 (Classification):** All files must carry valid YAML metadata headers.\n\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-functional-spec.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: specification\nvisibility: public\naudience: everyone\nform: text\nrole: specification\nstatus: normative\nowner: system-design\n---\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-functional-spec.md",
+    "section": "Liquidity Reservation \u2014 Functional Specification",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-functional-spec.md",
+    "section": "1. Identification",
+    "text": "- **Global ID:** `SPEC-LIQ-FUNC`\n- **Part of Set:** `SPEC-SET-LIQ`\n- **Traceability:**\n    - **Upstream Rulebook:** `@rule=SET-RULEBOOK:0.9.0`\n    - **Upstream Arch:** `@arch=SET-ARCH:0.1.0`\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-functional-spec.md",
+    "section": "2. Purpose and Scope",
+    "text": "\nThis document defines the **functional behaviour** of the **Waterfall Engine (`COMP-PSP-02`)**.\n\nIt specifies the **Reservation State Machine** required to bridge the PSP's internal **Commercial Bank Core** (Legacy) with the **Digital Euro Service Platform (DESP)**, ensuring atomic funding and defunding.\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-functional-spec.md",
+    "section": "3. General Principles",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-functional-spec.md",
+    "section": "3.1 Architectural Strategy: The Two-Phase Commit",
+    "text": "To satisfy the strict atomicity requirements of `Rule LIQ-01`, the Waterfall Engine implements a **Two-Phase Commit (2PC)** pattern.\n* **Internal Leg (Phase 1):** The engine instructs the PSP's own Core Banking System to **Lock** funds. This is a proprietary, internal action.\n* **External Leg (Phase 2):** The engine instructs the **DESP** (via `COMP-EUR-05`) to **Fund** (Issue) Digital Euro.\n* **Result:** The DESP is the authoritative issuer, but it relies on the PSP's guarantee that commercial funds have been reserved.\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-functional-spec.md",
+    "section": "3.2 Key Requirements",
+    "text": "\n| ID | Principle | Requirement Statement | Trace |\n| :--- | :--- | :--- | :--- |\n| **REQ-LIQ-01** | **Atomic Conservation** | The sum of Commercial Bank Money + Digital Euro MUST remain constant. Funds MUST NOT be double-spendable. | `Rule LIQ-01` |\n| **REQ-LIQ-02** | **Fail-Safe Rollback** | If the DESP (`COMP-EUR-04`) rejects the funding (e.g., limit breach), the internal commercial reservation MUST be released immediately. | `Rule LIQ-01` |\n| **REQ-LIQ-03** | **Limit Precedence** | Incoming payments breaching the Holding Limit MUST trigger an automatic \"Reverse Waterfall\" to offload excess funds to the Commercial Bank Core. | `Rule LIQ-02` |\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-functional-spec.md",
+    "section": "4. Reservation Lifecycle States",
+    "text": "\nThe lifecycle of a single **Liquidity Operation** within the Waterfall Engine (`COMP-PSP-02`).\n\n| State | Description | Asset Status |\n| :--- | :--- | :--- |\n| `INIT` | Request received. Calculating shortfall. | No change. |\n| `RESERVING` | Engine is instructing internal Core Banking to lock funds. | **Internal:** Pending Lock<br>**DESP:** Unchanged |\n| `LOCKED` | Commercial funds are reserved internally. Ready to Fund. | **Internal:** Locked<br>**DESP:** Unchanged |\n| `FUNDING` | Request sent to DESP (`COMP-EUR-05`). Awaiting finality. | **Internal:** Locked<br>**DESP:** Pending Issuance |\n| `SETTLED` | DESP confirmed Funding. Commercial funds finalized (debited). | **Internal:** Debited<br>**DESP:** Credited |\n| `ROLLING_BACK`| DESP failed. Unlocking Commercial funds. | **Internal:** Releasing Lock<br>**DESP:** Failed |\n| `FAILED` | Operation aborted. Funds restored to original state. | **Internal:** Restored<br>**DESP:** Failed |\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-functional-spec.md",
+    "section": "5. State Machine & Transitions",
+    "text": "\n```mermaid\nstateDiagram-v2\n    direction LR\n\n    %% Initial State\n    [*] --> INIT : Request Funding\n    \n    %% Phase 1: Internal Reservation\n    INIT --> RESERVING : TR-LIQ-01\\n(detect_shortfall)\n    \n    state RESERVING {\n        [*] --> Awaiting_Internal_Core\n    }\n\n    RESERVING --> LOCKED : TR-LIQ-02\\n(internal_lock_ok)\n    RESERVING --> FAILED : TR-LIQ-03\\n(internal_lock_fail)\n\n    %% Phase 2: External Funding\n    LOCKED --> FUNDING : TR-LIQ-04\\n(submit_funding)\n\n    state FUNDING {\n        [*] --> Awaiting_DESP_Response\n    }\n\n    FUNDING --> SETTLED : TR-LIQ-05\\n(desp_funding_ok)\n    FUNDING --> ROLLING_BACK : TR-LIQ-06\\n(desp_funding_fail)\n\n    %% Rollback Logic\n    state ROLLING_BACK {\n        [*] --> Releasing_Internal_Lock\n    }\n\n    ROLLING_BACK --> FAILED : TR-LIQ-07\\n(internal_void_ok)\n\n    %% Final States\n    SETTLED --> [*] : Success (Debit Finalised)\n    FAILED --> [*] : Aborted (Balance Restored)\n```\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-functional-spec.md",
+    "section": "Transition Logic",
+    "text": "\n**Parsing Context:** `Scope: WaterfallStateMachine`\n\n| Trans ID | From State | To State | Trigger | Guard / Logic | Trace |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **TR-LIQ-01** | `INIT` | `RESERVING` | `detect_shortfall` | **Calc:** `Shortfall = Payment - Balance`. | `LIQ-01` |\n| **TR-LIQ-02** | `RESERVING` | `LOCKED` | `internal_lock_ok` | **Action:** PSP Core Banking confirms reservation ID. | `COMP-PSP-02` |\n| **TR-LIQ-03** | `RESERVING` | `FAILED` | `internal_lock_fail` | **Error:** Insufficient Commercial Funds (NSF). | `LIQ-01` |\n| **TR-LIQ-04** | `LOCKED` | `FUNDING` | `submit_funding` | **Action:** Call `POST /fund` on Access Gateway (`COMP-EUR-05`). | `COMP-EUR-01` |\n| **TR-LIQ-05** | `FUNDING` | `SETTLED` | `desp_funding_ok` | **Action:** Instruct Internal Core to \"Capture\" the lock. | `LIQ-01` |\n| **TR-LIQ-06** | `FUNDING` | `ROLLING_BACK`| `desp_funding_fail` | **Trigger:** Timeout/Error from DESP.<br>**Action:** Instruct Internal Core to \"Void\" lock. | `REQ-LIQ-02` |\n| **TR-LIQ-07** | `ROLLING_BACK`| `FAILED` | `internal_void_ok` | **Action:** Notify User of failure. | `NFR-REL-01` |\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-functional-spec.md",
+    "section": "6. Functional Requirements (The Logic)",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-functional-spec.md",
+    "section": "6.1 Funding Logic (The Waterfall)",
+    "text": "**Target:** `COMP-PSP-02` (Waterfall Engine)\n\n- **REQ-LIQ-FUNC-01:** Upon detection of `shortfall`, the engine MUST initiate a **Synchronous Hold** on the user's linked Commercial Bank Account.\n- **REQ-LIQ-FUNC-02:** This interaction is **internal** to the PSP (Zone A) and outside the scope of Scheme Interfaces, but the *result* (Success/Failure) determines the next step.\n- **REQ-LIQ-FUNC-03:** Only upon successful internal lock, the engine SHALL transmit a `FundingInstruction` to the DESP (`COMP-EUR-04`).\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-functional-spec.md",
+    "section": "6.2 Defunding Logic (The Reverse Waterfall)",
+    "text": "**Target:** `COMP-PSP-02` (Waterfall Engine)\n\n- **REQ-LIQ-FUNC-04:** Upon detecting a Holding Limit breach, the engine MUST immediately calculate `excess`.\n- **REQ-LIQ-FUNC-05:** The engine MUST instruct the DESP to **Defund** the `excess` amount.\n- **REQ-LIQ-FUNC-06:** Upon receiving `200 OK` (Defunded) from DESP, the engine MUST credit the user's Commercial Bank Account.\n- **Trace:** This aligns with `COMP-EUR-01` responsibility to prevent double spending (money is gone from DE before appearing in CB).\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-functional-spec.md",
+    "section": "7. Security & Audit",
+    "text": "\n| ID | Rule Name | Logic | Trace |\n| :--- | :--- | :--- | :--- |\n| **SEC-LIQ-01** | **Evidence Linking** | The `FundingInstruction` sent to DESP MUST include the PSP's internal `reservation_id` (hashed or raw) to prove backing funds exist. | `AUD-TRC-01` |\n| **AUD-LIQ-01** | **Reconciliation** | The PSP MUST reconcile `Total Funded` (from DESP Reports) against `Total Debited` (Internal Core) daily. | `RULE-OPS-05` |\n\n---\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-functional-spec.md",
+    "section": "Appendix: How to Parse This Specification",
+    "text": "\n**For Automation Engineers:**\n\n1.  **State Machine Generation:**\n    - Parse **Section 5 (Transition Logic Table)**.\n    - Generate a State Pattern implementation for the `WaterfallService` class.\n    - *Validation:* Ensure strict handling of `TR-LIQ-06` (Rollback) to prevent \"Funding at Risk\" (where money is locked but not funded).\n\n2.  **Test Case Generation:**\n    - **Happy Path:** Simulate `TR-LIQ-01` -> `02` -> `04` -> `05` (Successful Top-up).\n    - **Rollback Path:** Simulate `TR-LIQ-04` -> `06` -> `07` (Eurosystem Timeout -> Unlock).\n    - *Constraint:* Assert that `ROLLING_BACK` state *always* triggers a call to `CBS.voidLock()`.\n\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-data-model-spec.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: specification\nvisibility: public\naudience: everyone\nform: text\nrole: specification\nstatus: normative\nowner: system-design\n---\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-data-model-spec.md",
+    "section": "Liquidity Reservation \u2014 Data Model Specification",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-data-model-spec.md",
+    "section": "1. Identification",
+    "text": "- **Global ID:** `SPEC-LIQ-DATA`\n- **Part of Set:** `SPEC-SET-LIQ`\n- **Traceability:**\n    - **Upstream Spec:** `SPEC-LIQ-FUNC` (Defines the states requiring storage)\n    - **Upstream Arch:** `@arch=SET-ARCH:0.1.0` (Defines `COMP-PSP-02` boundary)\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-data-model-spec.md",
+    "section": "2. Purpose and Scope",
+    "text": "\nThis document defines the **schema and data integrity rules** for the Waterfall Engine (`COMP-PSP-02`).\n\nIt governs:\n1.  **Data at Rest:** The `LiquidityReservation` entity stored by the PSP to manage the \"Lock\" state.\n2.  **Data in Motion:** The `FundingPayload` and `DefundingPayload` exchanged with the DESP via `SPEC-LIQ-INT`.\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-data-model-spec.md",
+    "section": "3. Conceptual Data Model",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-data-model-spec.md",
+    "section": "3.1 Design Rationale: The \"Split-State\" Pattern",
+    "text": "\nTo support the **Two-Phase Commit** defined in `SPEC-LIQ-FUNC`, the data model strictly separates the **Internal State** from the **External Message**.\n\n1.  **Persistence Requirement (`COMP-PSP-02`):** The Waterfall Engine must maintain a persistent record (`LiquidityReservation`) of every commercial lock. This ensures that if the system crashes after locking funds but before funding, the recovery process can identify the \"Orphan Lock\" and either complete or void it (Satisfying `REQ-LIQ-02`).\n\n2.  **Privacy Barrier (`Zone A` vs. `Zone B`):** The internal record contains proprietary Core Banking references (`cbs_reference`). These MUST NOT be exposed to the DESP. Therefore, the external `FundingInstruction` carries only a sanitized \"Reservation Proof\" (Hash), complying with privacy mandates.\n\nThe following diagram illustrates the relationship between the User's Wallet, the internal Reservation record, and the external Settlement transaction.\n\n**Visualisation (Normative)**\n\n```mermaid\nclassDiagram\n    direction TB\n\n    %% 1. The Parent Entity (User Context)\n    class UserWallet {\n        +UUID user_id\n        +Decimal current_balance\n    }\n\n    %% 2. The Core Entity (Internal Record)\n    class LiquidityReservation {\n        <<Internal Zone A>>\n        +UUID reservation_id\n        +String cbs_reference\n        +Decimal amount\n        +Enum status\n        +Timestamp expiry_time\n        +String settlement_ref\n    }\n\n    %% 3. External Systems (Dependencies)\n    class CoreBankingSystem {\n        <<External Legacy System>>\n        +String lock_id\n        +Decimal reserved_amount\n    }\n\n    class FundingInstruction {\n        <<External Message to DESP>>\n        +Integer amount\n        +String currency\n        +String reservation_proof\n    }\n\n    %% Relationships\n    UserWallet \"1\" -- \"0..*\" LiquidityReservation : initiates\n    \n    LiquidityReservation \"1\" --> \"1\" CoreBankingSystem : \"tracks lock in\"\n    LiquidityReservation \"1\" ..> \"0..1\" FundingInstruction : \"generates payload\"\n    \n    note for LiquidityReservation \"The central source of truth for the Two-Phase Commit.\\nStatus evolves: LOCKED -> SETTLED or FAILED\"\n```\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-data-model-spec.md",
+    "section": "4. Data Dictionary",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-data-model-spec.md",
+    "section": "4.1 Entity: LiquidityReservation (Internal)",
+    "text": "**Storage Target:** PSP Database (Zone A)\n**Purpose:** Tracks the lifecycle of a Commercial Bank Money lock to ensure it is eventually Captured or Voided.\n\n| Field Name | Data Type | Required | Description | Trace |\n| :--- | :--- | :--- | :--- | :--- |\n| **reservation_id** | `UUID` | Yes | Primary Key. Unique internal identifier for this operation. | `DAT-LIQ-01` |\n| **user_id** | `UUID` | Yes | Foreign Key to the PSP's local customer table. | `DAT-LIQ-02` |\n| **cbs_reference** | `String` | Yes | The ID returned by the Core Banking System during `LockFunds`. Used to trigger Capture/Void. | `REQ-LIQ-FUNC-02` |\n| **amount** | `Decimal` | Yes | The value locked in the Core Banking System. | `LIQ-01` |\n| **status** | `Enum` | Yes | `LOCKED`, `SETTLED`, `VOIDED`, `FAILED`. | `SPEC-LIQ-FUNC` (Sec 4) |\n| **expiry_time** | `Timestamp` | Yes | The time at which the Core Banking lock auto-expires (TTL). | `INT-LIQ-01` |\n| **settlement_ref** | `String` | No | The Transaction ID returned by DESP upon successful Funding. Populated only in `SETTLED` state. | `AUD-LIQ-01` |\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-data-model-spec.md",
+    "section": "4.2 Entity: FundingRequest (External Payload)",
+    "text": "**Transmission Target:** Access Gateway (`I_Settlement`)\n**Purpose:** The payload sent to `OP-LIQ-01` (POST /fund) to request issuance.\n\n| Field Name | Data Type | Format | Description | Trace |\n| :--- | :--- | :--- | :--- | :--- |\n| **amount** | `Integer` | `int64` | Amount in cent-euros (e.g., `1000` = \u20ac10.00). | `DAT-MSG-01` |\n| **currency** | `String` | `ISO 4217` | Fixed value: `EUR`. | `DAT-MSG-02` |\n| **reservation_proof** | `String` | `SHA-256` | A hash or opaque reference to the `reservation_id`. Allows the PSP to link the Mint event to the Lock event in audits without revealing internal IDs to DESP. | `SEC-LIQ-01` |\n| **remittance_info** | `String` | `Max 140` | (Optional) Reference for the bank statement (e.g., \"Top-up 2024-01-01\"). | `UX-01` |\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-data-model-spec.md",
+    "section": "4.3 Entity: DefundingRequest (External Payload)",
+    "text": "**Transmission Target:** Access Gateway (`I_Settlement`)\n**Purpose:** The payload sent to `OP-LIQ-02` (POST /defund) to offload excess liquidity.\n\n| Field Name | Data Type | Format | Description | Trace |\n| :--- | :--- | :--- | :--- | :--- |\n| **amount** | `Integer` | `int64` | Amount to defund (burn). | `DAT-MSG-03` |\n| **reason_code** | `String` | `Enum` | `LIMIT_BREACH`, `ZERO_HOLDING_CONFIG`. | `DAT-MSG-04` |\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-data-model-spec.md",
+    "section": "5. Data Integrity & Privacy Rules",
+    "text": "\n| ID | Rule Name | Logic | Trace |\n| :--- | :--- | :--- | :--- |\n| **DAT-VAL-01** | **Amount Precision** | All monetary values MUST be stored and transmitted as **Integers** (Minor Units / Cents) to prevent floating-point rounding errors. | `ARCH-STD-01` |\n| **DAT-PRI-01** | **Opaque References** | The `reservation_proof` sent to DESP MUST NOT contain PII or raw Core Banking IDs. It must be a random UUID or Hash generated by the Waterfall Engine. | `PRIV-01` |\n| **DAT-INT-01** | **Orphan Prevention** | A `LiquidityReservation` record MUST NOT be deleted until it reaches a terminal state (`SETTLED` or `VOIDED`). | `ACID` |\n\n---\n"
+  },
+  {
+    "source": "40-specifications/liquidity-reservation/liquidity-reservation-data-model-spec.md",
+    "section": "Appendix: How to Parse This Specification",
+    "text": "\n**For Automation Engineers:**\n\n1.  **Schema Validation:**\n    - Parse **Section 4.2 and 4.3**.\n    - **Generate:** JSON Schema or Protobuf definitions for the `I_Settlement` API.\n    - *Validation:* Ensure `amount` is strictly typed as `integer`, not `float`.\n\n2.  **Database Migration:**\n    - Parse **Section 4.1**.\n    - **Generate:** SQL Migration script (e.g., `CREATE TABLE liquidity_reservations ...`).\n    - *Constraint:* Ensure `cbs_reference` has a Unique Index to prevent double-usage of the same bank lock.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-spec-overview.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: specification\nvisibility: public\naudience: everyone\nform: text\nrole: specification\nstatus: normative\nowner: system-design\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-spec-overview.md",
+    "section": "Specification Overview: Participant Onboarding",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-spec-overview.md",
+    "section": "1. Identification",
+    "text": "- **Global ID:** `SPEC-OB-ROOT`\n- **Part of Set:** `SPEC-SET-ONB`\n- **Version:** Inherits from `manifest.yaml`\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-spec-overview.md",
+    "section": "2. Purpose and Scope",
+    "text": "This document defines the **technical scope** for onboarding Users and Payment Service Providers (PSPs) into the Digital Euro ecosystem.\n\nIt translates the high-level policy rules defined in the **Scheme Rulebook** into concrete technical requirements, strictly adhering to the privacy boundaries defined in the **System Architecture**.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-spec-overview.md",
+    "section": "2.1 In Scope",
+    "text": "- **User Identity Resolution:** The mechanism to enforce \"One Person / One Identity\" (`Rule ONB-01`) via the **Alias Service** (`COMP-EUR-02`), orchestrated by the **DESP** (`COMP-EUR-04`).\n- **Wallet Provisioning:** The technical lifecycle of creating a Digital Euro Account (`Rule ONB-03`) via the **Access Gateway** (`COMP-EUR-05`).\n- **Intermediary Checks:** Interfaces for PSPs to signal KYC/AML compliance (`Rule ONB-02`) from their local **PSP Adapter** (`COMP-PSP-01`).\n- **Portability Checks:** Logic to verify holding limits when a user opens an account at a second PSP (`Rule ONB-04`).\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-spec-overview.md",
+    "section": "2.2 Out of Scope",
+    "text": "- **Commercial Bank Money Liquidity:** Defined in `SPEC-LIQ` (Liquidity Management).\n- **Offline Secure Element Provisioning:** Defined in `SPEC-OFFLINE`.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-spec-overview.md",
+    "section": "3. Normative References (Upstream Traceability)",
+    "text": "\nThe requirements in this specification set are derived **exclusively** from the following mandated baselines.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-spec-overview.md",
+    "section": "3.1 Legal & Rulebook Basis",
+    "text": "This specification satisfies the mandates of **Rulebook Set v0.9.0** (`@rule=SET-RULEBOOK:0.9.0`).\n\n| Rule ID | Rule Name | Upstream Source |\n| :--- | :--- | :--- |\n| **ONB-01** | Single Identity Principle | [`functional-onboarding.md`](../../20-rulebook/functional-onboarding.md) |\n| **ONB-02** | Intermediary Responsibility | [`functional-onboarding.md`](../../20-rulebook/functional-onboarding.md) |\n| **ONB-03** | Digital Euro Account Creation | [`functional-onboarding.md`](../../20-rulebook/functional-onboarding.md) |\n| **ONB-04** | Portability & Limits | [`functional-onboarding.md`](../../20-rulebook/functional-onboarding.md) |\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-spec-overview.md",
+    "section": "3.2 Architectural Basis",
+    "text": "This specification adheres to the components and security zones defined in **Architecture Set v0.1.0** (`@arch=SET-ARCH:0.1.0`).\n\n| Component ID | Name | Role in Onboarding |\n| :--- | :--- | :--- |\n| **COMP-EUR-05** | **Access Gateway** | The **only** API entry point. Authenticates PSPs and validates schema. |\n| **COMP-EUR-04** | **DESP Platform** | The orchestrator. Executes business logic (Rate Limits, Status Checks). |\n| **COMP-EUR-02** | **Alias Service** | The System of Record. Stores unique Identity Hashes (Zone B). |\n| **COMP-PSP-01** | **PSP Adapter** | The client. Performs KYC and computes Identity Hash (Zone A). |\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-spec-overview.md",
+    "section": "4. Document Map (The Set)",
+    "text": "\nThe specification is split into three orthogonal views to ensure clarity and linting enforcement.\n\n| View | Document | Global ID | Purpose |\n| :--- | :--- | :--- | :--- |\n| **Behavior** | [`onboarding-functional-spec.md`](./onboarding-functional-spec.md) | **SPEC-OB-FUNC** | **\"The Logic\"**<br>Defines State Machines (e.g., `PENDING_KYC` -> `ACTIVE`) and validation rules. |\n| **Data** | [`onboarding-data-model-spec.md`](./onboarding-data-model-spec.md) | **SPEC-OB-DATA** | **\"The Schema\"**<br>Defines the `UserIdentityHash` and `Account` entities. |\n| **Interfaces** | [`onboarding-interfaces-spec.md`](./onboarding-interfaces-spec.md) | **SPEC-OB-INT** | **\"The Flow\"**<br>Sequence diagrams and API interactions. |\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-spec-overview.md",
+    "section": "5. Design Principles",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-spec-overview.md",
+    "section": "5.1 Privacy by Design (The Firewall)",
+    "text": "In accordance with `security-and-privacy-zones.md`, the Eurosystem (`Zone B`) **MUST NOT** receive clear-text identity data.\n- **Mechanism:** The PSP Adapter (`Zone A`) computes a one-way hash of the user's national ID.\n- **Constraint:** The **Alias Service** (`COMP-EUR-02`) operates exclusively on these hashes. The **Access Gateway** (`COMP-EUR-05`) strictly filters payloads to ensure no PII enters.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-spec-overview.md",
+    "section": "5.2 Intermediary Autonomy",
+    "text": "In accordance with `Rule ONB-02`, the Eurosystem does not perform KYC. The system accepts a cryptographic attestation from the PSP via `COMP-EUR-05` that KYC has been performed.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-spec-overview.md",
+    "section": "Appendix: How to Parse This Specification",
+    "text": "\n**For Automation Engineers:**\n\n1.  **Set Discovery:**\n    - Parse **Section 4 (Document Map)**.\n    - Extract the `Global ID` and `Document` path for each row.\n    - *Usage:* This allows your CI tools to dynamically discover all files belonging to `SPEC-SET-ONB` without hardcoding filenames.\n\n2.  **Dependency Validation (Linting):**\n    - Parse **Section 3.1** to find the `@rule` tag.\n    - Check that this version matches the `version` field in `20-rulebook/manifest.yaml`.\n    - Parse **Section 3.2** to find the `@arch` tag.\n    - Check that this version matches the `version` field in `30-architecture/manifest.yaml`.\n    - *Alert:* If versions mismatch, fail the build with `SpecDriftError`.\n\n3.  **Traceability Auditing:**\n    - Extract all **Rule IDs** (e.g., `ONB-01`) listed in the table in Section 3.1.\n    - Scan `SPEC-OB-FUNC` and `SPEC-OB-INT`.\n    - *Validation:* Warn if any Rule listed here is **not** referenced in the child specifications (indicating a missing requirement).\n\n    "
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-data-model-spec.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: specification\nvisibility: public\naudience: everyone\nform: text\nrole: specification\nstatus: normative\nowner: system-design\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-data-model-spec.md",
+    "section": "User Onboarding \u2014 Data Model Specification",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-data-model-spec.md",
+    "section": "1. Identification",
+    "text": "- **Global ID:** `SPEC-OB-DATA`\n- **Part of Set:** `SPEC-SET-ONB`\n- **Traceability:**\n    - **Upstream Spec:** `SPEC-OB-FUNC` (Implements `REQ-OB-FUNC-01` and `02`)\n    - **Upstream Arch:** `@arch=SET-ARCH:0.1.0` (Implements Data Schemas for `COMP-EUR-02` and `COMP-EUR-04`)\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-data-model-spec.md",
+    "section": "2. Purpose and Scope",
+    "text": "\nThis document defines the **Logical Data Model** for User Onboarding.\n\nIt strictly classifies data entities based on the **Security & Privacy Zones** to ensure that Personally Identifiable Information (PII) never crosses into the Eurosystem Domain (Zone B).\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-data-model-spec.md",
+    "section": "3. The Privacy Strategy (Narrative)",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-data-model-spec.md",
+    "section": "3.1 The \"Privacy Firewall\" Concept",
+    "text": "In accordance with **`security-and-privacy-zones.md`**, the Digital Euro architecture enforces a strict separation of data knowledge:\n\n1.  **Zone A (PSP Domain):** The PSP *must* know the user's real identity to perform KYC/AML checks mandated by law (`Rule ONB-02`).\n2.  **Zone B (Eurosystem Domain):** The Central Infrastructure *must* enforce the \"One Person, One Identity\" rule (`Rule ONB-01`) to prevent holding limit breaches.\n\n**The Conflict:** The Eurosystem needs to verify uniqueness (requiring identity) but is legally forbidden from processing PII (requiring anonymity).\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-data-model-spec.md",
+    "section": "3.2 The Data Solution",
+    "text": "To resolve this, this specification splits the User Identity into two disjoint entities:\n- **`UserIdentitySource` (Private):** The clear-text data. This never leaves the PSP's internal system.\n- **`GlobalAliasRecord` (Shared):** A cryptographic derivative (`SHA-256`) that acts as a unique pointer without revealing the source.\n\n**Visualisation (Normative)**\n\n```mermaid\nclassDiagram\n    direction TB\n\n    %% Zone A: Private Data\n    namespace Zone_A_PSP_Domain {\n        class UserIdentitySource {\n            <<Private PII>>\n            +String full_name\n            +Enum national_id_type\n            +String national_id_value\n            +ISO3166 issuing_country\n        }\n        \n        class PSP_Adapter {\n            <<Service>>\n            +computeHash(source, salt)\n        }\n    }\n\n    %% Interface Layer\n    class OnboardingRequest {\n        <<Interface Payload>>\n        +String identity_hash\n        +BIC psp_id\n        +JWS signature\n    }\n\n    %% Zone B: Shared Data\n    namespace Zone_B_Eurosystem {\n        class GlobalAliasRecord {\n            <<Shared Registry>>\n            +SHA256 identity_hash\n            +Timestamp creation_date\n            +Enum status\n            +Decimal holding_limit_usage\n        }\n    }\n\n    %% Relationships\n    UserIdentitySource \"1\" -- \"1\" PSP_Adapter : Inputs\n    PSP_Adapter \"1\" ..> \"1\" OnboardingRequest : Generates\n    OnboardingRequest \"1\" ..> \"1\" GlobalAliasRecord : Creates/Verifies\n\n    %% Firewall Note\n    note for OnboardingRequest \"Firewall Rule:\\nMust NOT contain fields\\nfrom UserIdentitySource\"\n```\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-data-model-spec.md",
+    "section": "4. General Principles",
+    "text": "\n| ID | Principle | Requirement Statement | Trace |\n| :--- | :--- | :--- | :--- |\n| **DM-OB-01** | **Data Minimisation** | The Central Infrastructure (`COMP-EUR-02` via `04`) MUST store only the cryptographic hash of the user identity, never the clear-text source data. | `Rule ONB-01` |\n| **DM-OB-02** | **Deterministic Derivation** | The `identity_hash` MUST be reproducible by any PSP given the same National ID and Scheme Salt. | `REQ-OB-FUNC-03` |\n| **DM-OB-03** | **Zone Containment** | Entities classified as **Zone A** MUST NOT appear in API payloads sent to the Access Gateway (`SYS-GWY`). | `ARCH-SEC-01` |\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-data-model-spec.md",
+    "section": "5. Data Dictionary",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-data-model-spec.md",
+    "section": "5.1 Entity: UserIdentitySource (Private PII)",
+    "text": "**Classification:** `ZONE A ONLY` (PSP Internal)\n**Description:** The source documents collected during KYC. Used solely to compute the hash.\n\n**Parsing Context:** `Scope: ZoneA_Storage`\n\n| ID | Attribute | Type | Description / Constraint | Trace |\n| :--- | :--- | :--- | :--- | :--- |\n| **DAT-SRC-01** | `national_id_type` | `Enum` | The type of document used.<br>Values: `PASSPORT`, `ID_CARD`, `TAX_ID`. | `Rule ONB-02` |\n| **DAT-SRC-02** | `national_id_value` | `String` | The unique number on the document.<br>Format: Normalised (Upper case, no spaces). | `REQ-OB-FUNC-02` |\n| **DAT-SRC-03** | `issuing_country` | `ISO-3166` | The country code of the issuer (e.g., `DE`, `FR`). | `ISO-3166-1` |\n| **DAT-SRC-04** | `full_name` | `String` | Legal name (for internal PSP KYC logs only). | `AMLD5` |\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-data-model-spec.md",
+    "section": "5.2 Entity: GlobalAliasRecord (The Registry)",
+    "text": "**Classification:** `ZONE B` (Eurosystem Shared)\n**Owner:** Alias Service (`COMP-EUR-02`)\n**Description:** The authoritative record stored in the Registry, queried by the DESP Platform.\n\n**Parsing Context:** `Scope: ZoneB_Registry`\n\n| ID | Attribute | Type | Description / Constraint | Trace |\n| :--- | :--- | :--- | :--- | :--- |\n| **DAT-ALS-01** | `identity_hash` | `SHA-256` | **Primary Key.** The anonymised unique identifier.<br>Derived from `SHA256(Salt + ID_Type + ID_Value)`. | `Rule ONB-01` |\n| **DAT-ALS-02** | `creation_date` | `Timestamp` | UTC timestamp of first registration. | `AUD-OB-01` |\n| **DAT-ALS-03** | `status` | `Enum` | Lifecycle state.<br>Values: `ACTIVE`, `SUSPENDED`. | `ONB-FUNC-States` |\n| **DAT-ALS-04** | `holding_limit_usage`| `Decimal` | The current aggregate holdings across all PSPs.<br>(Technical field for Limit Enforcement by `COMP-EUR-04`). | `Rule LIQ-04` |\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-data-model-spec.md",
+    "section": "5.3 Entity: OnboardingRequest (The Payload)",
+    "text": "**Classification:** `INTERFACE` (Zone A $\\to$ Zone B)\n**Consumer:** Access Gateway (`COMP-EUR-05`) & DESP Platform (`COMP-EUR-04`)\n**Description:** The data structure transmitted over the wire during `OP-OB-01`.\n\n**Parsing Context:** `Scope: API_Payload`\n\n| ID | Attribute | Type | Card. | Description / Constraint | Trace |\n| :--- | :--- | :--- | :---: | :--- | :--- |\n| **DAT-MSG-01** | `identity_hash` | `String` | 1..1 | Hex-encoded SHA-256 hash.<br>Regex: `^[a-f0-9]{64}$` | `INT-OB-01` |\n| **DAT-MSG-02** | `psp_id` | `BIC` | 1..1 | The BIC of the requesting PSP. | `DAT-PAR-002` |\n| **DAT-MSG-03** | `signature` | `JWS` | 1..1 | Cryptographic signature of the payload. | `INT-OB-02` |\n| **DAT-MSG-04** | `idempotency_key` | `UUID` | 1..1 | Unique request ID for retry safety. | `INT-OB-04` |\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-data-model-spec.md",
+    "section": "6. Mapping Rules (Transformation Logic)",
+    "text": "\nThis section defines how to transform **Source** (Zone A) into **Alias** (Zone B).\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-data-model-spec.md",
+    "section": "6.1 The Hashing Algorithm",
+    "text": "To ensure `REQ-OB-FUNC-01` (Determinism), all PSPs MUST implement the following logic:\n\n1.  **Normalisation:**\n    - `Input = UpperCase(Trim(national_id_value))`\n    - `Type = UpperCase(national_id_type)`\n    - `Country = UpperCase(issuing_country)`\n2.  **Concatenation:**\n    - `RawString = Country + \":\" + Type + \":\" + Input`\n    - *Example:* `DE:PASSPORT:123456789`\n3.  **Salting:**\n    - `SaltedString = SCHEME_IDENTITY_SALT + RawString`\n4.  **Hashing:**\n    - `IdentityHash = SHA256(SaltedString)`\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-data-model-spec.md",
+    "section": "Appendix: How to Parse This Specification",
+    "text": "\n**For Automation Engineers:**\n\n1.  **Schema Validation (OpenAPI):**\n    - Use **Section 5.3 (OnboardingRequest)** to generate or validate the `components/schemas` in your OpenAPI definition.\n    - *Constraint Check:* Ensure the `identity_hash` field in OpenAPI has the `pattern: ^[a-f0-9]{64}$` derived from `DAT-MSG-01`.\n\n2.  **Privacy Audit Script:**\n    - Write a linter that scans the `50-code` layer.\n    - **Rule:** If a variable name matches attributes from **Section 5.1 (Zone A)** (e.g., `national_id_value`), it **MUST NOT** appear in any log file or outbound HTTP request to `SYS-GWY`.\n\n3.  **Test Data Generation:**\n    - Use the Algorithm in **Section 6.1** to generate consistent test vectors.\n    - *Example:* Create a \"Golden Dataset\" of {Input, Expected Hash} to verify that different PSP implementations produce identical hashes.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/README.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: specification\nvisibility: public\naudience: everyone\nform: text\nrole: documentation\nstatus: informative\nowner: system-design\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/README.md",
+    "section": "Participant Onboarding Specification Set",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/README.md",
+    "section": "1. Identity and Scope",
+    "text": "\nThis folder contains the **Participant Onboarding Specification Set** (`SPEC-SET-ONB`).\n\nIt defines the technical requirements, interfaces, data models, and state machines required to onboard a new Participant (PSP) onto the Digital Euro infrastructure.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/README.md",
+    "section": "Versioning Strategy",
+    "text": "**This folder is versioned as an atomic unit.**\nThe current normative version of this set is defined in the **[`manifest.yaml`](./manifest.yaml)** file. Individual Markdown files do not carry independent version numbers.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/README.md",
+    "section": "2. \u26a0\ufe0f LEGAL NOTICE: FICTIONAL CONTENT",
+    "text": "\n> **IMPORTANT:** The technical specifications contained in this folder are **FICTIONAL**.\n>\n> They have been created by the authors of this repository solely to **demonstrate how rigorous specifications can/should be structured** within a governed project. They do **NOT** represent actual Digital Euro project. \n>\n> **Do not use these specifications to build actual software for the Digital Euro.**\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/README.md",
+    "section": "3. The Specification Set",
+    "text": "\nThe set consists of the following modular components.\nEach component has a unique **Global ID** to allow precise citation in code and tests (e.g., `Ref: SPEC-OB-FUNC`).\n\n| Global ID | File | Role |\n| :--- | :--- | :--- |\n| **SPEC-OB-ROOT** | [`onboarding-spec-overview.md`](./onboarding-spec-overview.md) | **Root Document**<br>Defines the Scope, Document Map, and Traceability rules. |\n| **SPEC-OB-FUNC** | [`onboarding-functional-spec.md`](./onboarding-functional-spec.md) | **Functional Spec**<br>Defines the State Machine (`DRAFT` \u2192 `ACTIVE`) and business rules. |\n| **SPEC-OB-INT** | [`onboarding-interfaces-spec.md`](./onboarding-interfaces-spec.md) | **Interface Spec**<br>Defines the interaction flows between PSP and Platform. |\n| **SPEC-OB-DATA** | [`onboarding-data-model-spec.md`](./onboarding-data-model-spec.md) | **Data Model Spec**<br>Defines the authoritative entities and privacy constraints. |\n| **SPEC-OB-API** | [`openapi.yaml`](./openapi.yaml) | **OpenAPI Definition**<br>Machine-readable contract implementing the above specs. |\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/README.md",
+    "section": "4. Traceability Strategy & Chain of Custody",
+    "text": "\nThis Specification Set acts as the bridge between high-level mandates and concrete verification. To ensure auditability, every requirement in this folder follows a strict **Chain of Custody**:\n"
+  },
+  {
+    "source": "40-specifications/onboarding/README.md",
+    "section": "4.1 Origin (Upstream Mandates)",
+    "text": "Every requirement must trace back to a specific **Rule ID**. This anchors technical behavior to the legal and operational framework.\n\n- **Mandate:** We implement the *Participant Onboarding Rules* defined in:\n    - `@rule=SET-RULEBOOK:0.9.0` (specifically [`functional-onboarding.md`](../../20-rulebook/functional-onboarding.md))\n- **Enforcement:** **LINT-T2** validates that every spec file contains valid `@rule` references.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/README.md",
+    "section": "4.2 Constraint (Architectural Boundary)",
+    "text": "Every requirement must apply to a specific **Component ID**. This prevents \"Architecture Drift\" by ensuring specifications respect the system boundaries and security zones.\n\n- **Constraint:** We adhere to the *System Context* and *Security Zones* defined in:\n    - `@arch=SET-ARCH:0.1.0` (specifically mapping to `COMP-EUR-02` Alias Service and `COMP-EUR-05` Access Gateway)\n- **Enforcement:** **LINT-T1** (Validation of implementation traces) and architectural review.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/README.md",
+    "section": "4.3 Verification (Downstream Consumers)",
+    "text": "Every requirement must be verifiable. Downstream artefacts rely on the **exact version** of this specification set to prove compliance.\n\n- **Test Suite:** The logic here is verified by the Conformance Test Suite:\n    - `@test=TEST-SET-ONB:0.1.1` (located in `50-tests/100-conformance-scenarios/onboarding/`)\n    - *Enforcement:* **LINT-T3** checks that every spec ID is covered by a test.\n- **Implementation:** The Reference Implementation derives its logic from here:\n    - `60-code/adapter-service` (Must declare compliance to `SPEC-SET-ONB:0.1.1`)\n\n> **Note on Drift:** Mismatches between the version defined in `manifest.yaml` and the versions cited by consumers will be flagged by **LINT-T5 (Spec Drift)**.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/README.md",
+    "section": "5. Governance & Linting",
+    "text": "\nThis folder is subject to the following automated governance rules:\n\n- **LINT-T2 (Anchoring):** Every specification file must reference a Rulebook ID.\n- **LINT-T4 (Version Syntax):** References must include the version suffix (e.g., `:0.1.0`).\n- **LINT-T5** (Spec Drift): Referenced versions must match the `RELEASED` version in the target manifest.\n- **LINT-C1 (Classification):** All files must carry valid YAML metadata headers.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-functional-spec.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: specification\nvisibility: public\naudience: everyone\nform: text\nrole: specification\nstatus: normative\nowner: system-design\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-functional-spec.md",
+    "section": "User Onboarding \u2014 Functional Specification",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-functional-spec.md",
+    "section": "1. Identification",
+    "text": "- **Global ID:** `SPEC-OB-FUNC`\n- **Part of Set:** `SPEC-SET-ONB`\n- **Traceability:**\n    - **Upstream Rulebook:** `@rule=SET-RULEBOOK:0.9.0`\n    - **Upstream Arch:** `@arch=SET-ARCH:0.1.0`\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-functional-spec.md",
+    "section": "2. Purpose and Scope",
+    "text": "\nThis document defines the **functional behaviour** for onboarding a Natural Person (User) into the Digital Euro Scheme.\n\nIt specifies the **State Machine** for the User Identity Lifecycle and the **Privacy-Preserving Uniqueness Check** required by `Rule ONB-01`.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-functional-spec.md",
+    "section": "3. General Principles",
+    "text": "\n| ID | Principle | Requirement Statement | Trace |\n| :--- | :--- | :--- | :--- |\n| **REQ-OB-001** | **Single Identity** | A natural person MUST NOT hold more than one active Digital Euro Identity across the entire ecosystem, regardless of the number of PSPs they use. | `Rule ONB-01`<br>`COMP-EUR-02` |\n| **REQ-OB-002** | **Privacy Firewall** | The Central Infrastructure (Eurosystem) MUST NOT receive, process, or store the user's clear-text name or national ID during the onboarding process. | `Zone B`<br>`ARCH-SEC-01` |\n| **REQ-OB-003** | **Intermediary KYC** | The PSP is solely responsible for verifying the real-world identity of the user *before* initiating the digital euro registration. | `Rule ONB-02`<br>`COMP-PSP-01` |\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-functional-spec.md",
+    "section": "4. User Lifecycle States",
+    "text": "\nThe lifecycle of a User Identity record within the **PSP System** (`COMP-PSP-01`).\n\n| State | Description | Authority |\n| :--- | :--- | :--- |\n| `PENDING_KYC` | User has applied, but PSP has not yet verified documents. | PSP |\n| `KYC_CLEARED` | PSP has verified identity. Identity Hash is calculated. Ready for uniqueness check. | PSP |\n| `CHECKING_ALIAS` | Request transmitted to Access Gateway (`COMP-EUR-05`). Awaiting response. | Eurosystem |\n| `ACTIVE` | Uniqueness confirmed. Wallet created. Limits active. | System |\n| `REJECTED` | Failed KYC or Duplicate Identity found. | System |\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-functional-spec.md",
+    "section": "5. State Machine & Transitions",
+    "text": "\n```mermaid\nstateDiagram-v2\n    direction LR\n    \n    %% Initial Application\n    [*] --> PENDING_KYC : User Applies\n    \n    %% KYC Phase (Zone A)\n    state PENDING_KYC {\n        [*] --> Awaiting_Docs\n    }\n    \n    PENDING_KYC --> REJECTED : KYC Fail\n    PENDING_KYC --> KYC_CLEARED : TR-OB-02\\n(verify_identity)\n    \n    %% Registration Phase (Crossing Zone A -> Zone B)\n    KYC_CLEARED --> CHECKING_ALIAS : TR-OB-03\\n(register_alias)\n    note right of KYC_CLEARED\n        Action: Transmit Hash\n        Target: COMP-EUR-05\n    end note\n    \n    %% Resolution Phase (Zone B Response)\n    state CHECKING_ALIAS {\n        [*] --> Awaiting_Gateway\n    }\n    \n    CHECKING_ALIAS --> ACTIVE : TR-OB-04\\n(alias_confirmed)\n    CHECKING_ALIAS --> REJECTED : TR-OB-05\\n(alias_conflict)\n    \n    %% Final State\n    ACTIVE --> [*] : Offboard\n```\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-functional-spec.md",
+    "section": "Transition Logic",
+    "text": "\n**Parsing Context:** `Scope: UserStateMachine`\n\n| Trans ID | From State | To State | Trigger | Guard / Logic | Trace |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **TR-OB-01** | `(null)` | `PENDING_KYC` | `submit_application` | Validate input formats (Name, ID). | `INT-OB-01` |\n| **TR-OB-02** | `PENDING_KYC` | `KYC_CLEARED` | `verify_identity` | **Manual/Auto KYC**: Verify physical ID document. <br>**Hash Gen**: Compute `SHA256(Salt + NationalID)`. | `Rule ONB-02` |\n| **TR-OB-03** | `KYC_CLEARED` | `CHECKING_ALIAS` | `register_alias` | **Action**: Transmit sanitized Hash to **Access Gateway** (`COMP-EUR-05`). | `Rule ONB-01` |\n| **TR-OB-04** | `CHECKING_ALIAS` | `ACTIVE` | `alias_confirmed` | **Provisioning**: Create Wallet Address.<br>**Link**: Bind Wallet Address to User ID in PSP DB. | `Rule ONB-03` |\n| **TR-OB-05** | `CHECKING_ALIAS` | `REJECTED` | `alias_conflict` | **Error Handling**: Inform user they already have a Digital Euro identity (potentially at another PSP). | `Rule ONB-01` |\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-functional-spec.md",
+    "section": "6. Functional Requirements (The Logic)",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-functional-spec.md",
+    "section": "6.1 Identity Hashing (The \"Alias\" Logic)",
+    "text": "**Target:** `COMP-PSP-01` (PSP Gateway)\n\n- **REQ-OB-FUNC-01:** The PSP MUST compute a deterministic **Identity Hash** for every user.\n- **REQ-OB-FUNC-02:** The Input for the hash MUST be the `National_ID_Type` + `National_ID_Value` (e.g., `PASSPORT:DE:123456789`).\n- **REQ-OB-FUNC-03:** The hash MUST be salted with a scheme-wide static salt to prevent rainbow table attacks, but ensure deterministic output across different PSPs.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-functional-spec.md",
+    "section": "6.2 Uniqueness Check (The \"Registry\" Logic)",
+    "text": "**Target:** `COMP-EUR-02` (Alias Service) via `COMP-EUR-04` (DESP)\n\n- **REQ-OB-FUNC-04:** Upon receiving a `register_alias` request (routed via Gateway and Platform), the Alias Service MUST check if the hash exists in the **Global Alias Registry**.\n- **REQ-OB-FUNC-05:** If the hash exists:\n    - Return `409 Conflict`.\n    - Do NOT register a new record.\n- **REQ-OB-FUNC-06:** If the hash does not exist:\n    - Store the hash.\n    - Return `200 OK`.\n    - **Trace:** This satisfies `Rule ONB-01` (Single Identity).\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-functional-spec.md",
+    "section": "6.3 Account Provisioning",
+    "text": "**Target:** `COMP-PSP-01` (PSP Gateway)\n\n- **REQ-OB-FUNC-07:** Upon transition to `ACTIVE`, the PSP MUST assign a **Wallet Address** (IBAN-like structure).\n- **REQ-OB-FUNC-08:** The PSP MUST initialize the user's **Holding Limit** counter to 0.00 EUR.\n- **Trace:** This satisfies `Rule ONB-03` (Account Creation) and `Rule LIQ-04` (Limits).\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-functional-spec.md",
+    "section": "7. Security & Audit",
+    "text": "\n| ID | Rule Name | Logic | Trace |\n| :--- | :--- | :--- | :--- |\n| **SEC-OB-01** | **KYC Attestation** | The `register_alias` message MUST be cryptographically signed by the PSP's private key (`COMP-PSP-03`) to attest that KYC was performed. | `Rule ONB-02` |\n| **AUD-OB-01** | **Minimisation** | The Alias Service (`COMP-EUR-02`) MUST NOT log the IP address or metadata that could de-anonymize the user. | `Zone B` |\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-functional-spec.md",
+    "section": "Appendix: How to Parse This Specification",
+    "text": "\n**For Automation Engineers:**\n\n1.  **State Machine Generation:**\n    - Parse **Section 5 (Transition Logic Table)**.\n    - Use the `From State` and `To State` columns to generate your **State Pattern** configuration or **Transition Matrix**.\n    - *Validation:* Ensure your code throws `InvalidTransitionError` for any transition attempt not explicitly defined in `TR-OB-01` to `TR-OB-05`.\n\n2.  **Test Case Generation:**\n    - **Positive Tests:** Create one test case for every row in the Transition Table to verify the happy path.\n    - **Negative Tests:** For every `Guard / Logic` condition (e.g., \"Validate input formats\"), create a test case that deliberately violates it (e.g., \"Submit invalid National ID format\") and asserts rejection.\n\n3.  **Requirement Mapping:**\n    - Iterate through **Section 6 (Functional Requirements)**.\n    - Ensure every `REQ-OB-FUNC-XX` is mapped to a Unit Test or Integration Test.\n    - *Traceability:* The `Trace` column connects these tests back to the Rulebook, ensuring legal compliance."
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-interfaces-spec.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: specification\nvisibility: public\naudience: everyone\nform: text\nrole: specification\nstatus: normative\nowner: system-design\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-interfaces-spec.md",
+    "section": "User Onboarding \u2014 Interface Behaviour Specification",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-interfaces-spec.md",
+    "section": "1. Identification",
+    "text": "- **Global ID:** `SPEC-OB-INT`\n- **Part of Set:** `SPEC-SET-ONB`\n- **Traceability:**\n    - **Upstream Spec:** `SPEC-OB-FUNC` (Implements `TR-OB-03` and `TR-OB-04`)\n    - **Upstream Arch:** `@arch=SET-ARCH:0.1.0` (Implements `COMP-EUR-05` and `COMP-EUR-04`)\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-interfaces-spec.md",
+    "section": "2. Purpose and Scope",
+    "text": "\nThis document defines the **component interactions** required to register a User Identity Hash with the Eurosystem.\n\nIt details the protocols, message flows, and security constraints for the interface between the **PSP's Adapter Service** and the **Digital Euro Service Platform (DESP)** via the Access Gateway.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-interfaces-spec.md",
+    "section": "3. Component Inventory (Actors)",
+    "text": "\nThe specific architectural components participating in these flows.\n\n| ID | Component Name | Role | Responsibility | Trace |\n| :--- | :--- | :--- | :--- | :--- |\n| **SYS-PSP** | **PSP Adapter Service** | Client | The PSP's proprietary integration layer. Computes Hash, manages keys, and calls the Access Gateway. | `COMP-PSP-01` |\n| **SYS-GWY** | **Access Gateway** | Interface | The Border Control. Terminates mTLS, validates QWACs, and routes sanitised requests to DESP. | `COMP-EUR-05` |\n| **SYS-DESP** | **DESP Platform** | Orchestrator | The Central Platform. Enforces business logic, audit logging, and coordinates sub-services. | `COMP-EUR-04` |\n| **SYS-ALIAS** | **Alias Service** | Registry | The System of Record. Pure storage engine for unique Identity Hashes. | `COMP-EUR-02` |\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-interfaces-spec.md",
+    "section": "4. Interface Operation Catalog",
+    "text": "\nThe list of logical operations exposed by the Access Gateway (`SYS-GWY`) to support user onboarding.\n\n| Op ID | Operation Name | Direction | Functional Trace |\n| :--- | :--- | :--- | :--- |\n| **OP-OB-01** | `RegisterUserHash` | `PSP` -> `EUR` | Executes `TR-OB-03` (KYC_CLEARED -> CHECKING_ALIAS) |\n| **OP-OB-02** | `CheckUserStatus` | `PSP` -> `EUR` | Queries current status of a Hash (Idempotency check). |\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-interfaces-spec.md",
+    "section": "5. Interaction Flows",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-interfaces-spec.md",
+    "section": "5.1 Flow: User Registration (Happy Path)",
+    "text": "\nThis flow covers the successful registration of a new User Identity Hash.\n\n**Visualisation (Normative)**\n\n```mermaid\nsequenceDiagram\n    autonumber\n    \n    participant PSP as SYS-PSP<br/>(PSP Adapter)\n    participant GWY as SYS-GWY<br/>(Access Gateway)\n    participant DESP as SYS-DESP<br/>(DESP Platform)\n    participant ALIAS as SYS-ALIAS<br/>(Alias Service)\n\n    Note over PSP, ALIAS: Flow: User Registration (Happy Path)\n\n    %% STEP-REG-01\n    PSP->>GWY: POST /aliases\n    Note right of PSP: Body: identity_hash<br/>Signed: QWAC + JWS\n\n    %% STEP-REG-02\n    GWY->>GWY: Authenticate (mTLS)<br/>& Validate Signature\n\n    %% STEP-REG-03\n    GWY->>DESP: Route Request\n    activate DESP\n\n    %% STEP-REG-04\n    DESP->>DESP: Validate Business Rules<br/>(Status, Limits, Schema)\n\n    %% STEP-REG-05\n    DESP->>ALIAS: Query Uniqueness(hash)\n    activate ALIAS\n\n    %% STEP-REG-06\n    ALIAS-->>DESP: Result: Not Found\n    deactivate ALIAS\n\n    %% STEP-REG-07\n    DESP->>ALIAS: Commit(hash)\n    activate ALIAS\n    ALIAS-->>DESP: Stored (OK)\n    deactivate ALIAS\n\n    %% STEP-REG-08\n    DESP-->>GWY: 201 Created (alias_id)\n    deactivate DESP\n\n    %% STEP-REG-09\n    GWY-->>PSP: 201 Created\n```\n\n**Step-by-Step Definition**\n\n| Step ID | Sender | Receiver | Message / Action | Constraints / Rules | Trace |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **STEP-REG-01** | `SYS-PSP` | `SYS-GWY` | `POST /aliases` | Body MUST contain `identity_hash`. Signed by PSP. | `REQ-OB-002` |\n| **STEP-REG-02** | `SYS-GWY` | `SYS-GWY` | *Authenticate* | Validate PSP mTLS & JWS Signature. | `ARCH-SEC-02` |\n| **STEP-REG-03** | `SYS-GWY` | `SYS-DESP` | *Route Request* | Pass authenticated context to DESP Platform. | `COMP-EUR-04` |\n| **STEP-REG-04** | `SYS-DESP` | `SYS-DESP` | *Validate Business Rules* | Check PSP status, Rate Limits, and Schema. | `Rule ONB-02` |\n| **STEP-REG-05** | `SYS-DESP` | `SYS-ALIAS` | *Query Uniqueness* | Internal call: \"Does Hash X exist?\" | `REQ-OB-FUNC-04` |\n| **STEP-REG-06** | `SYS-ALIAS` | `SYS-DESP` | *Result: Not Found* | Confirm hash is new. | `REQ-OB-FUNC-06` |\n| **STEP-REG-07** | `SYS-DESP` | `SYS-ALIAS` | *Commit* | Write Hash to Registry. | `Rule ONB-01` |\n| **STEP-REG-08** | `SYS-DESP` | `SYS-GWY` | `201 Created` | Return `alias_id` and `timestamp`. | `TR-OB-04` |\n| **STEP-REG-09** | `SYS-GWY` | `SYS-PSP` | `201 Created` | Forward response to PSP. | `INT-OB-03` |\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-interfaces-spec.md",
+    "section": "5.2 Flow: Duplicate Identity (Conflict)",
+    "text": "\nThis flow covers the scenario where the user already exists (Violation of Single Identity).\n\n**Visualisation (Normative)**\n\n```mermaid\nsequenceDiagram\n    autonumber\n    \n    participant PSP as SYS-PSP<br/>(PSP Adapter)\n    participant GWY as SYS-GWY<br/>(Access Gateway)\n    participant DESP as SYS-DESP<br/>(DESP Platform)\n    participant ALIAS as SYS-ALIAS<br/>(Alias Service)\n\n    Note over PSP, ALIAS: Flow: Duplicate Identity (Conflict)\n\n    %% Context: Request Arrival (Reusing Happy Path Entry)\n    PSP->>GWY: POST /aliases (identity_hash)\n    GWY->>DESP: Route Request\n    activate DESP\n    DESP->>DESP: Validate Business Rules\n\n    %% STEP-DUP-01\n    DESP->>ALIAS: Query Uniqueness(hash)\n    activate ALIAS\n\n    %% STEP-DUP-02\n    Note right of ALIAS: Hash already exists\n    ALIAS-->>DESP: Result: Found (Match)\n    deactivate ALIAS\n\n    %% STEP-DUP-03\n    DESP->>DESP: Log Violation<br/>(SEC-WARN-DUPLICATE)\n\n    %% STEP-DUP-04\n    DESP-->>GWY: 409 Conflict<br/>(Error: DUPLICATE_IDENTITY)\n    deactivate DESP\n\n    %% STEP-DUP-05\n    GWY-->>PSP: 409 Conflict\n```\n\n**Step-by-Step Definition**\n\n| Step ID | Sender | Receiver | Message / Action | Constraints / Rules | Trace |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **STEP-DUP-01** | `SYS-DESP` | `SYS-ALIAS` | *Query Uniqueness* | (Triggered after Validation) | `REQ-OB-FUNC-04` |\n| **STEP-DUP-02** | `SYS-ALIAS` | `SYS-DESP` | *Result: Found* | Hash already exists. | `REQ-OB-FUNC-05` |\n| **STEP-DUP-03** | `SYS-DESP` | `SYS-DESP` | *Log Violation* | Record audit event `SEC-WARN-DUPLICATE`. | `AUD-OB-01` |\n| **STEP-DUP-04** | `SYS-DESP` | `SYS-GWY` | `409 Conflict` | Error: `DUPLICATE_IDENTITY`. | `TR-OB-05` |\n| **STEP-DUP-05** | `SYS-GWY` | `SYS-PSP` | `409 Conflict` | Forward error to PSP. | `INT-OB-03` |\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-interfaces-spec.md",
+    "section": "6. Technical Constraints",
+    "text": "\n| ID | Constraint | Requirement Description | Trace |\n| :--- | :--- | :--- | :--- |\n| **INT-OB-01** | **Privacy Payload** | The payload MUST NOT contain any fields other than `identity_hash` and `psp_id`. Any other field triggers a `400 Bad Request`. | `Zone B` |\n| **INT-OB-02** | **Signature Requirement** | Every request MUST carry a `JWS-Signature` header signed by the PSP's registered QWAC key. | `Rule ONB-02` |\n| **INT-OB-03** | **Performance** | The `RegisterUserHash` operation MUST complete within 200ms (p99) to ensure smooth UX at the bank counter. | `NFR-PERF-02` |\n| **INT-OB-04** | **Idempotency** | All state-changing operations (`POST`) MUST require an `Idempotency-Key` HTTP header (UUID v4) to allow safe retries. | `NFR-REL-01` |\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/onboarding-interfaces-spec.md",
+    "section": "Appendix: How to Parse This Specification",
+    "text": "\n**For Automation Engineers:**\n\n1.  **Sequence Parsing:**\n    * The `mermaid` blocks contain standard Mermaid syntax.\n    * You can extract these blocks to generate live documentation images during the build process.\n    * *Validation:* Ensure the `participant` names in Mermaid match the IDs in **Section 3**.\n\n2.  **Contract Testing:**\n    * Iterate through **Section 5 (Step-by-Step Definitions)**.\n    * For every step where `Receiver` is `SYS-GWY` (incoming) or `SYS-DESP` (processing), assert that a corresponding API Endpoint exists in the `openapi.yaml`.\n    * If `Constraints` mentions `JWS-Signature`, assert that the API Schema requires that header.\n\n3.  **Simulation Configuration:**\n    * Use the **Step IDs** (e.g., `STEP-REG-05`) to configure the Mock Server behavior.\n    * *Example:* \"If Test Case = `TC-DUP-01`, Mock `SYS-ALIAS` to return `Result: Found` at `STEP-DUP-02`.\"\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: specification\nvisibility: public\naudience: everyone\nform: text\nrole: specification\nstatus: normative\nowner: system-architecture\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "Participant Onboarding \u2014 Functional Specification",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "Purpose",
+    "text": "\nThis document defines the **normative functional requirements** governing participant onboarding.\n\nIt specifies:\n\n- required system behaviour  \n- permitted and forbidden state transitions  \n- mandatory validations  \n- audit and traceability obligations  \n\nIt does **not** define technical protocols or data formats.  \nThose are addressed by interface and API specifications.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "Normative language",
+    "text": "\nThe keywords **MUST**, **MUST NOT**, **SHALL**, **SHOULD**, and **MAY** are to be interpreted as described in RFC 2119.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "Lifecycle states",
+    "text": "\nThe onboarding lifecycle consists of four states:\n\n`DRAFT \u2192 SUBMITTED \u2192 VERIFIED \u2192 ACTIVE`\n\n\nNo other states are permitted in this specification.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "General principles",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ONB-G-01 \u2014 Single participant record",
+    "text": "\nEach participant **MUST** be represented by exactly one participant record.\n\nDuplicate records for the same legal entity **MUST NOT** exist.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ONB-G-02 \u2014 State integrity",
+    "text": "\nA participant record **MUST** always be in exactly one lifecycle state.\n\nConcurrent or ambiguous states **MUST NOT** occur.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ONB-G-03 \u2014 Idempotency",
+    "text": "\nRepeated submission of identical onboarding data **MUST NOT** result in duplicate state transitions or side effects.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "State-specific requirements",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "DRAFT state",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ONB-D-01 \u2014 Draft creation",
+    "text": "\nThe system **MUST** allow the creation of a participant record in state `DRAFT`.\n\nMandatory information **MAY** be incomplete in this state.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ONB-D-02 \u2014 Draft mutability",
+    "text": "\nWhile in `DRAFT`, participant data **MAY** be modified freely by the submitting party.\n\nNo external validation **SHALL** be triggered.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "SUBMITTED state",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ONB-S-01 \u2014 Submission",
+    "text": "\nTransition from `DRAFT` to `SUBMITTED` **MUST** require an explicit submission action.\n\nImplicit or automatic submission **MUST NOT** occur.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ONB-S-02 \u2014 Submission immutability",
+    "text": "\nOnce a participant record enters `SUBMITTED`, submitted data **MUST NOT** be modified except through an explicit correction process.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ONB-S-03 \u2014 Submission validation",
+    "text": "\nUpon transition to `SUBMITTED`, the system **MUST** perform completeness checks on mandatory data elements.\n\nFailure **MUST** prevent further progression.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "VERIFIED state",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ONB-V-01 \u2014 Verification checks",
+    "text": "\nTransition from `SUBMITTED` to `VERIFIED` **MUST** require successful completion of:\n\n- eligibility verification  \n- certification validation  \n- identity and role checks  \n\nThe exact checks are defined by the rulebook and certification authorities.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ONB-V-02 \u2014 Verification authority",
+    "text": "\nOnly authorised verification processes or actors **MAY** initiate the transition to `VERIFIED`.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ONB-V-03 \u2014 Verification traceability",
+    "text": "\nEach verification decision **MUST** generate an auditable record, including:\n\n- verifier identity  \n- timestamp  \n- outcome  \n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ACTIVE state",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ONB-A-01 \u2014 Activation",
+    "text": "\nTransition from `VERIFIED` to `ACTIVE` **MUST** require an explicit activation action.\n\nActivation **MUST NOT** occur automatically upon verification.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ONB-A-02 \u2014 Operational eligibility",
+    "text": "\nOnly participants in state `ACTIVE` **MAY**:\n\n- access operational APIs  \n- participate in settlement or liquidity processes  \n- interact with other active participants  \n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ONB-A-03 \u2014 Irreversibility (within scope)",
+    "text": "\nThis specification defines no backward transitions from `ACTIVE`.\n\nDeactivation, suspension, or termination are **out of scope**\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "Invalid transitions",
+    "text": "\nThe following transitions are **explicitly forbidden**:\n\n- `DRAFT \u2192 VERIFIED`  \n- `DRAFT \u2192 ACTIVE`  \n- `SUBMITTED \u2192 ACTIVE`  \n- `ACTIVE \u2192 any other state`  \n\nAttempted invalid transitions **MUST** be rejected and logged.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "Audit requirements",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ONB-AUD-01 \u2014 State change logging",
+    "text": "\nEvery lifecycle state transition **MUST** be logged with:\n\n- previous state  \n- new state  \n- triggering action  \n- timestamp  \n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ONB-AUD-02 \u2014 Decision provenance",
+    "text": "\nVerification and activation decisions **MUST** be attributable to a responsible actor or process.\n\nAnonymous or untraceable decisions **MUST NOT** occur.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "Security requirements",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ONB-SEC-01 \u2014 Access control",
+    "text": "\nOnly authorised roles **MAY**:\n\n- submit participant records  \n- perform verification  \n- activate participants  \n\nRole definitions are derived from the scheme rulebook.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "ONB-SEC-02 \u2014 Confidentiality",
+    "text": "\nOnboarding data **MUST** be protected according to its declared visibility and classification.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "Relationship to downstream specifications",
+    "text": "\nThis functional specification constrains:\n\n- interface behaviour specifications  \n- API definitions (e.g. OpenAPI)  \n- test cases and conformance suites  \n\nNo downstream artefact may contradict the requirements defined herein.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-functional-spec-archive.md",
+    "section": "Disclaimer",
+    "text": "\nThis specification is illustrative.\n\nIt demonstrates a method for translating rulebook obligations into functional technical requirements and does not represent an official ECB technical specification.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-spec-overview-archive.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: specification\nvisibility: public\naudience: everyone\nform: text\nrole: specification\nstatus: normative\nowner: system-architecture\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-spec-overview-archive.md",
+    "section": "Participant Onboarding \u2014 Specification Overview",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-spec-overview-archive.md",
+    "section": "Purpose",
+    "text": "\nThis specification defines the **participant onboarding process** for the Digital Euro system.\n\nIt describes how an eligible participant progresses from initial registration to active participation, in accordance with the Scheme Rulebook and the system architecture.\n\nThis document is **illustrative**.  \nIt demonstrates how rulebook obligations can be transformed into a technical specification suitable for downstream implementation, testing, reporting, and automation.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-spec-overview-archive.md",
+    "section": "Scope",
+    "text": "\nThis specification covers **participant onboarding up to activation**.\n\nSpecifically, it defines:\n\n- onboarding lifecycle states  \n- mandatory validations and checks  \n- responsibilities of participating system components  \n- traceability to rulebook rules and architectural components  \n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-spec-overview-archive.md",
+    "section": "Out of scope",
+    "text": "\nThis specification explicitly does **not** cover:\n\n- suspension or termination of participants  \n- re-certification or renewal processes  \n- sanctions or fraud investigations  \n- end-user (wallet holder) onboarding  \n- platform-specific or vendor-specific integration details  \n\nThese topics may be addressed by separate specifications.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-spec-overview-archive.md",
+    "section": "Normative references",
+    "text": "\nThis specification derives from the following rulebook artefacts:\n\n- *Scheme Rulebook \u2014 Actors and Roles*  \n- *Scheme Rulebook \u2014 Functional Onboarding Rules*  \n\nAll normative requirements in this specification are traceable to rulebook rules governing:\n\n- participant eligibility  \n- certification and verification  \n- lifecycle state transitions  \n- auditability and accountability  \n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-spec-overview-archive.md",
+    "section": "Architectural context",
+    "text": "\nThese specifications are written against the **Digital Euro Service Platform (DESP)** architecture and its canonical **Digital Euro Access Gateway**.\n\nThey assume an intermediated model in which:\n\n- PSPs operate their own internal integration layers (implementation-specific and not standardised),\n- all authoritative onboarding state is maintained within DESP,\n- all platform interactions occur via the Access Gateway.\n\nThis folder does not prescribe PSP internal architecture. It defines the contractual, behavioural, and data expectations at the boundary between intermediaries and the Eurosystem platform.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-spec-overview-archive.md",
+    "section": "Traceability",
+    "text": "\nEach requirement defined in this specification:\n\n- traces back to a rulebook rule  \n- constrains one or more architectural components  \n- is designed to be testable and auditable  \n\nDownstream artefacts (code, tests, CI/CD pipelines) are expected to reference this specification explicitly.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-spec-overview-archive.md",
+    "section": "Relationship to downstream artefacts",
+    "text": "\nThis specification is intended to support the creation of:\n\n- functional interface specifications  \n- API definitions (e.g. OpenAPI)  \n- conformance tests  \n- audit evidence and reports  \n\nThe presence of this specification enables automation and governance, but does not mandate specific technologies.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-spec-overview-archive.md",
+    "section": "Disclaimer",
+    "text": "\nThis document is **not an official ECB specification**.\n\nIt uses publicly available information and reasonable architectural assumptions to demonstrate a **methodology**, not an institutional decision.\n\nIts purpose is educational and illustrative.\n\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: specification\nvisibility: public\naudience: everyone\nform: text\nrole: specification\nstatus: normative\nowner: system-architecture\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Participant Onboarding \u2014 Interface Behaviour Specification",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Purpose",
+    "text": "\nThis document defines the **behavioural interactions between system components**\nrequired to implement the participant onboarding lifecycle.\n\nIt bridges:\n\n- the **functional onboarding requirements**, and\n- concrete **API and protocol specifications** (e.g. OpenAPI).\n\nThis specification defines *what interactions must occur*, not *how they are technically realised*.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Normative references",
+    "text": "\nThis specification is constrained by:\n\n- *Participant Onboarding \u2014 Functional Specification*  \n- *System Architecture \u2014 Component Inventory*  \n\nAll interactions described here **MUST** comply with the functional requirements and lifecycle rules defined upstream.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Architectural components in scope",
+    "text": "\nThis specification applies to the following components:\n\n- **COMP-PSP-01 \u2014 Digital Euro Gateway (PSP-side)**  \n- **COMP-EUR-04 \u2014 Digital Euro Service Platform (DESP)**  \n- **COMP-EUR-05 \u2014 Digital Euro Access Gateway**  \n- **COMP-EUR-02 \u2014 Alias Service** (indirectly)\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Interaction principles",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "INT-G-01 \u2014 Layered responsibility",
+    "text": "\nParticipant onboarding is a **joint responsibility**:\n\n- **PSP-side gateways** handle client-facing interactions, retries, idempotency, and pre-validation.\n- **DESP services**, accessed via the **Access Gateway**, perform authoritative platform operations.\n\nNo single component **MAY** bypass this separation of concerns.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "INT-G-02 \u2014 Canonical platform access",
+    "text": "\nAll PSP interactions with DESP **MUST** occur via the **Digital Euro Access Gateway**.\n\nDirect access to internal DESP services **MUST NOT** be exposed.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "INT-G-03 \u2014 Explicit orchestration",
+    "text": "\nLifecycle state transitions **MUST** be triggered explicitly.\n\nNeither PSP gateways nor DESP services **MAY** advance onboarding state implicitly.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "INT-G-04 \u2014 Idempotent invocation",
+    "text": "\nPSP-facing onboarding operations **MUST** support idempotent invocation.\n\n- Idempotency handling is the responsibility of **COMP-PSP-01**.\n- Replayed requests **MUST NOT** result in duplicate side effects.\n- Conflicting reuse of idempotency keys **MUST** be rejected.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Interface responsibilities",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Digital Euro Gateway (PSP-side) \u2014 `COMP-PSP-01`",
+    "text": "\nThe PSP-side Digital Euro Gateway **MUST**:\n\n- expose onboarding APIs to internal PSP systems  \n- authenticate and authorise PSP actors  \n- handle request retries and idempotency  \n- perform syntactic and completeness validation  \n- invoke the Digital Euro Access Gateway for authoritative operations  \n\nIt **MUST NOT**:\n\n- create or mutate authoritative onboarding state within DESP  \n- bypass platform validation rules  \n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Digital Euro Access Gateway \u2014 `COMP-EUR-05`",
+    "text": "\nThe Access Gateway **MUST**:\n\n- authenticate and authorise PSP system identities  \n- validate request semantics and lifecycle preconditions  \n- route authorised requests to appropriate DESP services  \n- enforce platform-level controls (rate limiting, logging, observability)  \n\nIt **MUST NOT**:\n\n- perform PSP-specific business logic  \n- process or store end-user PII  \n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Digital Euro Service Platform (DESP) \u2014 `COMP-EUR-04`",
+    "text": "\nDESP services **MUST**:\n\n- persist authoritative participant records  \n- enforce lifecycle state integrity  \n- perform platform-level checks (e.g. alias uniqueness where applicable)  \n- generate audit-relevant events for onboarding decisions  \n\nDESP services **MUST NOT**:\n\n- accept direct calls from PSPs  \n- rely on PSP-side state for lifecycle authority  \n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Interaction flows",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Flow 1 \u2014 Draft creation",
+    "text": "\n```mermaid\nsequenceDiagram\n    participant PSP as PSP Integration Layer\n    participant AG as Digital Euro Access Gateway\n    participant DESP as Digital Euro Service Platform\n\n    PSP->>AG: Create participant (draft)\n    AG->>AG: Authenticate & authorise PSP\n    AG->>DESP: Create participant record\n    DESP-->>AG: Record created (state = DRAFT)\n    AG-->>PSP: Participant ID\n```\n\n**Trigger:** onboarding initiation by PSP\n\n1. PSP actor invokes the PSP-side Digital Euro Gateway to create a participant record.\n2. The PSP Gateway validates request structure.\n3. The PSP Gateway calls the Digital Euro Access Gateway.\n4. The Access Gateway routes the request to DESP.\n5. DESP creates a participant record in state `DRAFT`.\n6. The participant identifier is returned to the PSP.\n\n**Constraints:**\n- No eligibility or certification checks are performed.\n- The operation MUST be idempotent at the PSP gateway.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Flow 2 \u2014 Submission",
+    "text": "\n```mermaid\nsequenceDiagram\n    participant PSP as PSP Integration Layer\n    participant AG as Digital Euro Access Gateway\n    participant DESP as Digital Euro Service Platform\n\n    PSP->>AG: Submit onboarding data\n    AG->>AG: Validate request & lifecycle preconditions\n    AG->>DESP: Transition DRAFT \u2192 SUBMITTED\n    DESP-->>AG: State updated\n    AG-->>PSP: Submission accepted\n\n```\n\n**Trigger:** explicit submission by PSP\n\n1. PSP actor invokes submission via the PSP Gateway.\n2. The PSP Gateway validates completeness.\n3. The PSP Gateway invokes the Access Gateway.\n4. The Access Gateway validates lifecycle preconditions.\n5. DESP transitions the participant from `DRAFT` to `SUBMITTED`.\n\n**Constraints:**\n- Incomplete submissions MUST be rejected.\n- Duplicate submissions MUST be idempotent.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Flow 3 \u2014 Verification",
+    "text": "\n```mermaid\nsequenceDiagram\n    participant PSP as PSP Integration Layer\n    participant AG as Digital Euro Access Gateway\n    participant DESP as Digital Euro Service Platform\n\n    PSP->>AG: Submit verification result\n    AG->>AG: Validate PSP & verifier authority\n    AG->>DESP: Perform platform checks\n    DESP-->>AG: Checks passed\n    AG->>DESP: Transition SUBMITTED \u2192 VERIFIED\n    DESP-->>AG: State updated + audit record\n    AG-->>PSP: Verification accepted\n\n```\n\n**Trigger:** verification completion by authorised authority\n\n1. Authorised verifier invokes verification via the PSP Gateway.\n2. The PSP Gateway validates verifier authorisation.\n3. The PSP Gateway invokes the Access Gateway.\n4. The Access Gateway routes the request to DESP.\n5. DESP performs required platform checks (e.g. alias validation).\n6. DESP transitions the participant from `SUBMITTED` to `VERIFIED`.\n7. An auditable verification record is generated.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Flow 4 \u2014 Activation",
+    "text": "\n```mermaid\nsequenceDiagram\n    participant PSP as PSP Integration Layer\n    participant AG as Digital Euro Access Gateway\n    participant DESP as Digital Euro Service Platform\n\n    PSP->>AG: Activate participant\n    AG->>AG: Validate lifecycle preconditions\n    AG->>DESP: Transition VERIFIED \u2192 ACTIVE\n    DESP-->>AG: State updated\n    AG-->>PSP: Participant activated\n\n```\n\n**Trigger:** explicit activation decision\n\n1. Authorised PSP or Eurosystem actor invokes activation via the PSP Gateway.\n2. The PSP Gateway validates preconditions.\n3. The PSP Gateway invokes the Access Gateway.\n4. DESP transitions the participant from `VERIFIED` to `ACTIVE`.\n\n**Constraints:**\n- Activation MUST NOT be implicit.\n- Only verified participants MAY be activated.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Error handling",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "INT-E-01 \u2014 Invalid state transitions",
+    "text": "\nAttempts to perform illegal lifecycle transitions **MUST** result in:\n\n- rejection\n- explicit error response\n- audit log entry  \n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "INT-E-02 \u2014 Authorisation failures",
+    "text": "\nUnauthorised onboarding requests **MUST** be rejected without side effects.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Mapping to API specifications",
+    "text": "\nThe interactions defined in this document are intended to be realised via:\n\n- PSP-facing onboarding APIs  \n- Access Gateway platform APIs  \n- structured error responses and lifecycle endpoints  \n\nThe exact API shape is defined in the accompanying OpenAPI specification.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Relationship to downstream artefacts",
+    "text": "\nThis interface behaviour specification constrains:\n\n- OpenAPI definitions  \n- component-level implementations  \n- automated tests  \n- CI/CD validation rules  \n\nAny downstream artefact **MUST NOT** contradict the interaction patterns defined herein.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-interfaces-spec-archive.md",
+    "section": "Disclaimer",
+    "text": "\nThis specification is illustrative.\n\nIt demonstrates how onboarding responsibilities may be shared between intermediaries and the Eurosystem platform and does not represent an official ECB technical specification.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/README-archive.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: specification\nvisibility: public\naudience: everyone\nform: text\nrole: specification\nstatus: informative\nowner: system-architecture\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/README-archive.md",
+    "section": "Onboarding Specifications \u2014 Folder Map",
+    "text": "\nThis folder contains the **participant onboarding specification set**.\n\nEach file has a distinct role. Together they form a complete, layered specification.\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/README-archive.md",
+    "section": "Files in this folder",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/README-archive.md",
+    "section": "`onboarding-specification-overview.md`",
+    "text": "Provides **scope, intent, and traceability context** for the onboarding specification set.\n\nThis file explains:\n- why these specifications exist\n- how they relate to rulebooks and architecture\n- how they are intended to be used downstream\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/README-archive.md",
+    "section": "`onboarding-functional-spec.md`",
+    "text": "Defines **what must happen** during participant onboarding.\n\n- lifecycle states and transitions\n- functional rules and constraints\n- scheme-level obligations\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/README-archive.md",
+    "section": "`onboarding-interfaces-spec.md`",
+    "text": "Defines **how system components interact** to realise onboarding.\n\n- responsibilities of intermediaries and platform components\n- interaction flows\n- error handling and idempotency rules\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/README-archive.md",
+    "section": "`onboarding-data-model-spec.md`",
+    "text": "Defines the **logical data model** required to support onboarding.\n\n- authoritative participant entity\n- lifecycle-related data\n- verification and audit records\n- privacy-preserving constraints\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/README-archive.md",
+    "section": "Disclaimer",
+    "text": "\nThe specifications contained in this folder are **illustrative and educational**.\n\nThey are **not** official Digital Euro specifications and **do not represent**:\n- an ECB position,\n- a Eurosystem design decision,\n- or any agreed technical implementation.\n\nAll content is derived from **publicly available information** (e.g. scheme rulebooks, policy documents) and from **reasonable technical assumptions** made solely for the purpose of demonstrating methodology, structure, and traceability.\n\nNo confidential, proprietary, or insider information is included.\n\nThese documents exist to show *how* complex institutional requirements **could be structured, governed, and automated** \u2014 not *what* the Digital Euro system will implement.\n\nReaders should not interpret this material as normative or binding for any real Digital Euro project.\n\n\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Intro",
+    "text": "---\nartefact_type: specification\nvisibility: public\naudience: everyone\nform: text\nrole: specification\nstatus: normative\nowner: system-architecture\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Participant Onboarding \u2014 Data Model Specification",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Purpose",
+    "text": "\nThis document defines the **logical data model** for participant onboarding\nused by the Digital Euro Service Platform (DESP).\n\nIt specifies the **minimum authoritative data** required to:\n\n- support the onboarding lifecycle,\n- enforce scheme rules,\n- enable auditability,\n- and realise the onboarding APIs.\n\nThis data model is **illustrative**, not an official ECB schema.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Normative context",
+    "text": "\nThis specification derives from:\n\n- the Digital Euro Scheme Rulebook (roles, obligations, lifecycle intent)\n- Participant Onboarding \u2014 Functional Specification\n- Participant Onboarding \u2014 Interface Behaviour Specification\n\nWhere the rulebook is silent, this model applies **conservative, privacy-preserving defaults**.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Design principles",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "DM-G-01 \u2014 Minimal authority",
+    "text": "\nDESP stores **only authoritative platform data**.\n\nIt MUST NOT store:\n- real-world identities,\n- customer KYC documents,\n- personal identifiers.\n\nThose remain the responsibility of PSPs.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "DM-G-02 \u2014 Lifecycle-first modelling",
+    "text": "\nAll participant data MUST be attributable to a **well-defined lifecycle state**.\n\nLifecycle states and transitions are defined upstream in the onboarding specifications.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "DM-G-03 \u2014 Separation of concern",
+    "text": "\nThe data model distinguishes between:\n\n- **identity references** (opaque, hashed, or pseudonymised),\n- **operational status** (lifecycle),\n- **audit metadata** (who, when, why).\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Core entity: Participant",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Logical definition",
+    "text": "\nA **Participant** represents a supervised intermediary\nthat is authorised (or in the process of being authorised)\nto participate in the digital euro scheme.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Participant entity",
+    "text": "\n| Field | Type | Description |\n|------|------|-------------|\n| `participant_id` | String | Globally unique identifier assigned by DESP |\n| `psp_id` | String | Identifier of the PSP responsible for onboarding |\n| `state` | Enum | Current lifecycle state |\n| `created_at` | Timestamp | Creation time |\n| `updated_at` | Timestamp | Last state change |\n| `version` | Integer | Optimistic concurrency / audit version |\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Onboarding Lifecycle state",
+    "text": "\nThe onboarding lifecycle consists of the following states:\n`DRAFT \u2192 SUBMITTED \u2192 VERIFIED \u2192 ACTIVE`\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "State definitions",
+    "text": "\n- **DRAFT**  \n  The participant record exists but is incomplete.  \n  No validation or verification has occurred.\n\n- **SUBMITTED**  \n  The participant has formally submitted onboarding information for verification.  \n  Data is immutable except through explicit correction flows.\n\n- **VERIFIED**  \n  All mandatory checks and certifications have been completed successfully.  \n  The participant is eligible for activation.\n\n- **ACTIVE**  \n  The participant is authorised to operate within the Digital Euro system.\n\nState transitions are strictly controlled and auditable.\n\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Verification record",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Purpose",
+    "text": "\nCaptures the **fact of verification** without storing verification evidence.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Verification entity",
+    "text": "\n| Field | Type | Description |\n|------|------|-------------|\n| `verification_id` | String | Unique identifier |\n| `participant_id` | String | Associated participant |\n| `verified_by` | String | Authority or role performing verification |\n| `verified_at` | Timestamp | Verification timestamp |\n| `result` | Enum | `APPROVED` / `REJECTED` |\n| `remarks` | String (optional) | Non-sensitive notes |\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Audit metadata",
+    "text": ""
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Purpose",
+    "text": "\nEnsures auditability **without exposing confidential content**.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Audit event",
+    "text": "\n| Field | Type | Description |\n|------|------|-------------|\n| `event_id` | String | Unique event identifier |\n| `participant_id` | String | Affected participant |\n| `event_type` | Enum | CREATE, SUBMIT, VERIFY, ACTIVATE |\n| `performed_by` | String | Actor role (not personal identity) |\n| `performed_at` | Timestamp | Event time |\n| `source` | String | PSP Integration Layer / Access Gateway |\n\nAudit events are **append-only**.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Privacy considerations",
+    "text": "\n- DESP data MUST NOT be sufficient to reconstruct real-world identities.\n- All identifiers are opaque references.\n- PSPs retain full responsibility for identity, KYC, and customer data.\n\nThis aligns with the scheme\u2019s privacy-by-design principles.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Mapping to API specification",
+    "text": "\n| Data Model Element | OpenAPI Element |\n|-------------------|-----------------|\n| Participant | `Participant` schema |\n| Lifecycle state | `state` enum |\n| State transitions | POST lifecycle endpoints |\n| Audit events | Non-exposed internal records |\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Mapping to downstream artefacts",
+    "text": "\nThis data model constrains:\n\n- database schemas (illustrative)\n- API payloads\n- test fixtures\n- lifecycle validation logic\n- CI/CD checks for state integrity\n\nAny downstream artefact MUST remain consistent with this model.\n\n---\n"
+  },
+  {
+    "source": "40-specifications/onboarding/archive/onboarding-data-model-spec-archive.md",
+    "section": "Disclaimer",
+    "text": "\nThis data model is illustrative.\n\nIt demonstrates how onboarding intent expressed in rulebooks\ncan be realised as a coherent, auditable platform data model,\nwithout asserting an official ECB implementation.\n"
+  }
+]
