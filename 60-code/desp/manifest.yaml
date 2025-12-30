@@ -1,56 +1,59 @@
-# artefact_type: descriptor
-# visibility: public
-# audience: automation
-# form: yaml
-# role: manifest
-# status: operative
-# owner: engineering-core
+artefact_type: code
+visibility: restricted
+audience:
+  - NCB
+  - PSP
+form: text
+role: implementation
+status: normative
+owner: ECB
 
-# ------------------------------------------------------------------------------
-# DISCLAIMER: ILLUSTRATIVE ARTEFACT
-# ------------------------------------------------------------------------------
-# The code and configurations in this folder are illustrative and educational.
-# They do not represent official implementations, production-ready components,
-# or endorsed technical approaches for the Digital Euro or any other real-world
-# system.
-# ------------------------------------------------------------------------------
+# DISCLAIMER:
+# The code in this folder is **illustrative and educational**.
+# It does not represent official implementations, production-ready components,
+# or endorsed technical approaches for the Digital Euro or any other real-world system.
+#
+# PURPOSE:
+# This component serves as a reference implementation to demonstrate how technical
+# specifications are refined into code while maintaining strict auditability,
+# traceability, and mechanical governance across distinct institutional boundaries.
+# This structure enables automated compliance verification and live impact analysis.
 
-metadata:
-  id: COMP-DESP-CORE
-  name: "Digital Euro Service Platform (Core)"
-  description: "The central ledger and settlement engine for the Digital Euro scheme."
-  version: "0.1.0"
-  
-owner:
-  institution: "Eurosystem"
-  team: "settlement-engine-team"
-  contact: "desp-maintainers@eurosystem.int"
+component:
+  id: COMP-EUR-04
+  name: Digital Euro Service Platform (DESP)
+  description: >
+    The central platform domain hosting the Settlement Engine,
+    Alias Service, and core registries.
+  role: platform-core
+  ownership: eurosystem-development-team
 
-# The specific specifications this component realizes
-implements:
-  - spec_id: "SPEC-LEDGER-001"
-    version: "1.2.0"
-    coverage: "partial"
-  - spec_id: "SPEC-TOKEN-050"
-    version: "1.0.0"
+implementation:
+  technology_stack:
+    language: java
+    framework: spring-boot-3
+    build_tool: maven
 
-# Interfaces exposed to other components
+upstream:
+  specifications:
+    - id: SPEC-LIQ-FUNC
+      version: 0.1
+    - id: SPEC-SET-CORE
+      version: 0.1
+    - id: SPEC-ONB-FUNC
+      version: 0.1
+
 interfaces:
   exposed:
-    - id: "API-DESP-SETTLEMENT-GRPC"
-      type: "grpc"
-      protocol_version: "v2"
-    - id: "API-DESP-LOOKUP-HTTP"
-      type: "rest"
-      openapi_ref: "/docs/openapi/lookup-v1.yaml"
-
+    - id: I_Settlement
+      protocol: gRPC
+      role: server
   consumed:
-    - id: "API-ALIAS-LOOKUP"
-      provider: "COMP-ALIAS-SERVICE"
+    - id: I_Alias_Registry
+      protocol: gRPC
+      role: client
 
-# Links to assurance artefacts (tests) that verify this component
 assurance:
-  - test_suite_id: "TEST-SET-LEDGER-CORE"
-    location: "../60-tests/400-operational/system-level"
-
-    
+  tests:
+    - set_id: OPS-LIQ
+      coverage: partial

@@ -1,57 +1,53 @@
 ---
-artefact_type: documentation
-visibility: public
-audience: everyone
+artefact_type: code
+visibility: restricted
+audience:
+  - NCB
+  - PSP
 form: text
-role: component-guide
-status: operative
-owner: ecb
+role: implementation
+status: normative
+owner: ECB
 ---
 
-# Digital Euro Service Platform (DESP) - Core
+<!--
+DISCLAIMER:
+The code in this folder is **illustrative and educational**.
+It does not represent official implementations, production-ready components,
+or endorsed technical approaches for the Digital Euro or any other real-world system.
 
-> **Institution:** Eurosystem  
-> **Component ID:** COMP-DESP-CORE  
-> **Tech Stack:** Java 21 (Spring Boot)  
+PURPOSE:
+This component serves as a reference implementation to demonstrate how technical
+specifications are refined into code while maintaining strict auditability,
+traceability, and mechanical governance across distinct institutional boundaries.
+This structure enables automated compliance verification and live impact analysis.
+-->
 
-## Purpose and Responsibility
-The **DESP Core** is the authoritative ledger for the Digital Euro. It is responsible for:
-1.  **Token Issuance & Redemption:** Minting and burning tokens against central bank reserves.
-2.  **Settlement:** Atomic transfer of value between wallet addresses.
-3.  **Double-Spend Prevention:** Enforcing uniqueness of token usage (or UTXO consumption).
+# Digital Euro Service Platform (DESP)
 
-## Scope
-### In Scope
-* Core ledger logic (debit/credit validation).
-* Cryptographic signature verification of transaction instructions.
-* High-performance settlement APIs (gRPC).
+**Component ID:** `COMP-EUR-04`  
+**Owner:** Eurosystem Development Team  
+**Stack:** Java 17 / Spring Boot 3
 
-### Out of Scope
-* User identity management (handled by Onboarding / PSPs).
-* Mobile app connectivity (handled by Access Gateways).
-* Alias resolution (handled by Alias Service).
+## Overview
+The DESP is the "Backend of Backends." It is the central technical platform that coordinates the issuance, settlement, and redemption of the Digital Euro.
 
-## Implemented Specifications
-This component implements the following specifications. All code contributions must reference these IDs:
+It hosts the **Settlement Engine** (`COMP-EUR-01`), which is the authoritative ledger for all value movements.
 
-| Specification ID | Version | Description |
-| :--- | :--- | :--- |
-| **SPEC-LEDGER-001** | v1.2.0 | Core Settlement Logic & Ledger Invariants |
-| **SPEC-TOKEN-050** | v1.0.0 | Token Lifecycle (Mint/Burn) Standards |
+## Boundaries
+*   **Protected**: This component **NEVER** communicates directly with the public internet. All traffic MUST be mediated by the **Access Gateway** (`COMP-EUR-05`).
+*   **Privacy**: This component processes `System IDs` and `Hash Aliases`. It **MUST NOT** process or persist clear-text citizen identities (PII).
 
-## Interaction Model
-The DESP is a "headless" backend service. It does not accept connections from the public internet.
+## Architecture
+This implementation uses a standard Hexagonal (Ports & Adapters) architecture:
 
-* **Upstream:** Receives instructions from **Access Gateways** (authorized PSP connections).
-* **Downstream:** Queries the **Alias Service** to resolve IBANs/Phone numbers to wallet addresses.
+*   `api`: Inbound adapters (gRPC/REST controllers).
+*   `domain`: Pure business logic (Settlement, Liquidity Rules).
+*   `infrastructure`: Outbound adapters (Database, Messaging).
 
-## Developer Guide
-This component uses **Java 21** and **Maven**.
+## Traceability
+This code realizes requirements defined in:
+*   `SPEC-SET-CORE`: Settlement Logic
+*   `SPEC-LIQ-FUNC`: Liquidity/Waterfall Logic
 
-### Traceability Mandate
-All business logic classes MUST be annotated with `@SpecLink` to ensure traceability to the requirements above.
-
-
-## Disclaimer
-
-The code in this folder is **illustrative and educational**. It does not represent official implementations, production-ready components, or endorsed technical approaches for the Digital Euro or any other real-world system.
+See `manifest.yaml` for the complete machine-readable contract.
