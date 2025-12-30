@@ -4,7 +4,7 @@
  * audience:
  *   - ECB
  *   - PSP
- * form: text
+ * form: source
  * role: implementation
  * status: normative
  * owner: ECB
@@ -80,5 +80,18 @@ impl AliasOracle {
     fn verify_blind_signature(&self, zk_proof: &str) -> bool {
         // Illustrative pass-through
         !zk_proof.is_empty()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    #[spec_link(spec_id = "SPEC-ALIAS-T01", ref_id = "REQ-TEST-01", version = "0.1")]
+    fn test_alias_resolution_traceability() {
+        let oracle = AliasOracle::new();
+        // Illustrative assertion: Verifying internal state to prove white-box access
+        assert_eq!(oracle.pepper_version, 1);
     }
 }

@@ -79,3 +79,5 @@ build/
 
 # Access Gateway Binary
 access-gateway
+!60-code/access-gateway/
+
