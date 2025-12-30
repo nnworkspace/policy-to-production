@@ -1,0 +1,35 @@
+# artefact_type: descriptor
+# visibility: public
+# audience: everyone
+# form: yaml
+# role: manifest
+# status: operative
+# owner: programme-governance
+
+# ------------------------------------------------------------------------------
+# DISCLAIMER: ILLUSTRATIVE ARTEFACT
+# ------------------------------------------------------------------------------
+# The code in this folder is **illustrative and educational**. It does not
+# represent official implementations, production-ready components, or endorsed
+# technical approaches for the Digital Euro or any other real-world system.
+# ------------------------------------------------------------------------------
+
+metadata:
+  id: LIB-GOV-JAVA
+  name: "Governance Common (Java)"
+  description: "Shared governance annotations and utilities for Java components."
+  version: "0.1.0"
+
+owner:
+  institution: "Eurosystem"
+  team: "platform-architecture"
+
+implements: [] 
+
+interfaces:
+  exposed:
+    - id: "LIB-GOV-API"
+      type: "library"
+      language: "java"
+
+      

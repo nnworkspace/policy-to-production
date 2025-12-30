@@ -135,15 +135,15 @@ The syntax of the comment must respect the language, but the **content must rema
 
 ```c
 /*
-artefact_type: implementation
-visibility: confidential
-audience:
-  - ECB
-  - VENDOR
-form: source
-role: implementation
-status: operative
-owner: vendor-xyz
+ * artefact_type: implementation
+ * visibility: confidential
+ * audience:
+ *   - ECB
+ *   - VENDOR
+ * form: source
+ * role: implementation
+ * status: operative
+ * owner: vendor-xyz
 */
 
 ```
